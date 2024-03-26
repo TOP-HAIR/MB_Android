@@ -63,4 +63,5 @@
     <string name="title_activity_inicial_view">InicialView</string>
     <string name="title_activity_login_view">LoginView</string>
     <string name="title_activity_register_email_view">RegisterEmailView</string>
+    <string name="title_activity_register_dado_view">RegisterDadoView</string>
 </resources>
