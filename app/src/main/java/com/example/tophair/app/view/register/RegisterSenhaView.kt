@@ -1,6 +1,7 @@
 package com.example.tophair.app.view.register
 
 import android.content.Intent
+import android.icu.text.ListFormatter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,8 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,11 +21,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -52,11 +50,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.CustomRowWithDividers
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.ui.theme.TopHairTheme
+import com.example.tophair.app.view.register.ui.theme.TopHairTheme
 
-class RegisterEmailView : ComponentActivity() {
+class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,7 +63,7 @@ class RegisterEmailView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterEmailView("Registro Email")
+                    RegisterSenhaView("Android")
                 }
             }
         }
@@ -75,9 +72,11 @@ class RegisterEmailView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
+fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
+
     val route = LocalContext.current
-    var email by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+    var senhaConfirm by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -117,17 +116,21 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Image(painter = painterResource(
-                        id = R.drawable.logo_inicial),
+                    Image(
+                        painter = painterResource(
+                            id = R.drawable.logo_inicial
+                        ),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                    )
 
-                    MarginSpace(28.dp)
+                    MarginSpace(36.dp)
 
                     Text(
                         stringResource(
-                            R.string.titulo_tela_cadastro_email),
+                            R.string.titulo_tela_cadastro_senha
+                        ),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -135,14 +138,16 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                         textAlign = TextAlign.Center,
                         lineHeight = 40.sp,
                         color = Color.White,
-                        fontWeight = FontWeight.ExtraBold)
+                        fontWeight = FontWeight.ExtraBold
+                    )
 
-                    MarginSpace(18.dp)
+                    MarginSpace(32.dp)
+
 
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text(stringResource(R.string.txt_email)) },
+                        value = senha,
+                        onValueChange = { senha = it },
+                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email,
@@ -165,52 +170,46 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
 
                     MarginSpace(8.dp)
 
-                    CustomButton(
-                        stringResource(R.string.btn_txt_continue), onClick= {
-                        val registerDadoView = Intent(route, RegisterDadoView::class.java)
 
-                        route.startActivity(registerDadoView)
-                    },
-                        Color(47, 156, 127)
+
+                    OutlinedTextField(
+                        value = senhaConfirm,
+                        onValueChange = { senhaConfirm = it },
+                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            cursorColor = Color.Black, // Cor do cursor
+                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
+                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                        ),
+                        modifier = Modifier
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            ) // Cor de fundo #cac3dc
+                            .fillMaxWidth() // Largura específica
+                            .height(50.dp) // Altura específica
                     )
 
-                    MarginSpace(8.dp)
+                    MarginSpace(16.dp)
 
-                    CustomRowWithDividers()
+                    CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
+                       val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
 
-                    MarginSpace(8.dp)
+                        route.startActivity(registerSucessoCadastroView)
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Botão do Google
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(60.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val googleIcon: Painter = painterResource(id = R.drawable.google)
-                            Image(
-                                painter = googleIcon,
-                                contentDescription = "Google Login",
-                            )
-                        }
+                      },
 
-                        Spacer(modifier = Modifier.width(24.dp)) // Espaço entre os botões
+                            Color(31, 116, 109, 255),
 
-                        // Botão do Facebook
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(73.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val facebookIcon: Painter = painterResource(id = R.drawable.facebook)
-                            Image(
-                                painter = facebookIcon,
-                                contentDescription = "Facebook Login",
-                            )
-                        }
-                    }
-
+                        )
                 }
             }
-
 
 
             Column(
@@ -227,6 +226,8 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                     color = Color.White
                 )
             }
+
+
         }
 
     }
@@ -234,8 +235,8 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview2() {
+fun GreetingPreview4() {
     TopHairTheme {
-        RegisterEmailView("Registro Email")
+        RegisterSenhaView("Android")
     }
 }
