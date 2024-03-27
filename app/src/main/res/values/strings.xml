@@ -11,11 +11,11 @@
     <string name="txt_senha_reset">Esqueci minha senha</string>
     <string name="titulo_tela_cadastro_email">Cadastre-se com o seu email:</string>
     <string name="titulo_tela_cadastro_dado_pessoal">Cadastre seus dados:</string>
-    <string name="txt_nome_compleot">Nome Completo</string>
+    <string name="txt_nome_completo">Nome Completo</string>
     <string name="txt_telefone">Telefone</string>
     <string name="btn_txt_continue">Continue</string>
-    <string name="titulo_tela_cadastro_senha">Crie sua senha com no mínimo 8 digítos.</string>
-    <string name="titulo_tela_cadastro_sucesso">Cadastro Concluídocom Sucesso!!!</string>
+    <string name="titulo_tela_cadastro_senha">Crie sua senha com no mínimo 8 dígitos.</string>
+    <string name="titulo_tela_cadastro_sucesso">Cadastro Concluído com Sucesso!!!</string>
     <string name="btn_txt_voltar_login">Ir para o Login</string>
     <!-- <string name=""></string> -->
     <!-- Strings used for fragments for navigation -->
@@ -63,4 +63,7 @@
     <string name="title_activity_inicial_view">InicialView</string>
     <string name="title_activity_login_view">LoginView</string>
     <string name="title_activity_register_email_view">RegisterEmailView</string>
+    <string name="title_activity_register_senha_view">RegisterSenhaView</string>
+    <string name="title_activity_register_sucesso_cadastro_view">RegisterSucessoCadastroView
+    </string>
 </resources>
