@@ -54,9 +54,10 @@ import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomRowWithDividers
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.ui.theme.TopHairTheme
+import com.example.tophair.app.view.login.LoginView
+import com.example.tophair.app.view.register.ui.theme.TopHairTheme
 
-class RegisterEmailView : ComponentActivity() {
+class RegisterDadoView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,7 +67,7 @@ class RegisterEmailView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterEmailView()
+                    RegisterDadoView()
                 }
             }
         }
@@ -75,9 +76,10 @@ class RegisterEmailView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterEmailView( modifier: Modifier = Modifier) {
+fun RegisterDadoView( modifier: Modifier = Modifier) {
     val route = LocalContext.current
-    var email by remember { mutableStateOf("") }
+    var nomeCompleto by remember { mutableStateOf("") }
+    var telefone by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -125,9 +127,8 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
 
                     MarginSpace(36.dp)
 
-                    Text(
-                        stringResource(
-                            R.string.titulo_tela_cadastro_email),
+                    Text(stringResource(
+                        R.string.titulo_tela_cadastro_dado_pessoal),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -140,12 +141,11 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
                     MarginSpace(24.dp)
 
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text(stringResource(R.string.txt_email)) },
+                        value = nomeCompleto,
+                        onValueChange = { nomeCompleto = it },
+                        label = { Text(stringResource(R.string.txt_nome_compleot)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
@@ -155,63 +155,47 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
                             unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
                         ),
                         modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
+                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc // Largura específica
+                            .height(50.dp)
+                            .fillMaxWidth()// Altura específica
                     )
 
-                    MarginSpace(8.dp)
+                    MarginSpace(16.dp)
 
-                    CustomButton(
-                        stringResource(R.string.btn_txt_continue), onClick= {
-                        val registerDadoView = Intent(route, RegisterDadoView::class.java)
-
-                        route.startActivity(registerDadoView)
-                    },
-                        Color(47, 156, 127)
+                    OutlinedTextField(
+                        value = telefone,
+                        onValueChange = { telefone = it },
+                        label = { Text(stringResource(R.string.txt_telefone)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        ),
+                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            cursorColor = Color.Black, // Cor do cursor
+                            focusedBorderColor = Color.Black, // Torna a borda focada transparente
+                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                        ),
+                        modifier = Modifier
+                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc // Largura específica
+                            .height(50.dp)
+                            .fillMaxWidth()// Altura específica
                     )
 
-                    MarginSpace(8.dp)
+                    MarginSpace(16.dp)
 
-                    CustomRowWithDividers()
+                    CustomButton(stringResource(R.string.btn_txt_continue), onClick= {
+                        val loginView = Intent(route, LoginView::class.java)
 
-                    MarginSpace(8.dp)
+                        route.startActivity(loginView)
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Botão do Google
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(60.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val googleIcon: Painter = painterResource(id = R.drawable.google)
-                            Image(
-                                painter = googleIcon,
-                                contentDescription = "Google Login",
-                            )
-                        }
+                    })
 
-                        Spacer(modifier = Modifier.width(32.dp)) // Espaço entre os botões
-
-                        // Botão do Facebook
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(73.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val facebookIcon: Painter = painterResource(id = R.drawable.facebook)
-                            Image(
-                                painter = facebookIcon,
-                                contentDescription = "Facebook Login",
-                            )
-                        }
-                    }
+                    MarginSpace(16.dp)
 
                 }
             }
-
-
 
             Column(
                 modifier = Modifier
@@ -234,8 +218,8 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview2() {
+fun GreetingPreview4() {
     TopHairTheme {
-        RegisterEmailView()
+        RegisterDadoView()
     }
 }
