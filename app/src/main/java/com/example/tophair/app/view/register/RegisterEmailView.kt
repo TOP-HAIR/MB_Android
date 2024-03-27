@@ -66,7 +66,7 @@ class RegisterEmailView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterEmailView()
+                    RegisterEmailView("Registro Email")
                 }
             }
         }
@@ -75,7 +75,7 @@ class RegisterEmailView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterEmailView( modifier: Modifier = Modifier) {
+fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
     var email by remember { mutableStateOf("") }
 
@@ -123,7 +123,7 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .fillMaxWidth())
 
-                    MarginSpace(36.dp)
+                    MarginSpace(28.dp)
 
                     Text(
                         stringResource(
@@ -137,7 +137,7 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
                         color = Color.White,
                         fontWeight = FontWeight.ExtraBold)
 
-                    MarginSpace(24.dp)
+                    MarginSpace(18.dp)
 
                     OutlinedTextField(
                         value = email,
@@ -193,7 +193,7 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(32.dp)) // Espaço entre os botões
+                        Spacer(modifier = Modifier.width(24.dp)) // Espaço entre os botões
 
                         // Botão do Facebook
                         IconButton(
@@ -236,6 +236,6 @@ fun RegisterEmailView( modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview2() {
     TopHairTheme {
-        RegisterEmailView()
+        RegisterEmailView("Registro Email")
     }
 }

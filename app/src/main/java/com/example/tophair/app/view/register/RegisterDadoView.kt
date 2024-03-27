@@ -67,7 +67,7 @@ class RegisterDadoView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterDadoView()
+                    RegisterDadoView("Registro Dado")
                 }
             }
         }
@@ -76,7 +76,7 @@ class RegisterDadoView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterDadoView( modifier: Modifier = Modifier) {
+fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
     var nomeCompleto by remember { mutableStateOf("") }
     var telefone by remember { mutableStateOf("") }
@@ -220,6 +220,6 @@ fun RegisterDadoView( modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview4() {
     TopHairTheme {
-        RegisterDadoView()
+        RegisterDadoView("Registro Dado")
     }
 }

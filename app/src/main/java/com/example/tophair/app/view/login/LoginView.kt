@@ -62,7 +62,7 @@ class LoginView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginView()
+                    LoginView("Login")
                 }
             }
         }
@@ -71,7 +71,7 @@ class LoginView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginView( modifier: Modifier = Modifier) {
+fun LoginView(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
@@ -89,6 +89,8 @@ fun LoginView( modifier: Modifier = Modifier) {
                 )
 
         ) {
+
+            MarginSpace(12.dp)
 
             Image(
                 painter = painterResource(id = R.drawable.background_tela_inicial),
@@ -153,7 +155,6 @@ fun LoginView( modifier: Modifier = Modifier) {
                         ),
                         modifier = Modifier
                             .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc
-                            .width(280.dp) // Largura específica
                             .height(50.dp)
                             .fillMaxWidth()// Altura específica
                     )
@@ -177,7 +178,6 @@ fun LoginView( modifier: Modifier = Modifier) {
                         ),
                         modifier = Modifier
                             .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc
-                            .width(280.dp) // Largura específica
                             .height(50.dp)
                             .fillMaxWidth()// Altura específica
                     )
@@ -231,6 +231,6 @@ fun LoginView( modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview3() {
     TopHairTheme {
-        LoginView()
+        LoginView("Login")
     }
 }
