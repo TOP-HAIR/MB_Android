@@ -50,6 +50,8 @@ import com.example.tophair.R
 import androidx.compose.ui.unit.sp
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.app.view.menu.MenuNavigationView
+import com.example.tophair.app.view.register.RegisterSenhaView
 import com.example.tophair.app.view.ui.theme.TopHairTheme
 
 class LoginView : ComponentActivity() {
@@ -185,7 +187,9 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
                     MarginSpace(16.dp)
 
                     CustomButton(stringResource(R.string.btn_txt_login), onClick= {
+                        val menuNavigationView = Intent(route, MenuNavigationView::class.java)
 
+                        route.startActivity(menuNavigationView)
                     })
 
                     MarginSpace(16.dp)
