@@ -94,7 +94,7 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.background_tela_inicial),
+                painter = painterResource(id = R.mipmap.background_tela_inicial),
                 contentDescription = "Background tela inicial",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -118,7 +118,7 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                 ) {
 
                     Image(painter = painterResource(
-                        id = R.drawable.logo_inicial),
+                        id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
                             .fillMaxWidth())
@@ -186,7 +186,7 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                             onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
                             modifier = Modifier.size(60.dp) // Aplicando o tamanho ao botão
                         ) {
-                            val googleIcon: Painter = painterResource(id = R.drawable.google)
+                            val googleIcon: Painter = painterResource(id = R.mipmap.google)
                             Image(
                                 painter = googleIcon,
                                 contentDescription = "Google Login",
@@ -200,7 +200,7 @@ fun RegisterEmailView(message: String, modifier: Modifier = Modifier) {
                             onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
                             modifier = Modifier.size(73.dp) // Aplicando o tamanho ao botão
                         ) {
-                            val facebookIcon: Painter = painterResource(id = R.drawable.facebook)
+                            val facebookIcon: Painter = painterResource(id = R.mipmap.facebook)
                             Image(
                                 painter = facebookIcon,
                                 contentDescription = "Facebook Login",

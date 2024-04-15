@@ -77,7 +77,7 @@ fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.background_tela_inicial),
+                painter = painterResource(id = R.mipmap.background_tela_inicial),
                 contentDescription = "Background tela inicial",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -102,7 +102,7 @@ fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
 
                     Image(
                         painter = painterResource(
-                            id = R.drawable.logo_inicial
+                            id = R.mipmap.logo_inicial
                         ),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
@@ -125,7 +125,7 @@ fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
 
                     MarginSpace(10.dp)
                     
-                    Image(painter = painterResource(id = R.drawable.icon_success_cadastro),
+                    Image(painter = painterResource(id = R.mipmap.icon_success_cadastro),
                         contentDescription = "Ícone de Cadastro Bem-Sucedido",
                         modifier = Modifier.fillMaxWidth()
                             .size(width = 120.dp, height = 120.dp))

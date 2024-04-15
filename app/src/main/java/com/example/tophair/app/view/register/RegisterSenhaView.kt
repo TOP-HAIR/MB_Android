@@ -93,7 +93,7 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
         ) {
 
             Image(
-                painter = painterResource(id = R.drawable.background_tela_inicial),
+                painter = painterResource(id = R.mipmap.background_tela_inicial),
                 contentDescription = "Background tela inicial",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -118,7 +118,7 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
 
                     Image(
                         painter = painterResource(
-                            id = R.drawable.logo_inicial
+                            id = R.mipmap.logo_inicial
                         ),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
