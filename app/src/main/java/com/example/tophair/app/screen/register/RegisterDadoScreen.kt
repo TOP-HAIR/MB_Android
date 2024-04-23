@@ -1,7 +1,6 @@
-package com.example.tophair.app.view.register
+package com.example.tophair.app.screen.register
 
 import android.content.Intent
-import android.icu.text.ListFormatter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,9 +49,9 @@ import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.register.ui.theme.TopHairTheme
+import com.example.tophair.ui.theme.TopHairTheme
 
-class RegisterSenhaView : ComponentActivity() {
+class RegisterDadoView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -63,7 +61,7 @@ class RegisterSenhaView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterSenhaView("Android")
+                    RegisterDadoScreen("Registro Dado")
                 }
             }
         }
@@ -72,11 +70,10 @@ class RegisterSenhaView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
-
+fun RegisterDadoScreen(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
-    var senha by remember { mutableStateOf("") }
-    var senhaConfirm by remember { mutableStateOf("") }
+    var nomeCompleto by remember { mutableStateOf("") }
+    var telefone by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -116,21 +113,16 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Image(
-                        painter = painterResource(
-                            id = R.mipmap.logo_inicial
-                        ),
+                    Image(painter = painterResource(
+                        id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth()
-                    )
+                            .fillMaxWidth())
 
                     MarginSpace(36.dp)
 
-                    Text(
-                        stringResource(
-                            R.string.titulo_tela_cadastro_senha
-                        ),
+                    Text(stringResource(
+                        R.string.titulo_tela_cadastro_dado_pessoal),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -138,19 +130,16 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
                         textAlign = TextAlign.Center,
                         lineHeight = 40.sp,
                         color = Color.White,
-                        fontWeight = FontWeight.ExtraBold
-                    )
+                        fontWeight = FontWeight.ExtraBold)
 
-                    MarginSpace(32.dp)
-
+                    MarginSpace(24.dp)
 
                     OutlinedTextField(
-                        value = senha,
-                        onValueChange = { senha = it },
-                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
+                        value = nomeCompleto,
+                        onValueChange = { nomeCompleto = it },
+                        label = { Text(stringResource(R.string.txt_nome_completo)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
@@ -163,54 +152,50 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
                             .background(
                                 Color(0xFFCAC3DC),
                                 RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
-                    )
-
-                    MarginSpace(8.dp)
-
-
-
-                    OutlinedTextField(
-                        value = senhaConfirm,
-                        onValueChange = { senhaConfirm = it },
-                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
-                        ),
-                        modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
+                            ) // Cor de fundo #cac3dc // Largura específica
+                            .height(50.dp)
+                            .fillMaxWidth()// Altura específica
                     )
 
                     MarginSpace(16.dp)
 
-                    CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
-                       val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
+                    OutlinedTextField(
+                        value = telefone,
+                        onValueChange = { telefone = it },
+                        label = { Text(stringResource(R.string.txt_telefone)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        ),
+                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            cursorColor = Color.Black, // Cor do cursor
+                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
+                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                        ),
+                        modifier = Modifier
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            ) // Cor de fundo #cac3dc // Largura específica
+                            .height(50.dp)
+                            .fillMaxWidth()// Altura específica
+                    )
 
-                        route.startActivity(registerSucessoCadastroView)
+                    MarginSpace(16.dp)
 
-                      },
+                    CustomButton(stringResource(R.string.btn_txt_continue), onClick= {
+                        val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
 
-                            Color(31, 116, 109, 255),
+                        route.startActivity(registerSenhaView)
 
-                        )
+                    })
+
+                    MarginSpace(16.dp)
+
                 }
             }
-
 
             Column(
                 modifier = Modifier
@@ -226,8 +211,6 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
                     color = Color.White
                 )
             }
-
-
         }
 
     }
@@ -235,8 +218,8 @@ fun RegisterSenhaView(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview4() {
+fun GreetingPreview6() {
     TopHairTheme {
-        RegisterSenhaView("Android")
+        RegisterDadoScreen("Registro Dado")
     }
 }

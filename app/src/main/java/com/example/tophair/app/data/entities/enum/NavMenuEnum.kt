@@ -1,4 +1,4 @@
-package com.example.tophair.app.entities.enum
+package com.example.tophair.app.data.entities.enum
 
 import com.example.tophair.R
 

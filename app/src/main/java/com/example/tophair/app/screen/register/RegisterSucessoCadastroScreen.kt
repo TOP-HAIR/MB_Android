@@ -1,4 +1,4 @@
-package com.example.tophair.app.view.register
+package com.example.tophair.app.screen.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,8 +36,8 @@ import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.login.LoginView
-import com.example.tophair.app.view.register.ui.theme.TopHairTheme
+import com.example.tophair.app.screen.login.LoginView
+import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterSucessoCadastroView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +49,7 @@ class RegisterSucessoCadastroView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterSucessoCadastroView("Android")
+                    RegisterSucessoCadastroScreen("Android")
                 }
             }
         }
@@ -58,7 +57,7 @@ class RegisterSucessoCadastroView : ComponentActivity() {
 }
 
 @Composable
-fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
+fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
 
     val route = LocalContext.current
 
@@ -127,7 +126,8 @@ fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
                     
                     Image(painter = painterResource(id = R.mipmap.icon_success_cadastro),
                         contentDescription = "Ícone de Cadastro Bem-Sucedido",
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .size(width = 120.dp, height = 120.dp))
 
                     MarginSpace(32.dp)
@@ -173,6 +173,6 @@ fun RegisterSucessoCadastroView(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview5() {
     TopHairTheme {
-        RegisterSucessoCadastroView("Android")
+        RegisterSucessoCadastroScreen("Android")
     }
 }

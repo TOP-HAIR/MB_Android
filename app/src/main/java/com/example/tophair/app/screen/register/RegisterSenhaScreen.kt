@@ -1,4 +1,4 @@
-package com.example.tophair.app.view.register
+package com.example.tophair.app.screen.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -36,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -52,12 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.CustomRowWithDividers
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.login.LoginView
-import com.example.tophair.app.view.register.ui.theme.TopHairTheme
+import com.example.tophair.ui.theme.TopHairTheme
 
-class RegisterDadoView : ComponentActivity() {
+class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -67,7 +61,7 @@ class RegisterDadoView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterDadoView("Registro Dado")
+                    RegisterSenhaScreen("Android")
                 }
             }
         }
@@ -76,10 +70,11 @@ class RegisterDadoView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
+fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
+
     val route = LocalContext.current
-    var nomeCompleto by remember { mutableStateOf("") }
-    var telefone by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+    var senhaConfirm by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -119,16 +114,21 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Image(painter = painterResource(
-                        id = R.mipmap.logo_inicial),
+                    Image(
+                        painter = painterResource(
+                            id = R.mipmap.logo_inicial
+                        ),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                    )
 
                     MarginSpace(36.dp)
 
-                    Text(stringResource(
-                        R.string.titulo_tela_cadastro_dado_pessoal),
+                    Text(
+                        stringResource(
+                            R.string.titulo_tela_cadastro_senha
+                        ),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -136,16 +136,19 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
                         textAlign = TextAlign.Center,
                         lineHeight = 40.sp,
                         color = Color.White,
-                        fontWeight = FontWeight.ExtraBold)
+                        fontWeight = FontWeight.ExtraBold
+                    )
 
-                    MarginSpace(24.dp)
+                    MarginSpace(32.dp)
+
 
                     OutlinedTextField(
-                        value = nomeCompleto,
-                        onValueChange = { nomeCompleto = it },
-                        label = { Text(stringResource(R.string.txt_nome_completo)) },
+                        value = senha,
+                        onValueChange = { senha = it },
+                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
@@ -155,20 +158,25 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
                             unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
                         ),
                         modifier = Modifier
-                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc // Largura específica
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            ) // Cor de fundo #cac3dc
+                            .fillMaxWidth() // Largura específica
+                            .height(50.dp) // Altura específica
                     )
 
-                    MarginSpace(16.dp)
+                    MarginSpace(8.dp)
+
+
 
                     OutlinedTextField(
-                        value = telefone,
-                        onValueChange = { telefone = it },
-                        label = { Text(stringResource(R.string.txt_telefone)) },
+                        value = senhaConfirm,
+                        onValueChange = { senhaConfirm = it },
+                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Phone,
+                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
@@ -178,24 +186,29 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
                             unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
                         ),
                         modifier = Modifier
-                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc // Largura específica
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            ) // Cor de fundo #cac3dc
+                            .fillMaxWidth() // Largura específica
+                            .height(50.dp) // Altura específica
                     )
 
                     MarginSpace(16.dp)
 
-                    CustomButton(stringResource(R.string.btn_txt_continue), onClick= {
-                        val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
+                    CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
+                       val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
 
-                        route.startActivity(registerSenhaView)
+                        route.startActivity(registerSucessoCadastroView)
 
-                    })
+                      },
 
-                    MarginSpace(16.dp)
+                            Color(31, 116, 109, 255),
 
+                        )
                 }
             }
+
 
             Column(
                 modifier = Modifier
@@ -211,6 +224,8 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
                     color = Color.White
                 )
             }
+
+
         }
 
     }
@@ -218,8 +233,8 @@ fun RegisterDadoView(message: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview6() {
+fun GreetingPreview4() {
     TopHairTheme {
-        RegisterDadoView("Registro Dado")
+        RegisterSenhaScreen("Android")
     }
 }

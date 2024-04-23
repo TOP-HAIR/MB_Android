@@ -1,4 +1,4 @@
-package com.example.tophair.app.view.menu.tabs
+package com.example.tophair.app.screen.menu.tabs
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

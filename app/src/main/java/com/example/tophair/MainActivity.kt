@@ -36,8 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.login.LoginView
-import com.example.tophair.app.view.register.RegisterEmailView
+import com.example.tophair.app.screen.login.LoginView
+import com.example.tophair.app.screen.register.RegisterEmailView
 import com.example.tophair.ui.theme.TopHairTheme
 
 class MainActivity : ComponentActivity() {

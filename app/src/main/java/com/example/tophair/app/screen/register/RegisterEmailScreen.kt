@@ -1,4 +1,4 @@
-package com.example.tophair.app.view.login
+package com.example.tophair.app.screen.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,11 +22,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -46,15 +49,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tophair.R
 import androidx.compose.ui.unit.sp
+import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.CustomRowWithDividers
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.view.menu.MenuNavigationView
-import com.example.tophair.app.view.register.RegisterSenhaView
-import com.example.tophair.app.view.ui.theme.TopHairTheme
+import com.example.tophair.ui.theme.TopHairTheme
 
-class LoginView : ComponentActivity() {
+class RegisterEmailView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -64,7 +66,7 @@ class LoginView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginView("Login")
+                    RegisterEmailScreen("Registro Email")
                 }
             }
         }
@@ -73,10 +75,9 @@ class LoginView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginView(message: String, modifier: Modifier = Modifier) {
+fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
     var email by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -91,8 +92,6 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
                 )
 
         ) {
-
-            MarginSpace(12.dp)
 
             Image(
                 painter = painterResource(id = R.mipmap.background_tela_inicial),
@@ -124,11 +123,11 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .fillMaxWidth())
 
-                    MarginSpace(36.dp)
+                    MarginSpace(28.dp)
 
                     Text(
                         stringResource(
-                        R.string.titulo_tela_login),
+                            R.string.titulo_tela_cadastro_email),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -138,7 +137,7 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
                         color = Color.White,
                         fontWeight = FontWeight.ExtraBold)
 
-                    MarginSpace(24.dp)
+                    MarginSpace(18.dp)
 
                     OutlinedTextField(
                         value = email,
@@ -152,61 +151,63 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Black, // Torna a borda focada transparente
+                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
                             unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
                         ),
                         modifier = Modifier
-                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            ) // Cor de fundo #cac3dc
+                            .fillMaxWidth() // Largura específica
+                            .height(50.dp) // Altura específica
                     )
 
-                    MarginSpace(16.dp)
+                    MarginSpace(8.dp)
 
-                    OutlinedTextField(
-                        value = senha,
-                        onValueChange = { senha = it },
-                        label = { Text(stringResource(R.string.txt_senha)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Black, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
-                        ),
-                        modifier = Modifier
-                            .background(Color(0xFFCAC3DC), RoundedCornerShape(32.dp)) // Cor de fundo #cac3dc
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                    CustomButton(
+                        stringResource(R.string.btn_txt_continue), onClick= {
+                        val registerDadoView = Intent(route, RegisterDadoView::class.java)
+
+                        route.startActivity(registerDadoView)
+                    },
+                        Color(47, 156, 127)
                     )
 
-                    MarginSpace(16.dp)
+                    MarginSpace(8.dp)
 
-                    CustomButton(stringResource(R.string.btn_txt_login), onClick= {
-                        val menuNavigationView = Intent(route, MenuNavigationView::class.java)
+                    CustomRowWithDividers()
 
-                        route.startActivity(menuNavigationView)
-                    })
+                    MarginSpace(8.dp)
 
-                    MarginSpace(16.dp)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Botão do Google
+                        IconButton(
+                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
+                            modifier = Modifier.size(60.dp) // Aplicando o tamanho ao botão
+                        ) {
+                            val googleIcon: Painter = painterResource(id = R.mipmap.google)
+                            Image(
+                                painter = googleIcon,
+                                contentDescription = "Google Login",
+                            )
+                        }
 
-                    TextButton(
-                        onClick = {
-                            // TODO: Implemente a lógica do que deve acontecer quando o texto for clicado
-                        },
-                        modifier = Modifier.padding(8.dp) // Espaçamento ao redor do botão
-                    ) {
-                        Text(
-                            text = stringResource(R.string.txt_senha_reset),
-                            fontSize = 14.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Spacer(modifier = Modifier.width(24.dp)) // Espaço entre os botões
+
+                        // Botão do Facebook
+                        IconButton(
+                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
+                            modifier = Modifier.size(73.dp) // Aplicando o tamanho ao botão
+                        ) {
+                            val facebookIcon: Painter = painterResource(id = R.mipmap.facebook)
+                            Image(
+                                painter = facebookIcon,
+                                contentDescription = "Facebook Login",
+                            )
+                        }
                     }
+
                 }
             }
 
@@ -233,8 +234,8 @@ fun LoginView(message: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview3() {
+fun GreetingPreview2() {
     TopHairTheme {
-        LoginView("Login")
+        RegisterEmailScreen("Registro Email")
     }
 }
