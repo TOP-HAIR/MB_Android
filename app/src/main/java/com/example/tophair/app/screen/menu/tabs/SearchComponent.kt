@@ -22,58 +22,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tophair.R
+import com.example.tophair.app.utils.CustomLogo
 
 @Preview(showBackground = true)
 @Composable
 fun SearchComponent() {
 
-    val contextoBusca = LocalContext.current
-    val temaTopHair = Color(red = 4, green = 23, blue = 32)
-    val textoSobreposto = Color(red = 0, green = 0, blue = 0, alpha = 200)
-    var barbearia = remember { mutableStateOf("") }
-
     Column(
-        modifier = Modifier.fillMaxSize(1f),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
     ) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(bottom = 20.dp)
-                .background(color = temaTopHair, shape = RectangleShape),
-            horizontalArrangement = Arrangement.Center
-        ) {
-
-            Image(
-                painter = painterResource(id = R.mipmap.logo_mobile_svg),
-                contentDescription = "Logo Top Hair",
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(160.dp)
-            )
-
-        }
-
-        // TextField()
-
-       // Row() {
-
-            //TextField()
-
-            //TextField()
-
-
-      //  }
-
-     //   if () {}
-
-     //   else(){}
-
-
-
+        CustomLogo()
     }
 
 }

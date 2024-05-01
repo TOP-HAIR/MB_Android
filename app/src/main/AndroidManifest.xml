@@ -15,6 +15,11 @@
         android:theme="@style/Theme.TopHair"
         tools:targetApi="31">
         <activity
+            android:name=".app.screen.register.RegisterEnderecoScreen"
+            android:exported="false"
+            android:label="@string/title_activity_register_endereco_screen"
+            android:theme="@style/Theme.TopHair" />
+        <activity
             android:name=".app.screen.menu.MenuNavigationView"
             android:exported="false"
             android:label="@string/title_activity_menu_navigation_view"

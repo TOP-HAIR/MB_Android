@@ -1,9 +1,11 @@
 package com.example.tophair.app.screen.register
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,13 +49,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterDadoView : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val extras = intent.extras
         setContent {
             TopHairTheme {
                 // A surface container using the 'background' color from the theme
@@ -61,18 +66,22 @@ class RegisterDadoView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterDadoScreen("Registro Dado")
+                    RegisterDadoScreen(extras)
                 }
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterDadoScreen(message: String, modifier: Modifier = Modifier) {
+fun RegisterDadoScreen(extras: Bundle?, modifier: Modifier = Modifier) {
     val route = LocalContext.current
+    val user = extras?.getSerializable("user", UserCadastro::class.java)
+
     var nomeCompleto by remember { mutableStateOf("") }
+    var cpf by remember { mutableStateOf("") }
     var telefone by remember { mutableStateOf("") }
 
     BoxWithConstraints(
@@ -144,17 +153,42 @@ fun RegisterDadoScreen(message: String, modifier: Modifier = Modifier) {
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                            cursorColor = Color.Black,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .background(
                                 Color(0xFFCAC3DC),
                                 RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc // Largura específica
+                            )
                             .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                            .fillMaxWidth()
+                    )
+
+                    MarginSpace(16.dp)
+
+                    OutlinedTextField(
+                        value = cpf,
+                        onValueChange = { cpf = it },
+                        label = { Text(stringResource(R.string.txt_nome_completo)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next
+                        ),
+                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            cursorColor = Color.Black,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent
+                        ),
+                        modifier = Modifier
+                            .background(
+                                Color(0xFFCAC3DC),
+                                RoundedCornerShape(32.dp)
+                            )
+                            .height(50.dp)
+                            .fillMaxWidth()
                     )
 
                     MarginSpace(16.dp)
@@ -170,24 +204,30 @@ fun RegisterDadoScreen(message: String, modifier: Modifier = Modifier) {
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                            cursorColor = Color.Black,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .background(
                                 Color(0xFFCAC3DC),
                                 RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc // Largura específica
+                            )
                             .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                            .fillMaxWidth()
                     )
 
                     MarginSpace(16.dp)
 
                     CustomButton(stringResource(R.string.btn_txt_continue), onClick= {
                         val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
+                        if (user != null) {
+                            user.nomeCompleto = nomeCompleto
+                            user.telefone = telefone
+                            user.cpf = cpf
+                        }
 
+                        //registerSenhaView.putExtra("userCadastro", user)
                         route.startActivity(registerSenhaView)
 
                     })
@@ -216,10 +256,11 @@ fun RegisterDadoScreen(message: String, modifier: Modifier = Modifier) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview6() {
     TopHairTheme {
-        RegisterDadoScreen("Registro Dado")
+        RegisterDadoScreen(null)
     }
 }

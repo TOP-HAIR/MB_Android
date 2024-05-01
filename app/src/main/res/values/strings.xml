@@ -104,4 +104,5 @@
     </string>
     <string name="title_activity_register_dado_view">RegisterDadoView</string>
     <string name="title_activity_menu_navigation_view">MenuNavigationView</string>
+    <string name="title_activity_register_endereco_screen">RegisterEnderecoScreen</string>
 </resources>

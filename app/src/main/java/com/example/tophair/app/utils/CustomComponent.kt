@@ -1,5 +1,6 @@
 package com.example.tophair.app.utils
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ButtonDefaults
@@ -10,7 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
@@ -68,4 +73,31 @@ fun CustomRowWithDividers(
             )
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun CustomLogo() {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
+    val temaTopHair = Color(red = 4, green = 23, blue = 32)
+    Column(modifier = Modifier
+        .height(110.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = temaTopHair, shape = RectangleShape),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(id = R.mipmap.logo_mobile),
+                contentDescription = "Logo Top Hair",
+                modifier = Modifier
+                    .heightIn(max = screenHeight * 10 / 100)
+                    .width(240.dp)
+            )
+        }
+    }
+
 }
