@@ -19,13 +19,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +47,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,7 +70,8 @@ class RegisterDadoView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterDadoScreen(extras)
+                    val user = extras?.getSerializable("user") as? UserCadastro
+                    RegisterDadoScreen(user)
                 }
             }
         }
@@ -76,13 +81,10 @@ class RegisterDadoView : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterDadoScreen(extras: Bundle?, modifier: Modifier = Modifier) {
+fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) {
     val route = LocalContext.current
-    val user = extras?.getSerializable("user", UserCadastro::class.java)
 
-    var nomeCompleto by remember { mutableStateOf("") }
-    var cpf by remember { mutableStateOf("") }
-    var telefone by remember { mutableStateOf("") }
+    val (user, userSetter) = remember { mutableStateOf(userParam)}
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -112,7 +114,8 @@ fun RegisterDadoScreen(extras: Bundle?, modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(0.90f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -122,11 +125,14 @@ fun RegisterDadoScreen(extras: Bundle?, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    MarginSpace(8.dp)
+
                     Image(painter = painterResource(
                         id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                            .fillMaxHeight(fraction = 0.4f))
 
                     MarginSpace(36.dp)
 
@@ -143,92 +149,81 @@ fun RegisterDadoScreen(extras: Bundle?, modifier: Modifier = Modifier) {
 
                     MarginSpace(24.dp)
 
-                    OutlinedTextField(
-                        value = nomeCompleto,
-                        onValueChange = { nomeCompleto = it },
+//                    OutlinedTextField(
+//                        value = user?.nomeCompleto ?: "",
+//                        onValueChange = { userSetter(user?.copy(nomeCompleto = it)) },
+//                        label = { Text(stringResource(R.string.txt_nome_completo)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
+
+                    TextField(
+                        value = user?.nomeCompleto ?: "",
+                        onValueChange = { userSetter(user?.copy(nomeCompleto = it)) },
                         label = { Text(stringResource(R.string.txt_nome_completo)) },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
                         ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black,
-                            focusedBorderColor = Color.Transparent,
-                            unfocusedBorderColor = Color.Transparent
-                        ),
                         modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            )
-                            .height(50.dp)
                             .fillMaxWidth()
                     )
 
                     MarginSpace(16.dp)
 
-                    OutlinedTextField(
-                        value = cpf,
-                        onValueChange = { cpf = it },
-                        label = { Text(stringResource(R.string.txt_nome_completo)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black,
-                            focusedBorderColor = Color.Transparent,
-                            unfocusedBorderColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            )
-                            .height(50.dp)
-                            .fillMaxWidth()
+//                    OutlinedTextField(
+//                        value = user?.telefone ?: "",
+//                        onValueChange = { userSetter(user?.copy(telefone = it)) },
+//                        label = { Text(stringResource(R.string.txt_telefone)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            keyboardType = KeyboardType.Phone,
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
+
+                    FormattedPhoneNumberTextField(
+                        initialValue = user?.telefone ?: "",
+                        onValueChange = { userSetter(user?.copy(telefone = it)) },
+                        modifier = Modifier.fillMaxWidth()
                     )
 
-                    MarginSpace(16.dp)
-
-                    OutlinedTextField(
-                        value = telefone,
-                        onValueChange = { telefone = it },
-                        label = { Text(stringResource(R.string.txt_telefone)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Phone,
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black,
-                            focusedBorderColor = Color.Transparent,
-                            unfocusedBorderColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            )
-                            .height(50.dp)
-                            .fillMaxWidth()
-                    )
 
                     MarginSpace(16.dp)
 
                     CustomButton(stringResource(R.string.btn_txt_continue), onClick= {
                         val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
-                        if (user != null) {
-                            user.nomeCompleto = nomeCompleto
-                            user.telefone = telefone
-                            user.cpf = cpf
+                        if(!user?.telefone.isNullOrEmpty() && !user?.nomeCompleto.isNullOrEmpty()) {
+                            registerSenhaView.putExtra("user", user)
+                            route.startActivity(registerSenhaView)
                         }
 
-                        //registerSenhaView.putExtra("userCadastro", user)
-                        route.startActivity(registerSenhaView)
 
                     })
 
@@ -263,4 +258,42 @@ fun GreetingPreview6() {
     TopHairTheme {
         RegisterDadoScreen(null)
     }
+}
+
+@Composable
+fun FormattedPhoneNumberTextField(
+    initialValue: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var text by remember { mutableStateOf(TextFieldValue(initialValue)) }
+
+    TextField(
+        value = text,
+        onValueChange = {
+            val formattedText = formatPhoneNumber(it.text)
+            text = it.copy(text = formattedText)
+            onValueChange(formattedText)
+        },
+        label = { Text(stringResource(R.string.txt_telefone)) },
+        modifier = modifier,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Phone,
+            imeAction = ImeAction.Next
+        ),
+    )
+}
+
+fun formatPhoneNumber(input: String): String {
+    val digits = input.filter { it.isDigit() }
+    val formatted = buildString {
+        append("(")
+        for (i in digits.indices) {
+            append(digits[i])
+            if (i == 1) append(") ")
+            if (i == 6) append("-")
+            if (i == 10) break
+        }
+    }
+    return formatted
 }

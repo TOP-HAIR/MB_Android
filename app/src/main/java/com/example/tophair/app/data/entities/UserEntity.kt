@@ -22,3 +22,29 @@ data class UserCadastro(
     var telefone: String? = null,
     var profissional: Boolean? = false
 ): Serializable
+
+data class UserCadastroDeserealize(
+    var cpf: String? = null,
+    var nomeCompleto: String? = null,
+    var email: String? = null,
+    var senha: String? = null,
+    var telefone: String? = null,
+    var profissional: Boolean? = false
+)
+
+data class UserUpdate(
+    var nomeCompleto: String? = null,
+    var email: String? = null,
+    var telefone: String? = null,
+    var profissional: Boolean? = false
+)
+
+data class UserGet(
+    val userId: Number? = null,
+    var cpf: String? = null,
+    var nomeCompleto: String? = null,
+    var email: String? = null,
+    var telefone: String? = null,
+    var isProfissional: Boolean? = false,
+    var arquivo: String? = null,
+)

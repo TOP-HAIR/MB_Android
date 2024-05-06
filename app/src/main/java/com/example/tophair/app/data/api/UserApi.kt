@@ -1,7 +1,11 @@
 package com.example.tophair.app.data.api
 
 import com.example.tophair.app.data.entities.User
+import com.example.tophair.app.data.entities.UserCadastro
+import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.entities.UserGet
 import com.example.tophair.app.data.entities.UserLogin
+import com.example.tophair.app.data.entities.UserUpdate
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,14 +16,18 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserApi {
-    @POST("/usuarios/login")
+    @POST("/api/usuarios/login")
     suspend fun postUserLogin(@Body userLogin: UserLogin): Response<User>
-    @GET("/usuarios/{userId}")
-    suspend fun getUser(@Path("userId") userId: String): Response<User>
 
-    @DELETE("/usuarios/{userId}")
-    suspend fun deleteUser(@Path("userId") userId: String): Response<Unit>
+    @POST("/api/usuarios/cadastrar")
+    suspend fun postUserCadastrar(@Body userCadastro: UserCadastroDeserealize): Response<Any>
 
-    @PUT("/usuarios/{userId}")
-    suspend fun updateUser(@Path("userId") userId: String, @Body updatedUser: User): Response<User>
+    @GET("/api/usuarios/{id}")
+    suspend fun getUser(@Path("id") userId: Int): Response<UserGet>
+
+    @DELETE("/api/usuarios/{id}")
+    suspend fun deleteUser(@Path("id") userId: Long): Response<Unit>
+
+    @PUT("/api/usuarios/{id}")
+    suspend fun updateUser(@Path("id") userId: Long, @Body updatedUser: UserUpdate): Response<User>
 }

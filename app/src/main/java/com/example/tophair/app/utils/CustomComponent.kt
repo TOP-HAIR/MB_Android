@@ -2,32 +2,47 @@ package com.example.tophair.app.utils
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 
+@Preview(showBackground = true)
 @Composable
-fun CustomButton(text: String, onClick: () -> Unit?, color: Color = Color(0xFF26A69A)) {
+fun CustomButton(text: String = "", onClick: () -> Unit? = {}, color: Color = Color(0xFF26A69A)) {
     Button(
         onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
             containerColor = color),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        shape = MaterialTheme.shapes.small
     ) {
         Text(text, fontSize = 18.sp)
     }
@@ -74,6 +89,7 @@ fun CustomRowWithDividers(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun CustomLogo() {
@@ -101,3 +117,4 @@ fun CustomLogo() {
     }
 
 }
+

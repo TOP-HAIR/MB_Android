@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -90,7 +92,8 @@ fun TelaInicial(modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(0.90f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -100,11 +103,14 @@ fun TelaInicial(modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
+                    MarginSpace(8.dp)
+
                     Image(painter = painterResource(
                         id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                            .fillMaxHeight(fraction = 0.4f))
 
                     MarginSpace(36.dp)
 

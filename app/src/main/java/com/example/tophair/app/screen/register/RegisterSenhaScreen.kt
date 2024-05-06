@@ -2,6 +2,7 @@ package com.example.tophair.app.screen.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -17,16 +18,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,6 +53,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.UserCadastro
+import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.viewmodel.UserViewModel
+import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
@@ -54,6 +64,7 @@ import com.example.tophair.ui.theme.TopHairTheme
 class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val extras = intent.extras
         setContent {
             TopHairTheme {
                 // A surface container using the 'background' color from the theme
@@ -61,7 +72,8 @@ class RegisterSenhaView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RegisterSenhaScreen("Android")
+                    val user = extras?.getSerializable("user") as? UserCadastro
+                    RegisterSenhaScreen(user,UserViewModel())
                 }
             }
         }
@@ -70,10 +82,12 @@ class RegisterSenhaView : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
+fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel = UserViewModel(), modifier: Modifier = Modifier) {
 
     val route = LocalContext.current
-    var senha by remember { mutableStateOf("") }
+    val userCadastro by userViewModel.userAtual.observeAsState()
+
+    val (user, userSetter) = remember { mutableStateOf(userParam)}
     var senhaConfirm by remember { mutableStateOf("") }
 
     BoxWithConstraints(
@@ -104,7 +118,8 @@ fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(0.90f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -114,6 +129,8 @@ fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    MarginSpace(8.dp)
+
                     Image(
                         painter = painterResource(
                             id = R.mipmap.logo_inicial
@@ -121,6 +138,7 @@ fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
                             .fillMaxWidth()
+                            .fillMaxHeight(fraction = 0.4f)
                     )
 
                     MarginSpace(36.dp)
@@ -142,70 +160,96 @@ fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
                     MarginSpace(32.dp)
 
 
-                    OutlinedTextField(
-                        value = senha,
-                        onValueChange = { senha = it },
-                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
-                        singleLine = true,
+//                    OutlinedTextField(
+//                        value = user?.senha ?: "",
+//                        onValueChange = { userSetter(user?.copy(senha = it)) },
+//                        label = { Text(stringResource(R.string.txt_senha)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            keyboardType = KeyboardType.Password,
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
+
+                    TextField(
+                        value = user?.senha ?: "",
+                        onValueChange = { userSetter(user?.copy(senha = it)) },
+                        label = { Text(stringResource(R.string.txt_senha)) },
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
+                            keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Next
                         ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
-                        ),
                         modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
+                            .fillMaxWidth()
                     )
+
 
                     MarginSpace(8.dp)
 
-
-
-                    OutlinedTextField(
+                    TextField(
                         value = senhaConfirm,
                         onValueChange = { senhaConfirm = it },
                         label = { Text(stringResource(R.string.txt_senha_confirm)) },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
+                            keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Next
                         ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
-                        ),
                         modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
+                            .fillMaxWidth()
                     )
+
+
+//                    OutlinedTextField(
+//                        value = senhaConfirm,
+//                        onValueChange = { senhaConfirm = it },
+//                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            keyboardType = KeyboardType.Password,
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
 
                     MarginSpace(16.dp)
 
                     CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
-                       val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
 
-                        route.startActivity(registerSucessoCadastroView)
+                        if((user?.senha.toString() == senhaConfirm)) {
+                            val obj = UserCadastroDeserealize(user?.cpf.toString(), user?.nomeCompleto.toString(), user?.email.toString(), user?.senha.toString(), user?.telefone.toString(), false)
 
+                            userViewModel.postUserCadastro(obj)
+
+
+                                val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
+                                route.startActivity(registerSucessoCadastroView)
+                        }
                       },
-
-                            Color(31, 116, 109, 255),
-
-                        )
+                      Color(31, 116, 109, 255),
+                    )
                 }
             }
 
@@ -235,6 +279,6 @@ fun RegisterSenhaScreen(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview4() {
     TopHairTheme {
-        RegisterSenhaScreen("Android")
+        RegisterSenhaScreen(null,UserViewModel())
     }
 }

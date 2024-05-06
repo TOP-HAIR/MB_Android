@@ -1,7 +1,9 @@
 package com.example.tophair.app.screen.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,8 +26,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -49,16 +53,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tophair.R
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.tophair.app.data.entities.UserLogin
+import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.ui.theme.TopHairTheme
+import kotlinx.coroutines.flow.firstOrNull
 
 class LoginView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        SessionManager.initialize(this)
+
         setContent {
             TopHairTheme {
                 // A surface container using the 'background' color from the theme
@@ -77,8 +89,9 @@ class LoginView : ComponentActivity() {
 @Composable
 fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifier = Modifier) {
     val route = LocalContext.current
+    val tokenState by SessionManager.getTokenFlow().collectAsState(initial = null)
 
-    val users = userViewModel.users.observeAsState().value!!
+    val user by userViewModel.userAtual.observeAsState()
 
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
@@ -123,11 +136,14 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    MarginSpace(8.dp)
+
                     Image(painter = painterResource(
                         id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                            .fillMaxHeight(fraction = 0.4f))
 
                     MarginSpace(36.dp)
 
@@ -145,7 +161,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
 
                     MarginSpace(24.dp)
 
-                    OutlinedTextField(
+                    /*OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
                         label = { Text(stringResource(R.string.txt_email)) },
@@ -156,22 +172,45 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Black, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                            cursorColor = Color.Black,
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .background(
                                 Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
+                                RoundedCornerShape(28.dp)
+                            )
+                            .fillMaxWidth()
+                    )*/
+
+                    TextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text(stringResource(R.string.txt_email)) },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
 
                     MarginSpace(16.dp)
 
-                    OutlinedTextField(
+                    TextField(
+                        value = senha,
+                        onValueChange = { senha = it },
+                        label = { Text(stringResource(R.string.txt_senha)) },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+
+                    /*OutlinedTextField(
                         value = senha,
                         onValueChange = { senha = it },
                         label = { Text(stringResource(R.string.txt_senha)) },
@@ -182,33 +221,35 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                         ),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Black, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
+                            cursorColor = Color.Black,
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Transparent
                         ),
                         modifier = Modifier
                             .background(
                                 Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .height(50.dp)
-                            .fillMaxWidth()// Altura específica
-                    )
+                                RoundedCornerShape(28.dp)
+                            )
+                            .fillMaxWidth()
+                    )*/
 
                     MarginSpace(16.dp)
 
                     CustomButton(stringResource(R.string.btn_txt_login), onClick= {
                         if(!email.isNullOrEmpty() && !senha.isNullOrEmpty()) {
-                            val obj:UserLogin = UserLogin(email,senha)
+                            val obj = UserLogin(email,senha)
 
                             userViewModel.postUserLogin(obj)
-
-                            if(users.isNullOrEmpty()) {
-                                val menuNavigationView = Intent(route, MenuNavigationView::class.java)
-                                route.startActivity(menuNavigationView)
-                            }
                         }
                     })
+
+                    LaunchedEffect(tokenState) {
+                        if (user != null && tokenState != null) {
+                            Log.d("Token", "Token salvo: $tokenState")
+                            val menuNavigationView = Intent(route, MenuNavigationView::class.java)
+                            route.startActivity(menuNavigationView)
+                        }
+                    }
 
                     MarginSpace(16.dp)
 
@@ -216,7 +257,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                         onClick = {
                             // TODO: Implemente a lógica do que deve acontecer quando o texto for clicado
                         },
-                        modifier = Modifier.padding(8.dp) // Espaçamento ao redor do botão
+                        modifier = Modifier.padding(8.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.txt_senha_reset),
@@ -248,6 +289,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
 
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

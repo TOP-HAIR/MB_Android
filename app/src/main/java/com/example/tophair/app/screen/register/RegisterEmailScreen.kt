@@ -19,14 +19,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,6 +54,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomRowWithDividers
 import com.example.tophair.app.utils.MarginSpace
@@ -77,7 +81,7 @@ class RegisterEmailView : ComponentActivity() {
 @Composable
 fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
-    var email by remember { mutableStateOf("") }
+    val (user, userSetter) = remember { mutableStateOf(UserCadastro())}
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -107,7 +111,8 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(0.90f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -117,11 +122,14 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    MarginSpace(8.dp)
+
                     Image(painter = painterResource(
                         id = R.mipmap.logo_inicial),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
-                            .fillMaxWidth())
+                            .fillMaxWidth()
+                            .fillMaxHeight(fraction = 0.4f))
 
                     MarginSpace(28.dp)
 
@@ -139,74 +147,93 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
 
                     MarginSpace(18.dp)
 
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
+//                    OutlinedTextField(
+//                        value = user.email ?: "",
+//                        onValueChange = { userSetter(user.copy(email = it)) },
+//                        label = { Text(stringResource(R.string.txt_email)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            keyboardType = KeyboardType.Email,
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
+
+                    TextField(
+                        value = user.email ?: "",
+                        onValueChange = { userSetter(user.copy(email = it)) },
                         label = { Text(stringResource(R.string.txt_email)) },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black, // Cor do cursor
-                            focusedBorderColor = Color.Transparent, // Torna a borda focada transparente
-                            unfocusedBorderColor = Color.Transparent // backgroundColor é definido pelo modificador 'background' abaixo
-                        ),
                         modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(32.dp)
-                            ) // Cor de fundo #cac3dc
-                            .fillMaxWidth() // Largura específica
-                            .height(50.dp) // Altura específica
+                            .fillMaxWidth()
                     )
 
-                    MarginSpace(8.dp)
+                    MarginSpace(16.dp)
+
+                    TextField(
+                        value = user.cpf ?: "",
+                        onValueChange = { userSetter(user.copy(cpf = it)) },
+                        label = { Text(stringResource(R.string.txt_cpf)) },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+
+//                    OutlinedTextField(
+//                        value = user.cpf ?: "",
+//                        onValueChange = { userSetter(user.copy(cpf = it)) },
+//                        label = { Text(stringResource(R.string.txt_cpf)) },
+//                        singleLine = true,
+//                        keyboardOptions = KeyboardOptions.Default.copy(
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            cursorColor = Color.Black,
+//                            focusedBorderColor = Color.Transparent,
+//                            unfocusedBorderColor = Color.Transparent
+//                        ),
+//                        modifier = Modifier
+//                            .background(
+//                                Color(0xFFCAC3DC),
+//                                RoundedCornerShape(28.dp)
+//                            )
+//                            .fillMaxWidth()
+//                    )
+
+                    MarginSpace(16.dp)
 
                     CustomButton(
                         stringResource(R.string.btn_txt_continue), onClick= {
                         val registerDadoView = Intent(route, RegisterDadoView::class.java)
+                            if(!user.email.isNullOrEmpty() && !user.cpf.isNullOrEmpty()) {
+                                registerDadoView.putExtra("user", user)
 
-                        route.startActivity(registerDadoView)
-                    },
+                                route.startActivity(registerDadoView)
+                            }
+
+                        },
                         Color(47, 156, 127)
                     )
 
-                    MarginSpace(8.dp)
 
-                    CustomRowWithDividers()
-
-                    MarginSpace(8.dp)
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Botão do Google
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(60.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val googleIcon: Painter = painterResource(id = R.mipmap.google)
-                            Image(
-                                painter = googleIcon,
-                                contentDescription = "Google Login",
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(24.dp)) // Espaço entre os botões
-
-                        // Botão do Facebook
-                        IconButton(
-                            onClick = { /* TODO: Adicione sua lógica de clique aqui */ },
-                            modifier = Modifier.size(73.dp) // Aplicando o tamanho ao botão
-                        ) {
-                            val facebookIcon: Painter = painterResource(id = R.mipmap.facebook)
-                            Image(
-                                painter = facebookIcon,
-                                contentDescription = "Facebook Login",
-                            )
-                        }
-                    }
 
                 }
             }
@@ -222,7 +249,7 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = stringResource(R.string.txt_politicas_e_termos),
-                    fontSize = 10.sp,
+                    fontSize = 8.sp,
                     textAlign = TextAlign.Center,
                     color = Color.White
                 )
