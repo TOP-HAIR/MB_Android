@@ -104,7 +104,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                     ) {
                         if(!empresa.arquivoDtos.isNullOrEmpty()){
                             AsyncImage(
-                                model = "http://34.235.119.206/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                                model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
                                 contentDescription = empresa.razaoSocial,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()

@@ -106,6 +106,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
     val route = LocalContext.current
     val tokenState by SessionManager.getTokenFlow().collectAsState(initial = null)
     val user by userViewModel.userAtual.observeAsState()
+    val erroApi by userViewModel.erroApi.observeAsState()
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
     val view = LocalView.current
@@ -119,11 +120,10 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
 
         Box(
             modifier = Modifier
-
+                .fillMaxSize()
                 .background(
                     color = Color(4, 23, 32)
                 )
-                .verticalScroll(rememberScrollState())
 
         ) {
 
@@ -143,7 +143,8 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(0.90f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -221,6 +222,14 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                         singleLine = true
                     )
 
+                    if(erroApi != null && erroApi != "") {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = erroApi.toString(),
+                            fontSize = 14.sp,
+                            color = Color.Red)
+                    }
 
                     MarginSpace(16.dp)
 
@@ -231,6 +240,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                             userViewModel.postUserLogin(obj)
                         }
                     })
+
 
                     LaunchedEffect(tokenState) {
                         if (user != null && tokenState != null) {

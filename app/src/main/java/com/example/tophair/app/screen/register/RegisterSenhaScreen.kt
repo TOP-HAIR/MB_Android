@@ -88,6 +88,7 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
 
     val route = LocalContext.current
     val userCadastro by userViewModel.userAtual.observeAsState()
+    val erroApi by userViewModel.erroApi.observeAsState()
 
     val (user, userSetter) = remember { mutableStateOf(userParam)}
     var senhaConfirm by remember { mutableStateOf("") }
@@ -194,6 +195,25 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
                         visualTransformation = PasswordVisualTransformation(),
                         singleLine = true
                     )
+
+                    if(user?.senha.toString() == senhaConfirm && erroApi == null && erroApi == "") {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "Senhas não batem",
+                            fontSize = 14.sp,
+                            color = Color.Red)
+                    }
+
+
+                    if(erroApi != null && erroApi != "") {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = erroApi.toString(),
+                            fontSize = 14.sp,
+                            color = Color.Red)
+                    }
 
 
                     MarginSpace(16.dp)
