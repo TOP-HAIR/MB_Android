@@ -177,7 +177,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     ) {
                         if(!empresa.arquivoDtos.isNullOrEmpty()){
                             AsyncImage(
-                                model = "http://34.235.119.206/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                                model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
                                 contentDescription = empresa.razaoSocial,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
@@ -272,7 +272,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
     ) {
         if(!empresa.arquivoDtos.isNullOrEmpty()){
             AsyncImage(
-                model = "http://34.235.119.206/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
                 contentDescription = empresa.razaoSocial,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

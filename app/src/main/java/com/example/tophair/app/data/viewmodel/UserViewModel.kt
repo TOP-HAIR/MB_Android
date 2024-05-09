@@ -58,7 +58,7 @@ class UserViewModel: ViewModel() {
                     }
                 } else {
                     Log.e("UserViewModel", "erro no postUserLogin ${response}")
-                    erroApi.postValue(response.errorBody()?.string())
+                    erroApi.postValue("Dados inválidos.")
                 }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in postUserLogin! ${e.message}")

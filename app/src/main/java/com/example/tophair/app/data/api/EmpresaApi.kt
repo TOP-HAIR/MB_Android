@@ -15,6 +15,6 @@ interface EmpresaApi {
     @GET("/api/empresas/{id}")
     suspend fun getEmpresaPeloId(@Path("id") empresaId: Int?): Response<EmpresaPorId>
 
-    @GET("/api/empresas/filtro-empresas")
-    suspend fun getFiltroEmpresas(@Query("id") userId: Int, @Query("estado") estado: String, @Query("nomeServico") nomeServico: String, @Query("nomeEmpresa") nomeEmpresa: String): Response<List<Empresa>>
+    @GET("/api/empresas/filtro-empresas/{id}")
+    suspend fun getFiltroEmpresas(@Path("id") userId: Int, @Query("estado") estado: String, @Query("nomeServico") nomeServico: String, @Query("nomeEmpresa") nomeEmpresa: String): Response<List<Empresa>>
 }
