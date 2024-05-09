@@ -48,6 +48,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +59,7 @@ import com.example.tophair.app.data.entities.UserCadastroDeserealize
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -89,6 +91,8 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
 
     val (user, userSetter) = remember { mutableStateOf(userParam)}
     var senhaConfirm by remember { mutableStateOf("") }
+
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -160,29 +164,6 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
                     MarginSpace(32.dp)
 
 
-//                    OutlinedTextField(
-//                        value = user?.senha ?: "",
-//                        onValueChange = { userSetter(user?.copy(senha = it)) },
-//                        label = { Text(stringResource(R.string.txt_senha)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            keyboardType = KeyboardType.Password,
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
-
                     TextField(
                         value = user?.senha ?: "",
                         onValueChange = { userSetter(user?.copy(senha = it)) },
@@ -192,7 +173,9 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
                             imeAction = ImeAction.Next
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
                     )
 
 
@@ -207,32 +190,11 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
                             imeAction = ImeAction.Next
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
                     )
 
-
-//                    OutlinedTextField(
-//                        value = senhaConfirm,
-//                        onValueChange = { senhaConfirm = it },
-//                        label = { Text(stringResource(R.string.txt_senha_confirm)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            keyboardType = KeyboardType.Password,
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
 
                     MarginSpace(16.dp)
 
@@ -243,17 +205,23 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
 
                             userViewModel.postUserCadastro(obj)
 
-
                                 val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
                                 route.startActivity(registerSucessoCadastroView)
                         }
                       },
                       Color(31, 116, 109, 255),
                     )
+
+                    MarginSpace(32.dp)
+
+//                    Text(
+//                        text = stringResource(R.string.txt_politicas_e_termos),
+//                        fontSize = 10.sp,
+//                        textAlign = TextAlign.Center,
+//                        color = Color.White
+//                    )
                 }
             }
-
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -268,8 +236,6 @@ fun RegisterSenhaScreen(userParam: UserCadastro?, userViewModel: UserViewModel =
                     color = Color.White
                 )
             }
-
-
         }
 
     }

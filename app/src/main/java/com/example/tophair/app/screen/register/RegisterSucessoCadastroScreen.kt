@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,6 +39,7 @@ import com.example.tophair.R
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.login.LoginView
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterSucessoCadastroView : ComponentActivity() {
@@ -60,6 +63,8 @@ class RegisterSucessoCadastroView : ComponentActivity() {
 fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
 
     val route = LocalContext.current
+
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -89,7 +94,8 @@ fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f),
+                    .fillMaxHeight(1f)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -144,7 +150,14 @@ fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
 
                         )
 
+                    MarginSpace(32.dp)
 
+//                    Text(
+//                        text = stringResource(R.string.txt_politicas_e_termos),
+//                        fontSize = 10.sp,
+//                        textAlign = TextAlign.Center,
+//                        color = Color.White
+//                    )
                 }
 
             }
@@ -157,11 +170,11 @@ fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.txt_politicas_e_termos),
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
+                        text = stringResource(R.string.txt_politicas_e_termos),
+                        fontSize = 10.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    )
             }
 
         }

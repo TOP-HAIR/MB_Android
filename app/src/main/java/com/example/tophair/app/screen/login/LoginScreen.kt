@@ -1,9 +1,13 @@
 package com.example.tophair.app.screen.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -18,8 +22,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -38,21 +44,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tophair.R
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -62,10 +74,13 @@ import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.menu.MenuNavigationView
+import com.example.tophair.app.utils.HideSystemBars
+import com.example.tophair.app.utils.OutlinedTextFieldBackground
 import com.example.tophair.ui.theme.TopHairTheme
 import kotlinx.coroutines.flow.firstOrNull
 
 class LoginView : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,11 +105,12 @@ class LoginView : ComponentActivity() {
 fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifier = Modifier) {
     val route = LocalContext.current
     val tokenState by SessionManager.getTokenFlow().collectAsState(initial = null)
-
     val user by userViewModel.userAtual.observeAsState()
-
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+    val view = LocalView.current
+
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -103,10 +119,11 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
+
                 .background(
                     color = Color(4, 23, 32)
                 )
+                .verticalScroll(rememberScrollState())
 
         ) {
 
@@ -161,40 +178,32 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
 
                     MarginSpace(24.dp)
 
-                    /*OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text(stringResource(R.string.txt_email)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black,
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(28.dp)
-                            )
-                            .fillMaxWidth()
-                    )*/
 
-                    TextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text(stringResource(R.string.txt_email)) },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
+                        TextField(
+                            value = email,
+                            onValueChange = { email = it },
+                            label = { Text(stringResource(R.string.txt_email)) },
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Email,
+                                imeAction = ImeAction.Next
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onFocusChanged { focusState ->
+                                    if (focusState.isFocused) {
+
+                                        val window = (view.context as Activity).window
+                                        val insetsController =
+                                            WindowCompat.getInsetsController(window, view)
+                                        insetsController?.apply {
+                                            hide(WindowInsetsCompat.Type.statusBars())
+                                            systemBarsBehavior =
+                                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                                        }
+                                    }
+                                },
+                            singleLine = true
+                        )
 
                     MarginSpace(16.dp)
 
@@ -208,30 +217,10 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                         ),
                         modifier = Modifier
                             .fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
                     )
 
-                    /*OutlinedTextField(
-                        value = senha,
-                        onValueChange = { senha = it },
-                        label = { Text(stringResource(R.string.txt_senha)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            cursorColor = Color.Black,
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .background(
-                                Color(0xFFCAC3DC),
-                                RoundedCornerShape(28.dp)
-                            )
-                            .fillMaxWidth()
-                    )*/
 
                     MarginSpace(16.dp)
 
@@ -266,10 +255,26 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
                             fontWeight = FontWeight.Bold
                         )
                     }
+
+                    MarginSpace(32.dp)
+
+
                 }
             }
 
-
+//            Column(
+//                modifier = Modifier
+//                    .padding(bottom = 16.dp)
+//                    .align(Alignment.BottomCenter),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                Text(
+//                    text = stringResource(R.string.txt_politicas_e_termos),
+//                    fontSize = 10.sp,
+//                    textAlign = TextAlign.Center,
+//                    color = Color.White
+//                )
+//            }
 
             Column(
                 modifier = Modifier

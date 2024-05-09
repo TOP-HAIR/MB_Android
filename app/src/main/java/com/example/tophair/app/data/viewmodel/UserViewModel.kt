@@ -38,6 +38,9 @@ class UserViewModel: ViewModel() {
     val apiUsersToken: UserApi = RetrofitService.getApiServiceWithToken(UserApi::class.java)
     val erroApi = MutableLiveData("")
 
+    init {
+        getUser()
+    }
 
     fun postUserLogin(login: UserLogin) {
         viewModelScope.launch {

@@ -4,6 +4,7 @@ import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomRowWithDividers
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -24,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,10 +40,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.login.LoginView
 import com.example.tophair.app.screen.register.RegisterEmailView
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.ui.theme.TopHairTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +69,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TelaInicial(modifier: Modifier = Modifier) {
 
-   val route = LocalContext.current
+    val route = LocalContext.current
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()

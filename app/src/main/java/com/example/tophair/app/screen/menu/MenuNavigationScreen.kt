@@ -35,24 +35,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tophair.app.data.entities.enum.NavMenuEnum
 import com.example.tophair.app.data.service.SessionManager
+import com.example.tophair.app.data.viewmodel.AgendaViewModel
+import com.example.tophair.app.data.viewmodel.EmpresaViewModel
+import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.screen.menu.tabs.CalendarComponent
+import com.example.tophair.app.screen.menu.tabs.EmpresaComponent
 import com.example.tophair.app.screen.menu.tabs.HomeComponent
 import com.example.tophair.app.screen.menu.tabs.SearchComponent
 import com.example.tophair.app.screen.menu.tabs.UserComponent
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.ui.theme.TopHairTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MenuNavigationView : ComponentActivity() {
     private val userViewModel: UserViewModel by viewModels()
+    private val agendaViewModel: AgendaViewModel by viewModels()
+    private val empresaViewModel: EmpresaViewModel by viewModels()
+    private val servicoViewModel: ServicoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +75,9 @@ class MenuNavigationView : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MenuNavigationView("Tela MenuNavigation", rememberNavController(), userViewModel)
+//                    val navController = rememberNavController()
+//                    val savedStateHandle = remember { SavedStateHandle() }
+                    MenuNavigationView("Tela MenuNavigation", rememberNavController(), userViewModel, agendaViewModel, empresaViewModel, servicoViewModel)
                 }
             }
         }
@@ -73,7 +86,8 @@ class MenuNavigationView : ComponentActivity() {
 
 
 @Composable
-fun MenuNavigationView(name: String, navController: NavHostController, userViewModel: UserViewModel, modifier: Modifier = Modifier) {
+fun MenuNavigationView(name: String, navController: NavHostController, userViewModel: UserViewModel, agendaViewModel: AgendaViewModel, empresaViewModel: EmpresaViewModel, servicoViewModel: ServicoViewModel,
+                        modifier: Modifier = Modifier) {
     val navControllers = remember {
         NavMenuEnum.values().associateWith {
             mutableStateOf(false)
@@ -89,17 +103,28 @@ fun MenuNavigationView(name: String, navController: NavHostController, userViewM
 //    Text(
 //        text = tokenState.value ?: "Token não disponível"
 //    )
+
+    HideSystemBars()
+
+    val isEmpresaActive = remember {
+        navControllers[NavMenuEnum.EMPRESA]?.value ?: false
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth().background(color = Color.White)) {
-                NavHostWithScreens(navController = navController, userViewModel = userViewModel)
+                NavHostWithScreens(navController = navController, userViewModel = userViewModel, agendaViewModel = agendaViewModel, empresaViewModel = empresaViewModel, servicoViewModel = servicoViewModel,
+                    )
         }
 
         Row(
             modifier = Modifier
                 .background(color = Color(0xFF041720))
         ) {
-            NavMenuEnum.values().forEach { tela ->
+
+            NavMenuEnum.values().filter { tela ->
+            tela != NavMenuEnum.EMPRESA
+        }.forEach { tela ->
                 Card(
                     modifier = Modifier
                         .weight(1f)
@@ -141,20 +166,53 @@ fun MenuNavigationView(name: String, navController: NavHostController, userViewM
 }
 
 @Composable
-fun NavHostWithScreens(navController: NavHostController, userViewModel: UserViewModel) {
+fun NavHostWithScreens(navController: NavHostController, userViewModel: UserViewModel, agendaViewModel: AgendaViewModel, empresaViewModel: EmpresaViewModel, servicoViewModel: ServicoViewModel,) {
     NavHost(
         navController = navController,
         startDestination = NavMenuEnum.HOME.name
     ) {
-        NavMenuEnum.values().forEach { tela ->
-            composable(tela.name) {
-                println(tela)
-                when (tela) {
-                    NavMenuEnum.HOME -> HomeComponent()
-                    NavMenuEnum.SEARCH -> SearchComponent()
-                    NavMenuEnum.CALENDAR -> CalendarComponent()
-                    NavMenuEnum.USER -> UserComponent(userViewModel)
-                }
+        composable(NavMenuEnum.HOME.name) {
+            HomeComponent(empresaViewModel, navController)
+        }
+        composable(NavMenuEnum.SEARCH.name) {
+            SearchComponent(empresaViewModel, navController)
+        }
+//        composable(NavMenuEnum.SEARCH.name, arguments = listOf(navArgument("filtro") {
+//            type = NavType.StringType
+//            defaultValue = ""
+//            nullable = true
+//        })) { backStackEntry ->
+//            SearchComponent(
+//                empresaViewModel = empresaViewModel,
+//                navController = navController,
+//                savedStateHandle = savedStateHandle
+//            )
+//        }
+//        composable(
+//            route = "Search/{filtroHome}",
+//            arguments = listOf(navArgument("filtroHome") { type = NavType.IntType })
+//        ) { backStackEntry ->
+//            val filtroHome = backStackEntry.arguments?.getString("filtroHome")
+//            if (filtroHome != null) {
+//                SearchComponent(empresaViewModel = empresaViewModel, navController = navController, filtroHome = filtroHome)
+//            } else {
+//            }
+//        }
+        composable(NavMenuEnum.CALENDAR.name) {
+            CalendarComponent(agendaViewModel, empresaViewModel)
+        }
+        composable(NavMenuEnum.USER.name) {
+            UserComponent(userViewModel)
+        }
+        composable(
+                route = "Empresa/{idEmpresa}",
+                arguments = listOf(navArgument("idEmpresa") { type = NavType.IntType })
+            ) { backStackEntry ->
+            val idEmpresa = backStackEntry.arguments?.getInt("idEmpresa")
+            if (idEmpresa != null) {
+                EmpresaComponent(navController = navController, idEmpresa = idEmpresa, servicoViewModel = servicoViewModel, empresaViewModel = empresaViewModel)
+            } else {
+
             }
         }
     }
@@ -164,7 +222,13 @@ fun NavHostWithScreens(navController: NavHostController, userViewModel: UserView
 @Composable
 fun GreetingPreview7() {
     val fakeUserViewModel = UserViewModel()
+    val fakeAgendaViewModel = AgendaViewModel()
+    val fakeEmpresaViewModel = EmpresaViewModel()
+    val fakeServicoViewModel = ServicoViewModel()
+
     TopHairTheme {
-        MenuNavigationView("Tela MenuNavigation",rememberNavController(), fakeUserViewModel)
+//        val navController = rememberNavController()
+//        val savedStateHandle = remember { SavedStateHandle() }
+        MenuNavigationView("Tela MenuNavigation",rememberNavController(), fakeUserViewModel, fakeAgendaViewModel, fakeEmpresaViewModel,fakeServicoViewModel)
     }
 }

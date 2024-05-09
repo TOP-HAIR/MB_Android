@@ -57,6 +57,7 @@ import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomRowWithDividers
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -82,6 +83,8 @@ class RegisterEmailView : ComponentActivity() {
 fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
     val route = LocalContext.current
     val (user, userSetter) = remember { mutableStateOf(UserCadastro())}
+
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -111,7 +114,7 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f)
+                    .fillMaxHeight(1f)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -147,28 +150,6 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
 
                     MarginSpace(18.dp)
 
-//                    OutlinedTextField(
-//                        value = user.email ?: "",
-//                        onValueChange = { userSetter(user.copy(email = it)) },
-//                        label = { Text(stringResource(R.string.txt_email)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            keyboardType = KeyboardType.Email,
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
 
                     TextField(
                         value = user.email ?: "",
@@ -179,7 +160,8 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
                             imeAction = ImeAction.Next
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        singleLine = true
                     )
 
                     MarginSpace(16.dp)
@@ -193,53 +175,36 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
                             imeAction = ImeAction.Next
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        singleLine = true
                     )
 
-//                    OutlinedTextField(
-//                        value = user.cpf ?: "",
-//                        onValueChange = { userSetter(user.copy(cpf = it)) },
-//                        label = { Text(stringResource(R.string.txt_cpf)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
 
                     MarginSpace(16.dp)
 
                     CustomButton(
                         stringResource(R.string.btn_txt_continue), onClick= {
-                        val registerDadoView = Intent(route, RegisterDadoView::class.java)
+                            val registerDadoView = Intent(route, RegisterDadoView::class.java)
                             if(!user.email.isNullOrEmpty() && !user.cpf.isNullOrEmpty()) {
                                 registerDadoView.putExtra("user", user)
 
                                 route.startActivity(registerDadoView)
                             }
-
                         },
                         Color(47, 156, 127)
                     )
 
+                    MarginSpace(32.dp)
 
+//                    Text(
+//                        text = stringResource(R.string.txt_politicas_e_termos),
+//                        fontSize = 10.sp,
+//                        textAlign = TextAlign.Center,
+//                        color = Color.White
+//                    )
 
                 }
             }
-
-
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -249,7 +214,7 @@ fun RegisterEmailScreen(message: String, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = stringResource(R.string.txt_politicas_e_termos),
-                    fontSize = 8.sp,
+                    fontSize = 10.sp,
                     textAlign = TextAlign.Center,
                     color = Color.White
                 )

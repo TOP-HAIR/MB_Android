@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,24 +55,14 @@ import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomLogo
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
 fun UserComponent(userViewModel: UserViewModel) {
-//    val userIdFlow = remember { SessionManager.getUserIdFlow() }
-//    val userId = remember { mutableStateOf<String?>(null) }
-//    LaunchedEffect(userIdFlow) {
-//        userIdFlow.collect { id ->
-//            userId.value = id
-//        }
-//    }
-//
-//    userViewModel.getUser(userId.toString() ?: "")
-
-//    val user = userViewModel.user.observeAsState().value!!
-//    val userAtual = userViewModel.userAtual.observeAsState().value!!
+    val user = userViewModel.user.observeAsState().value!!
 
     var nomeCompleto by remember { mutableStateOf("") }
     var email by remember { mutableStateOf( "") }
@@ -80,12 +71,15 @@ fun UserComponent(userViewModel: UserViewModel) {
 
     val userDataState by userViewModel.user.observeAsState()
 
+    HideSystemBars()
+
     LaunchedEffect(userDataState) {
         userDataState?.let { user ->
             nomeCompleto = user.nomeCompleto ?: ""
             email = user.email ?: ""
             telefone = user.telefone ?: ""
         }
+        Log.d("teste", "${nomeCompleto}")
     }
 
     Column(modifier = Modifier
@@ -122,6 +116,7 @@ fun UserComponent(userViewModel: UserViewModel) {
                 text = stringResource(R.string.titulo_perfil_user),
                 style = TextStyle(textAlign = TextAlign.Center),
                 fontSize = 28.sp,
+                color = Color.Black,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -130,37 +125,58 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = nomeCompleto,
                 onValueChange = { nomeCompleto = it },
-                label = { Text(stringResource(R.string.txt_nome_completo)) },
+                label = { Text(stringResource(R.string.txt_nome_completo),style = TextStyle(color = Color.Black)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textStyle = TextStyle(color = Color.Black),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    cursorColor = Color.Black
+                ),
+                singleLine = true
             )
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(stringResource(R.string.txt_email)) },
+                label = { Text(stringResource(R.string.txt_email),style = TextStyle(color = Color.Black)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textStyle = TextStyle(color = Color.Black),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    cursorColor = Color.Black
+                ),
+                singleLine = true
             )
 
             OutlinedTextField(
                 value = telefone,
                 onValueChange = { telefone = it },
-                label = { Text(stringResource(R.string.txt_telefone)) },
+                label = { Text(stringResource(R.string.txt_telefone),style = TextStyle(color = Color.Black)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Next
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textStyle = TextStyle(color = Color.Black),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    cursorColor = Color.Black
+                ),
+                singleLine = true
             )
 
             MarginSpace(8.dp)
@@ -175,13 +191,21 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = senha,
                 onValueChange = { senha = it },
-                label = { Text(stringResource(R.string.txt_senha)) },
+                label = { Text(stringResource(R.string.txt_senha),style = TextStyle(color = Color.Black)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textStyle = TextStyle(color = Color.Black),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black,
+                    cursorColor = Color.Black
+                ),
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true
             )
 
             MarginSpace(8.dp)

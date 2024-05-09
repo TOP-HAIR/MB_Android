@@ -9,6 +9,15 @@ data class User(
     val token: String? = null
 )
 
+data class Usuario(
+    val idUsuario: Int? = null,
+    val cpf: String? = null,
+    val nomeCompleto: String? = null,
+    val email: String? = null,
+    val telefone: String? = null,
+    val isProfissional: Boolean? = null
+)
+
 data class UserLogin(
     val email: String? = null,
     val senha: String? = null

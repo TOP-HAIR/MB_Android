@@ -51,7 +51,8 @@ android {
 }
 
 dependencies {
-
+    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("com.google.accompanist:accompanist-pager:0.19.0")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

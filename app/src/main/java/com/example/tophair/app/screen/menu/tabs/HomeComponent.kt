@@ -1,5 +1,6 @@
 package com.example.tophair.app.screen.menu.tabs
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +28,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,15 +41,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavHostController
+import androidx.viewpager.widget.ViewPager
+import coil.compose.AsyncImage
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.enum.FilterServicoEnum
+import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CustomLogo
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
-@Preview(showBackground = true)
 @Composable
-fun HomeComponent() {
+fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostController) {
+    val empresasState = empresaViewModel.empresaTop5.observeAsState()!!
+    val empresaHomeState = empresaViewModel.empresaHome.observeAsState()!!
+    val empresasTop5 = empresasState.value ?: emptyList()
+    val empresaHome = empresaHomeState.value ?: emptyList()
 
+    HideSystemBars()
 
     Column(
         modifier = Modifier
@@ -87,7 +104,11 @@ fun HomeComponent() {
                                     color = Color.DarkGray,
                                     shape = RoundedCornerShape(10.dp)
                                 )
-                                .clickable { icon.onClick() }
+                                .clickable {
+//                                    val filtro = icon.descricaoFiltro
+//                                    savedStateHandle["filtro"] = filtro
+                                    navController.navigate("Buscar")
+                                }
                         )
                         Text(stringResource(id = icon.textoFiltro),
                             color = Color.Black,
@@ -101,12 +122,13 @@ fun HomeComponent() {
 
             MarginSpace(height = 16.dp)
 
+
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 4.dp),
                 text = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados),
                 color = Color.Black,
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
 
             Divider(
@@ -118,57 +140,10 @@ fun HomeComponent() {
 
             MarginSpace(height = 4.dp)
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.mipmap.imagem_de_fundo),
-                    contentDescription = "Imagem de Fundo 01",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .height(200.dp),
-                )
+            if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
+                EmpresaPager(empresas = empresasTop5, navController)
+            } else {}
 
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .background(Color(0x80000000))
-                ) {
-                    Text(
-                        text = "Canto superior direito",
-                        color = Color.White,
-                        modifier = Modifier
-                            .padding(20.dp),
-                                fontSize = 14.sp
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .background(Color(0x80000000))
-                ) {
-                    Column(modifier = Modifier
-                        .padding(8.dp)
-                    ) {
-                        Text(
-                            text = "A Pelntada do Roberto",
-                            color = Color.White,
-                            fontSize = 18.sp
-                            )
-                        Text(
-                            text = "Avenida Casa Rossam, Bairro Badki, rua Tuarucú, 692\n" +
-                                    "03574-021 - São Paulo/SP",
-                            color = Color.White,
-                            fontSize = 16.sp
-                            )
-                    }
-                }
-            }
 
             MarginSpace(height = 12.dp)
 
@@ -177,7 +152,7 @@ fun HomeComponent() {
                     .padding(horizontal = 20.dp, vertical = 4.dp),
                 color = Color.Black,
                 text = stringResource(id = R.string.txt_estabelecimentos_recomendados),
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
 
             Divider(
@@ -188,176 +163,169 @@ fun HomeComponent() {
             )
 
             MarginSpace(height = 4.dp)
-        }
 
+            if (empresaHome != null && empresaHome.isNotEmpty()) {
+                empresaHome.forEach { empresa ->
+                    Box(
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clickable {
+                                navController.navigate("Empresa/${empresa.idEmpresa}")
+                            }
+                    ) {
+                        if(!empresa.arquivoDtos.isNullOrEmpty()){
+                            AsyncImage(
+                                model = "http://34.235.119.206/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                                contentDescription = empresa.razaoSocial,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.mipmap.no_image),
+                                contentDescription = "Sem Imagem",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+
+
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .background(Color(0x80000000))
+                                .padding(20.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                                    color = Color.White,
+                                    fontSize = 16.sp
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = "⭐",
+                                    fontSize = 8.sp,
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .background(Color(0x80000000))
+                        ) {
+                            Column(modifier = Modifier.padding(8.dp)) {
+                                Text(
+                                    text = empresa.razaoSocial.toString(),
+                                    color = Color.White,
+                                    fontSize = 14.sp
+                                )
+                                Text(
+                                    text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
+                                            "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {}
+
+
+        }
 
 
         MarginSpace(height = 15.dp)
 
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(220.dp)
-//        ) {
-//
-//            Image(
-//                painter = painterResource(id = R.mipmap.imagem_de_fundo),
-//                contentDescription = "Imagem de Fundo 01",
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight()
-//            )
-//
-//            Row(
-//                modifier = Modifier
-//                    .align(alignment = Alignment.TopEnd)
-//                    .padding(top = 13.dp, end = 56.dp)
-//                    .width(90.dp)
-//                    .height(50.dp)
-//                    .background(color = textoSobreposto, shape = RoundedCornerShape(5.dp))
-//            ) {
-//
-//                Text(
-//                    text = stringResource(id = R.string.txt_taxa_de_avaliacao),
-//                    modifier = Modifier.padding(start = 15.dp, top = 5.dp),
-//                    fontSize = 24.sp,
-//                    color = Color.White
-//                )
-//
-//                Image(
-//                    painter = painterResource(id = R.mipmap.imagem_estrela_dourada),
-//                    contentDescription = "Imagem de estrela dourada",
-//                    modifier = Modifier
-//                        .width(20.dp)
-//                        .height(10.dp)
-//                        .align(Alignment.CenterVertically),
-//                    alignment = Alignment.CenterEnd
-//
-//                )
-//
-//                Text(
-//                    text = stringResource(id = R.string.txt_qtd_de_avaliacoes),
-//                    color = Color.White,
-//                    fontSize = 5.sp,
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier.padding(top = 20.dp, end = 10.dp)
-//                )
-//
-//
-//            }
-//
-//            Row(
-//                modifier = Modifier
-//                    .align(alignment = Alignment.BottomStart)
-//                    .padding(start = 56.dp, bottom = 18.dp, end = 56.dp)
-//                    .width(280.dp)
-//                    .height(60.dp)
-//                    .background(color = textoSobreposto, shape = RoundedCornerShape(2.dp))
-//            ) {
-//
-//                //  Text(text = stringResource(id =),
-//                //    color = Color.White,
-//                //    fontSize = 5.sp,
-//                //    textAlign = TextAlign.Center,
-//                //    modifier = Modifier.padding(top = 20.dp, end = 10.dp)
-//                //  )
-//
-//
-//            }
-//
-//
-//        }
-
     }
 
-//    LazyColumn(
-//        modifier = Modifier.height(770.dp),
-//        state = rememberLazyListState(0, 0),
-//        verticalArrangement = Arrangement.Bottom,
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        userScrollEnabled = true,
-//    ) {
-//        items(1) {
-//
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(220.dp)
-//            ) {
-//
-//                Image(
-//                    painter = painterResource(id = R.mipmap.imagem_de_fundo),
-//                    contentDescription = "Imagem de Fundo 01",
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .fillMaxHeight()
-//                )
-//
-//                Row(
-//                    modifier = Modifier
-//                        .align(alignment = Alignment.TopEnd)
-//                        .padding(top = 13.dp, end = 56.dp)
-//                        .width(90.dp)
-//                        .height(50.dp)
-//                        .background(color = textoSobreposto, shape = RoundedCornerShape(5.dp))
-//                ) {
-//
-//                    Text(
-//                        text = stringResource(id = R.string.txt_taxa_de_avaliacao),
-//                        modifier = Modifier.padding(start = 15.dp, top = 5.dp),
-//                        fontSize = 24.sp,
-//                        color = Color.White
-//                    )
-//
-//                    Image(
-//                        painter = painterResource(id = R.mipmap.imagem_estrela_dourada),
-//                        contentDescription = "Imagem de estrela dourada",
-//                        modifier = Modifier
-//                            .width(20.dp)
-//                            .height(10.dp)
-//                            .align(Alignment.CenterVertically),
-//                        alignment = Alignment.CenterEnd
-//
-//                    )
-//
-//                    Text(
-//                        text = stringResource(id = R.string.txt_qtd_de_avaliacoes),
-//                        color = Color.White,
-//                        fontSize = 5.sp,
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier.padding(top = 20.dp, end = 10.dp)
-//                    )
-//
-//
-//                }
-//
-//                Row(
-//                    modifier = Modifier
-//                        .align(alignment = Alignment.BottomStart)
-//                        .padding(start = 56.dp, bottom = 18.dp, end = 56.dp)
-//                        .width(280.dp)
-//                        .height(60.dp)
-//                        .background(color = textoSobreposto, shape = RoundedCornerShape(2.dp))
-//                ) {
-//
-//                    //  Text(text = stringResource(id =),
-//                    //    color = Color.White,
-//                    //    fontSize = 5.sp,
-//                    //    textAlign = TextAlign.Center,
-//                    //    modifier = Modifier.padding(top = 20.dp, end = 10.dp)
-//                    //  )
-//
-//
-//                }
-//
-//
-//            }
-//
-//        }
-//    }
 
 }
 
 
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
+    val pagerState = rememberPagerState(initialPage = 0)
 
+    HorizontalPager(state = pagerState, count = empresas.size) { page ->
+        EmpresaItem(empresa = empresas[page],navController)
+    }
+}
 
+@Composable
+fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
+    Box(
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth()
+            .height(200.dp)
+            .clickable {
+                navController.navigate("Empresa/${empresa.idEmpresa}")
+            }
+    ) {
+        if(!empresa.arquivoDtos.isNullOrEmpty()){
+            AsyncImage(
+                model = "http://34.235.119.206/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                contentDescription = empresa.razaoSocial,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.mipmap.no_image),
+                contentDescription = "Sem Imagem",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .background(Color(0x80000000))
+                .padding(20.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "⭐",
+                    fontSize = 8.sp,
+                    color = Color.White
+                )
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color(0x80000000))
+        ) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = empresa.razaoSocial.toString(),
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
+                            "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+}

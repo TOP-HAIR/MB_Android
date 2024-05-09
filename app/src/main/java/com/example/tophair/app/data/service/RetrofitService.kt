@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitService {
-    val BASE_URL_USER: String = "http://54.210.203.106/api/"
+    val BASE_URL_USER: String = "http://34.228.216.4/api/"
     val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder().build()
     }

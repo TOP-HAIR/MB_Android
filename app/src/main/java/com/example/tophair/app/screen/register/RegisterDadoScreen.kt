@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,10 +38,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -55,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -83,8 +87,9 @@ class RegisterDadoView : ComponentActivity() {
 @Composable
 fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) {
     val route = LocalContext.current
-
     val (user, userSetter) = remember { mutableStateOf(userParam)}
+
+    HideSystemBars()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
@@ -149,27 +154,6 @@ fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) 
 
                     MarginSpace(24.dp)
 
-//                    OutlinedTextField(
-//                        value = user?.nomeCompleto ?: "",
-//                        onValueChange = { userSetter(user?.copy(nomeCompleto = it)) },
-//                        label = { Text(stringResource(R.string.txt_nome_completo)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
 
                     TextField(
                         value = user?.nomeCompleto ?: "",
@@ -180,33 +164,12 @@ fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) 
                             imeAction = ImeAction.Next
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        singleLine = true
                     )
 
                     MarginSpace(16.dp)
 
-//                    OutlinedTextField(
-//                        value = user?.telefone ?: "",
-//                        onValueChange = { userSetter(user?.copy(telefone = it)) },
-//                        label = { Text(stringResource(R.string.txt_telefone)) },
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions.Default.copy(
-//                            keyboardType = KeyboardType.Phone,
-//                            imeAction = ImeAction.Next
-//                        ),
-//                        textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            cursorColor = Color.Black,
-//                            focusedBorderColor = Color.Transparent,
-//                            unfocusedBorderColor = Color.Transparent
-//                        ),
-//                        modifier = Modifier
-//                            .background(
-//                                Color(0xFFCAC3DC),
-//                                RoundedCornerShape(28.dp)
-//                            )
-//                            .fillMaxWidth()
-//                    )
 
                     FormattedPhoneNumberTextField(
                         initialValue = user?.telefone ?: "",
@@ -227,7 +190,14 @@ fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) 
 
                     })
 
-                    MarginSpace(16.dp)
+                    MarginSpace(32.dp)
+
+//                    Text(
+//                        text = stringResource(R.string.txt_politicas_e_termos),
+//                        fontSize = 10.sp,
+//                        textAlign = TextAlign.Center,
+//                        color = Color.White
+//                    )
 
                 }
             }
@@ -247,7 +217,6 @@ fun RegisterDadoScreen(userParam: UserCadastro?, modifier: Modifier = Modifier) 
                 )
             }
         }
-
     }
 }
 
@@ -266,13 +235,14 @@ fun FormattedPhoneNumberTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var text by remember { mutableStateOf(TextFieldValue(initialValue)) }
+    var textState by remember { mutableStateOf(TextFieldValue(initialValue)) }
+    val focusManager = LocalFocusManager.current
 
     TextField(
-        value = text,
-        onValueChange = {
-            val formattedText = formatPhoneNumber(it.text)
-            text = it.copy(text = formattedText)
+        value = textState,
+        onValueChange = { newText ->
+            val formattedText = formatPhoneNumber(newText.toString())
+            textState = textState.copy(text = formattedText)
             onValueChange(formattedText)
         },
         label = { Text(stringResource(R.string.txt_telefone)) },
@@ -281,11 +251,20 @@ fun FormattedPhoneNumberTextField(
             keyboardType = KeyboardType.Phone,
             imeAction = ImeAction.Next
         ),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                focusManager.moveFocus(FocusDirection.Next)
+                focusManager.clearFocus()
+            }
+        ),
+        singleLine = true
     )
 }
 
 fun formatPhoneNumber(input: String): String {
     val digits = input.filter { it.isDigit() }
+    if (digits.isEmpty()) return ""
+
     val formatted = buildString {
         append("(")
         for (i in digits.indices) {
