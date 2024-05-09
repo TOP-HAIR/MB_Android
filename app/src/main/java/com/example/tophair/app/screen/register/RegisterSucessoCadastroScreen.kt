@@ -1,10 +1,7 @@
-package com.example.tophair
+package com.example.tophair.app.screen.register
 
-import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.CustomRowWithDividers
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,8 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,16 +35,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import com.example.tophair.R
+import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.login.LoginView
-import com.example.tophair.app.screen.register.RegisterEmailView
 import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.ui.theme.TopHairTheme
 
-
-class MainActivity : ComponentActivity() {
+class RegisterSucessoCadastroView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -59,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TelaInicial()
+                    RegisterSucessoCadastroScreen("Android")
                 }
             }
         }
@@ -67,9 +60,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TelaInicial(modifier: Modifier = Modifier) {
+fun RegisterSucessoCadastroScreen(name: String, modifier: Modifier = Modifier) {
 
     val route = LocalContext.current
+
     HideSystemBars()
 
     BoxWithConstraints(
@@ -100,7 +94,7 @@ fun TelaInicial(modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f)
+                    .fillMaxHeight(1f)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -109,21 +103,21 @@ fun TelaInicial(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .width(320.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                ) {
 
-                    MarginSpace(8.dp)
-
-                    Image(painter = painterResource(
-                        id = R.mipmap.logo_inicial),
+                    Image(
+                        painter = painterResource(
+                            id = R.mipmap.logo_inicial
+                        ),
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(fraction = 0.4f))
+                    )
 
                     MarginSpace(36.dp)
 
-                    Text(stringResource(
-                        R.string.titulo_tela_inicial),
+                    Text(
+                        stringResource(id = R.string.titulo_tela_cadastro_sucesso),
                         fontSize = 28.sp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -131,33 +125,42 @@ fun TelaInicial(modifier: Modifier = Modifier) {
                         textAlign = TextAlign.Center,
                         lineHeight = 40.sp,
                         color = Color.White,
-                        fontWeight = FontWeight.ExtraBold)
+                        fontWeight = FontWeight.ExtraBold
+                    )
+
+                    MarginSpace(10.dp)
+                    
+                    Image(painter = painterResource(id = R.mipmap.icon_success_cadastro),
+                        contentDescription = "Ícone de Cadastro Bem-Sucedido",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(width = 120.dp, height = 120.dp))
 
                     MarginSpace(32.dp)
 
-                    CustomButton(stringResource(R.string.btn_txt_login), onClick= {
+                    CustomButton(text = stringResource(id = R.string.btn_txt_voltar_login),onClick = {
+
                         val loginView = Intent(route, LoginView::class.java)
 
                         route.startActivity(loginView)
-                    })
 
-                    MarginSpace(24.dp)
-
-                    CustomRowWithDividers()
-
-                    MarginSpace(24.dp)
-
-                    CustomButton(stringResource(R.string.btn_txt_cadastro), onClick= {
-                        val registerEmailView = Intent(route, RegisterEmailView::class.java)
-
-                        route.startActivity(registerEmailView)
                     },
-                        Color(47, 156, 127)
-                    )
+
+                        Color(31, 116, 109, 255),
+
+                        )
+
+                    MarginSpace(32.dp)
+
+//                    Text(
+//                        text = stringResource(R.string.txt_politicas_e_termos),
+//                        fontSize = 10.sp,
+//                        textAlign = TextAlign.Center,
+//                        color = Color.White
+//                    )
                 }
+
             }
-
-
 
             Column(
                 modifier = Modifier
@@ -167,12 +170,13 @@ fun TelaInicial(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.txt_politicas_e_termos),
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
+                        text = stringResource(R.string.txt_politicas_e_termos),
+                        fontSize = 10.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    )
             }
+
         }
 
     }
@@ -180,8 +184,8 @@ fun TelaInicial(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview5() {
     TopHairTheme {
-        TelaInicial()
+        RegisterSucessoCadastroScreen("Android")
     }
 }

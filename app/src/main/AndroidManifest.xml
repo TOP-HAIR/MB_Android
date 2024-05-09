@@ -3,47 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:launchMode="singleTop"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TopHair"
         tools:targetApi="31">
         <activity
-            android:name=".app.view.menu.MenuNavigationView"
+            android:name=".app.screen.menu.MenuNavigationView"
             android:exported="false"
             android:label="@string/title_activity_menu_navigation_view"
             android:theme="@style/Theme.TopHair" />
         <activity
-            android:name=".app.view.register.RegisterDadoView"
+            android:name=".app.screen.register.RegisterDadoView"
             android:exported="true"
             android:label="@string/title_activity_register_dado_view"
             android:theme="@style/Theme.TopHair" />
         <activity
-            android:name=".app.view.register.RegisterSucessoCadastroView"
+            android:name=".app.screen.register.RegisterSucessoCadastroView"
             android:exported="false"
             android:label="@string/title_activity_register_sucesso_cadastro_view"
             android:theme="@style/Theme.TopHair" />
         <activity
-            android:name=".app.view.register.RegisterSenhaView"
+            android:name=".app.screen.register.RegisterSenhaView"
             android:exported="false"
             android:label="@string/title_activity_register_senha_view"
             android:theme="@style/Theme.TopHair" />
         <activity
-            android:name=".app.view.register.RegisterEmailView"
+            android:name=".app.screen.register.RegisterEmailView"
             android:exported="true"
             android:label="@string/title_activity_register_email_view"
             android:theme="@style/Theme.TopHair" />
         <activity
-            android:name=".app.view.login.LoginView"
+            android:name=".app.screen.login.LoginView"
             android:exported="true"
             android:label="@string/title_activity_login_view"
             android:theme="@style/Theme.TopHair" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

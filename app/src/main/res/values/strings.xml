@@ -7,7 +7,13 @@
     <string name="txt_politicas_e_termos">Ao continuar, você concorda integralmente com nossos Termos de Serviço e Política de Privacidade.</string>
     <string name="titulo_tela_login">Seja bem vindo(a) de volta ao APP!!!</string>
     <string name="txt_email">Email</string>
+    <string name="txt_nome_empresa">Buscar por Empresa</string>
+    <string name="txt_data_input">Data</string>
+    <string name="txt_horario_input">Horário</string>
+    <string name="txt_servico">Buscar por Serviço</string>
+    <string name="txt_estado">UF</string>
     <string name="txt_senha">Senha</string>
+    <string name="txt_cpf">CPF</string>
     <string name="txt_senha_reset">Esqueci minha senha</string>
     <string name="txt_senha_confirm">Confirmar Senha</string>
     <string name="titulo_tela_cadastro_email">Cadastre-se com o seu email:</string>
@@ -18,6 +24,51 @@
     <string name="titulo_tela_cadastro_senha">Crie sua senha com no mínimo 8 dígitos.</string>
     <string name="titulo_tela_cadastro_sucesso">Cadastro Concluído com Sucesso!!!</string>
     <string name="btn_txt_voltar_login">Ir para o Login</string>
+    <string name="btn_txt_update_user">Salvar Alterações</string>
+    <string name="btn_txt_filtrar">Filtrar</string>
+    <string name="txt_tintura">TINTURA</string>
+    <string name="txt_cabelo_masculino">CABELO</string>
+    <string name="txt_barba">BARBA</string>
+    <string name="txt_estabelecimentos_mais_avaliados">Estabelecimentos mais avaliados</string>
+    <string name="txt_agendamentos">Agendamentos</string>
+    <string name="txt_servicos_empresa">Serviços</string>
+    <string name="txt_servico_selecionado">Serviço Selecionado:</string>
+    <string name="btn_txt_servico_confirm">Confirmar</string>
+    <string name="btn_txt_servico_dismiss">Cancelar</string>
+    <string name="txt_taxa_de_avaliacao">3.5</string>
+    <string name="txt_qtd_de_avaliacoes">10 avaliações</string>
+    <string name="txt_estabelecimentos_recomendados">Recomendado</string>
+    <string name="txt_taxa_de_avaliacao2">2.5</string>
+    <string name="txt_qtd_de_avaliacoes2">3 avaliações</string>
+    <string name="txt_input_pesquisa">Digite Aqui</string>
+    <string name="txt_taxa_de_avaliacao3">2.5</string>
+    <string name="txt_qtd_de_avaliacoes3">3 avaliações</string>
+    <string name="txt_taxa_de_avaliacao4">4.5</string>
+    <string name="txt_qtd_de_avaliacoes4">384</string>
+    <string name="btn_txt_deletar_perfil">Deletar Perfil</string>
+    <string name="titulo_tela_de_busca_sem_resultado">Nenhum resultado encontrado</string>
+    <string name="txt_tela_de_busca_sem_resultado">Pesquise por barbearias próximas para você ou filtre-as na barra de pesquisa conforme necessário.</string>
+    <string name="titulo_tela_de_agendamento_sem_reservas">Nenhuma Reserva Agendada</string>
+    <string name="txt_tela_de_agendamento_sem_reservas">Descubra e reserve serviços profissionais especializados e preocupados com o seu bem-estar perto da sua casa. Suas Reservas aparecerão aqui</string>
+    <string name="titulo_tela_de_agendamentos_com_reservas">Agendamentos</string>
+    <string name="btn_txt_agendar">Agendar</string>
+    <string name="titulo_tela_de_perfil">Perfil</string>
+    <string name="txt_input_nome">Nome</string>
+    <string name="txt_input_email">Email</string>
+    <string name="txt_input_telefone">Telefone</string>
+    <string name="txt_input_senha">Senha</string>
+    <string name="txt_input_confirmacao_de_senha">Confirmação de Senha</string>
+    <string name="titulo_tela_de_agendamento_barbearia">Barbearia</string>
+    <string name="titulo_tela_de_agendamento_servicos">Serviços</string>
+    <string name="txt_servico_disponivel">disponível</string>
+    <string name="txt_servico_indisponivel">indisponível</string>
+    <string name="btn_txt_agendamento">Agendar</string>
+    <string name="titulo_popup_servico">Serviço selecionado:</string>
+    <string name="txt_input_data">Data</string>
+    <string name="txt_input_horario">Horário</string>
+    <string name="titulo_perfil_user">Perfil</string>
+    <string name="btn_text_confirmacao_agendamento">Confirmar Agendamento</string>
+
     <!-- <string name=""></string> -->
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -69,4 +120,5 @@
     </string>
     <string name="title_activity_register_dado_view">RegisterDadoView</string>
     <string name="title_activity_menu_navigation_view">MenuNavigationView</string>
+    <string name="title_activity_register_endereco_screen">RegisterEnderecoScreen</string>
 </resources>
