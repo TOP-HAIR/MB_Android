@@ -8,6 +8,7 @@ data class Empresa(
     val mediaNivelAvaliacoes: Int? = null,
     val arquivoDtos: List<ArquivoDto>? = null
 )
+
 data class EmpresaPorId(
     val idEmpresa: Int? = null,
     val razaoSocial: String? = null,

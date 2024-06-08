@@ -49,14 +49,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserUpdate
 import com.example.tophair.app.data.service.SessionManager
+import com.example.tophair.app.data.viewmodel.AgendaViewModel
+import com.example.tophair.app.data.viewmodel.EmpresaViewModel
+import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
+import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomLogo
 import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.ui.theme.TopHairTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -65,8 +71,8 @@ fun UserComponent(userViewModel: UserViewModel) {
     val user = userViewModel.user.observeAsState().value!!
 
     var nomeCompleto by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf( "") }
-    var telefone by remember { mutableStateOf( "") }
+    var email by remember { mutableStateOf("") }
+    var telefone by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
 
     val userDataState by userViewModel.user.observeAsState()
@@ -79,13 +85,12 @@ fun UserComponent(userViewModel: UserViewModel) {
             email = user.email ?: ""
             telefone = user.telefone ?: ""
         }
-        Log.d("teste", "${nomeCompleto}")
     }
 
-    Column(modifier = Modifier
-        .verticalScroll(rememberScrollState())
-       ) {
-
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+    ) {
         CustomLogo()
 
         Column(
@@ -94,21 +99,22 @@ fun UserComponent(userViewModel: UserViewModel) {
                 .padding(20.dp),
             verticalArrangement = Arrangement.Center
         ) {
-
-            Row(modifier = Modifier
-                .fillMaxWidth(),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-            Image(
-                painter = painterResource(id = R.mipmap.icon_user),
-                contentDescription = "Descrição da imagem",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(shape = CircleShape)
-                    .shadow(4.dp, shape = CircleShape)
-            )}
+                Image(
+                    painter = painterResource(id = R.mipmap.icon_user),
+                    contentDescription = "Descrição da imagem",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(shape = CircleShape)
+                        .shadow(4.dp, shape = CircleShape)
+                )
+            }
 
             MarginSpace(8.dp)
 
@@ -125,7 +131,12 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = nomeCompleto,
                 onValueChange = { nomeCompleto = it },
-                label = { Text(stringResource(R.string.txt_nome_completo),style = TextStyle(color = Color.Black)) },
+                label = {
+                    Text(
+                        stringResource(R.string.txt_nome_completo),
+                        style = TextStyle(color = Color.Black)
+                    )
+                },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -144,7 +155,12 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(stringResource(R.string.txt_email),style = TextStyle(color = Color.Black)) },
+                label = {
+                    Text(
+                        stringResource(R.string.txt_email),
+                        style = TextStyle(color = Color.Black)
+                    )
+                },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -163,7 +179,12 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = telefone,
                 onValueChange = { telefone = it },
-                label = { Text(stringResource(R.string.txt_telefone),style = TextStyle(color = Color.Black)) },
+                label = {
+                    Text(
+                        stringResource(R.string.txt_telefone),
+                        style = TextStyle(color = Color.Black)
+                    )
+                },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Next
@@ -191,7 +212,12 @@ fun UserComponent(userViewModel: UserViewModel) {
             OutlinedTextField(
                 value = senha,
                 onValueChange = { senha = it },
-                label = { Text(stringResource(R.string.txt_senha),style = TextStyle(color = Color.Black)) },
+                label = {
+                    Text(
+                        stringResource(R.string.txt_senha),
+                        style = TextStyle(color = Color.Black)
+                    )
+                },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
@@ -210,14 +236,13 @@ fun UserComponent(userViewModel: UserViewModel) {
 
             MarginSpace(8.dp)
 
-            CustomButton(stringResource(R.string.btn_txt_update_user), onClick= {
-                if((nomeCompleto.isNotBlank() || email.isNotBlank() || telefone.isNotBlank())) {
-                    val obj = UserUpdate(nomeCompleto ,email, telefone, false)
+            CustomButton(stringResource(R.string.btn_txt_update_user), onClick = {
+                if ((nomeCompleto.isNotBlank() || email.isNotBlank() || telefone.isNotBlank())) {
+                    val obj = UserUpdate(nomeCompleto, email, telefone, false)
 
                     val result = userViewModel.putUser(obj)
                     Log.d("putUser", "Resultado: $result")
                 }
-
             })
 
             MarginSpace(8.dp)
@@ -229,14 +254,24 @@ fun UserComponent(userViewModel: UserViewModel) {
                     .background(color = Color.DarkGray)
             )
 
-            CustomButton(stringResource(R.string.btn_txt_deletar_perfil), onClick= {
-                userViewModel.deleteUser()
-            },
+            CustomButton(
+                stringResource(R.string.btn_txt_deletar_perfil), onClick = {
+                    userViewModel.deleteUser()
+                },
                 Color(0xFFDC3545)
             )
-
         }
     }
-
 }
 
+@Preview(showBackground = true)
+@Composable
+fun UserComponentPreview() {
+    val fakeUserViewModel = UserViewModel()
+
+    TopHairTheme {
+        UserComponent(
+            fakeUserViewModel
+        )
+    }
+}

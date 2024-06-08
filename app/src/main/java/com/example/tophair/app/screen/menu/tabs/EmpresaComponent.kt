@@ -14,9 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -31,21 +29,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.tophair.R
-import com.example.tophair.app.data.entities.UserLogin
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.utils.CardComponent
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomLogo
+import com.example.tophair.ui.theme.TopHairTheme
 
 @Composable
-fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoViewModel: ServicoViewModel, empresaViewModel: EmpresaViewModel) {
+fun EmpresaComponent(
+    navController: NavHostController,
+    idEmpresa: Int,
+    servicoViewModel: ServicoViewModel,
+    empresaViewModel: EmpresaViewModel
+) {
     val empresaState = empresaViewModel.empresaGetId.observeAsState()
     val servicoState = servicoViewModel.empresaServicoList.observeAsState()
     val servico = servicoState.value ?: emptyList()
@@ -56,16 +60,18 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
 
     empresaViewModel.getEmpresaById(idEmpresa)
     servicoViewModel.getServicoEmpresa(idEmpresa)
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
         CustomLogo()
-        if(empresaState != null) {
+
+        if (empresaState != null) {
             val empresa = empresaState.value
-            if(!empresa?.arquivos.isNullOrEmpty()){
+
+            if (!empresa?.arquivos.isNullOrEmpty()) {
                 AsyncImage(
                     model = "http://34.237.189.174/api/arquivos/exibir/${empresa?.arquivos?.get(0)?.id}",
                     contentDescription = empresa?.razaoSocial,
@@ -107,7 +113,8 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                 color = Color.Black,
                 fontSize = 16.sp
             )
-            if(servico != null && servico.isNotEmpty()){
+
+            if (servico != null && servico.isNotEmpty()) {
                 servico.forEach { servicoItem ->
                     CardComponent(
                         modifier = Modifier
@@ -119,19 +126,21 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                             modifier = Modifier.padding(16.dp),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Text(text = servicoItem.nomeServico.toString(),
-                                color = Color.Black,)
+                            Text(
+                                text = servicoItem.nomeServico.toString(),
+                                color = Color.Black,
+                            )
+
                             Spacer(modifier = Modifier.height(16.dp))
+
                             CustomButton(stringResource(R.string.btn_txt_agendar),
-                                onClick= {
+                                onClick = {
                                     servicoSelecionado.value = servicoItem?.nomeServico ?: ""
                                     openDialog.value = true
                                 }
                             )
                         }
                     }
-
-
                 }
             }
         }
@@ -145,13 +154,15 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                         modifier = Modifier
                             .fillMaxWidth(),
 
-                    ) {
+                        ) {
+
                         Text(
                             text = stringResource(id = R.string.txt_servico_selecionado),
                             textAlign = TextAlign.Center,
                             fontSize = 16.sp,
                             color = Color.Black,
                         )
+
                         Text(
                             text = servicoSelecionado.value.toString(),
                             textAlign = TextAlign.Center,
@@ -160,15 +171,17 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                             color = Color(0x1A5646),
                         )
                     }
-                        },
+                },
                 text = {
                     Column {
                         TextField(
                             value = dataAgendamento.value,
-                            onValueChange = { dataAgendamento.value = it},
+                            onValueChange = { dataAgendamento.value = it },
                             label = { Text(stringResource(id = R.string.txt_data_input)) }
                         )
+
                         Spacer(modifier = Modifier.height(16.dp))
+
                         TextField(
                             value = horarioAgendamento.value,
                             onValueChange = { horarioAgendamento.value = it },
@@ -182,9 +195,11 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                             openDialog.value = false
                         }
                     ) {
-                        Text(stringResource(id = R.string.btn_txt_servico_dismiss),
+                        Text(
+                            stringResource(id = R.string.btn_txt_servico_dismiss),
                             fontSize = 14.sp,
-                            color = Color.Black,)
+                            color = Color.Black,
+                        )
                     }
                 },
                 confirmButton = {
@@ -193,12 +208,31 @@ fun EmpresaComponent(navController: NavHostController, idEmpresa: Int, servicoVi
                             openDialog.value = false
                         }
                     ) {
-                        Text(stringResource(id = R.string.btn_txt_servico_confirm),
+                        Text(
+                            stringResource(id = R.string.btn_txt_servico_confirm),
                             fontSize = 14.sp,
-                            color = Color.Black,)
+                            color = Color.Black,
+                        )
                     }
                 }
             )
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun EmpresaComponentPreview() {
+    val fakeEmpresaViewModel = EmpresaViewModel()
+    val fakeServicoViewModel = ServicoViewModel()
+
+    TopHairTheme {
+        EmpresaComponent(
+            rememberNavController(),
+            6,
+            fakeServicoViewModel,
+            fakeEmpresaViewModel,
+        )
+    }
+}
+

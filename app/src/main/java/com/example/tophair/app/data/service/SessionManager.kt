@@ -34,7 +34,6 @@ object SessionManager {
     fun getTokenFlow(): Flow<String?> {
         return tokenDataStore.data.map { preferences ->
             preferences[TOKEN_KEY]
-
         }
     }
 

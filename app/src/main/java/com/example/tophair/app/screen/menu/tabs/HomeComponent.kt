@@ -1,6 +1,5 @@
 package com.example.tophair.app.screen.menu.tabs
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,25 +9,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +29,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavHostController
-import androidx.viewpager.widget.ViewPager
 import coil.compose.AsyncImage
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.Empresa
@@ -71,15 +59,13 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top
     ) {
-
         CustomLogo()
 
-
-        Column(modifier = Modifier
-            .padding(14.dp)
-            .fillMaxSize()
+        Column(
+            modifier = Modifier
+                .padding(14.dp)
+                .fillMaxSize()
         ) {
-
             MarginSpace(height = 4.dp)
 
             Row(
@@ -105,12 +91,11 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                     shape = RoundedCornerShape(10.dp)
                                 )
                                 .clickable {
-//                                    val filtro = icon.descricaoFiltro
-//                                    savedStateHandle["filtro"] = filtro
                                     navController.navigate("Buscar")
                                 }
                         )
-                        Text(stringResource(id = icon.textoFiltro),
+                        Text(
+                            stringResource(id = icon.textoFiltro),
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
@@ -119,9 +104,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                 }
             }
 
-
             MarginSpace(height = 16.dp)
-
 
             Text(
                 modifier = Modifier
@@ -142,8 +125,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
             if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
                 EmpresaPager(empresas = empresasTop5, navController)
-            } else {}
-
+            }
 
             MarginSpace(height = 12.dp)
 
@@ -175,9 +157,13 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                 navController.navigate("Empresa/${empresa.idEmpresa}")
                             }
                     ) {
-                        if(!empresa.arquivoDtos.isNullOrEmpty()){
+                        if (!empresa.arquivoDtos.isNullOrEmpty()) {
                             AsyncImage(
-                                model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                                model = "http://34.237.189.174/api/arquivos/exibir/${
+                                    empresa.arquivoDtos?.get(
+                                        0
+                                    )?.id
+                                }",
                                 contentDescription = empresa.razaoSocial,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
@@ -191,7 +177,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                             )
                         }
 
-
                         Column(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
@@ -204,7 +189,9 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                     color = Color.White,
                                     fontSize = 16.sp
                                 )
+
                                 Spacer(modifier = Modifier.width(4.dp))
+
                                 Text(
                                     text = "⭐",
                                     fontSize = 8.sp,
@@ -225,6 +212,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                     color = Color.White,
                                     fontSize = 14.sp
                                 )
+
                                 Text(
                                     text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
                                             "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
@@ -235,17 +223,11 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                         }
                     }
                 }
-            } else {}
-
-
+            }
         }
 
-
         MarginSpace(height = 15.dp)
-
     }
-
-
 }
 
 
@@ -255,7 +237,7 @@ fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
     val pagerState = rememberPagerState(initialPage = 0)
 
     HorizontalPager(state = pagerState, count = empresas.size) { page ->
-        EmpresaItem(empresa = empresas[page],navController)
+        EmpresaItem(empresa = empresas[page], navController)
     }
 }
 
@@ -270,7 +252,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
                 navController.navigate("Empresa/${empresa.idEmpresa}")
             }
     ) {
-        if(!empresa.arquivoDtos.isNullOrEmpty()){
+        if (!empresa.arquivoDtos.isNullOrEmpty()) {
             AsyncImage(
                 model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
                 contentDescription = empresa.razaoSocial,
@@ -298,7 +280,9 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
                     color = Color.White,
                     fontSize = 16.sp
                 )
+
                 Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
                     text = "⭐",
                     fontSize = 8.sp,
@@ -319,6 +303,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
                     color = Color.White,
                     fontSize = 14.sp
                 )
+
                 Text(
                     text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
                             "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",

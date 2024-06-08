@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -76,11 +78,11 @@ import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.OutlinedTextFieldBackground
+import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.ui.theme.TopHairTheme
 import kotlinx.coroutines.flow.firstOrNull
 
 class LoginView : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,7 +90,6 @@ class LoginView : ComponentActivity() {
 
         setContent {
             TopHairTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -100,9 +101,8 @@ class LoginView : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifier = Modifier) {
+fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     val route = LocalContext.current
     val tokenState by SessionManager.getTokenFlow().collectAsState(initial = null)
     val user by userViewModel.userAtual.observeAsState()
@@ -111,204 +111,115 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel(), modifier: Modifi
     var senha by remember { mutableStateOf("") }
     val view = LocalView.current
 
-    HideSystemBars()
-
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        val constraints = with(LocalDensity.current) { constraints }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = Color(4, 23, 32)
-                )
-
-        ) {
-
-            MarginSpace(12.dp)
-
-            Image(
-                painter = painterResource(id = R.mipmap.background_tela_inicial),
-                contentDescription = "Background tela inicial",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(
-                        width = constraints.maxWidth.toFloat().dp,
-                        height = constraints.maxHeight.toFloat().dp
-                    )
-            )
-
-            Column(
+    RegisterComponent(
+        componentContent = {
+            Text(
+                stringResource(
+                    R.string.titulo_tela_login
+                ),
+                fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.90f)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Column(
+                    .padding(vertical = 16.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 40.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(stringResource(R.string.txt_email)) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+
+                            val window = (view.context as Activity).window
+                            val insetsController =
+                                WindowCompat.getInsetsController(window, view)
+                            insetsController?.apply {
+                                hide(WindowInsetsCompat.Type.statusBars())
+                                systemBarsBehavior =
+                                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                            }
+                        }
+                    },
+                singleLine = true
+            )
+
+            MarginSpace(16.dp)
+
+            TextField(
+                value = senha,
+                onValueChange = { senha = it },
+                label = { Text(stringResource(R.string.txt_senha)) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true
+            )
+
+            if (erroApi != null && erroApi != "") {
+                Text(
                     modifier = Modifier
-                        .width(320.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                        .padding(8.dp),
+                    text = erroApi.toString(),
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
 
-                    MarginSpace(8.dp)
+            MarginSpace(16.dp)
 
-                    Image(painter = painterResource(
-                        id = R.mipmap.logo_inicial),
-                        contentDescription = "TopHair Logo",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(fraction = 0.4f))
+            CustomButton(stringResource(R.string.btn_txt_login), onClick = {
+                if (!email.isNullOrEmpty() && !senha.isNullOrEmpty()) {
+                    val obj = UserLogin(email, senha)
 
-                    MarginSpace(36.dp)
+                    userViewModel.postUserLogin(obj)
+                }
+            })
 
-                    Text(
-                        stringResource(
-                        R.string.titulo_tela_login),
-                        fontSize = 28.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                        textAlign = TextAlign.Center,
-                        lineHeight = 40.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.ExtraBold)
-
-                    MarginSpace(24.dp)
-
-
-                        TextField(
-                            value = email,
-                            onValueChange = { email = it },
-                            label = { Text(stringResource(R.string.txt_email)) },
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .onFocusChanged { focusState ->
-                                    if (focusState.isFocused) {
-
-                                        val window = (view.context as Activity).window
-                                        val insetsController =
-                                            WindowCompat.getInsetsController(window, view)
-                                        insetsController?.apply {
-                                            hide(WindowInsetsCompat.Type.statusBars())
-                                            systemBarsBehavior =
-                                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                                        }
-                                    }
-                                },
-                            singleLine = true
-                        )
-
-                    MarginSpace(16.dp)
-
-                    TextField(
-                        value = senha,
-                        onValueChange = { senha = it },
-                        label = { Text(stringResource(R.string.txt_senha)) },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        visualTransformation = PasswordVisualTransformation(),
-                        singleLine = true
-                    )
-
-                    if(erroApi != null && erroApi != "") {
-                        Text(
-                            modifier = Modifier
-                                .padding(8.dp),
-                            text = erroApi.toString(),
-                            fontSize = 14.sp,
-                            color = Color.Red)
-                    }
-
-                    MarginSpace(16.dp)
-
-                    CustomButton(stringResource(R.string.btn_txt_login), onClick= {
-                        if(!email.isNullOrEmpty() && !senha.isNullOrEmpty()) {
-                            val obj = UserLogin(email,senha)
-
-                            userViewModel.postUserLogin(obj)
-                        }
-                    })
-
-
-                    LaunchedEffect(tokenState) {
-                        if (user != null && tokenState != null) {
-                            Log.d("Token", "Token salvo: $tokenState")
-                            val menuNavigationView = Intent(route, MenuNavigationView::class.java)
-                            route.startActivity(menuNavigationView)
-                        }
-                    }
-
-                    MarginSpace(16.dp)
-
-                    TextButton(
-                        onClick = {
-                            // TODO: Implemente a lógica do que deve acontecer quando o texto for clicado
-                        },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.txt_senha_reset),
-                            fontSize = 14.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    MarginSpace(32.dp)
-
-
+            LaunchedEffect(tokenState) {
+                if (user != null && tokenState != null) {
+                    Log.d("Token", "Token salvo: $tokenState")
+                    val menuNavigationView = Intent(route, MenuNavigationView::class.java)
+                    route.startActivity(menuNavigationView)
                 }
             }
 
-//            Column(
-//                modifier = Modifier
-//                    .padding(bottom = 16.dp)
-//                    .align(Alignment.BottomCenter),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(
-//                    text = stringResource(R.string.txt_politicas_e_termos),
-//                    fontSize = 10.sp,
-//                    textAlign = TextAlign.Center,
-//                    color = Color.White
-//                )
-//            }
+            MarginSpace(16.dp)
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally
+            TextButton(
+                onClick = {
+                },
+                modifier = Modifier.padding(8.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.txt_politicas_e_termos),
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White
+                    text = stringResource(R.string.txt_senha_reset),
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
-
-    }
+    )
 }
-
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview3() {
+fun LoginPreview() {
     TopHairTheme {
         LoginScreen(UserViewModel())
     }

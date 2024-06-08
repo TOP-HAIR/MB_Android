@@ -30,7 +30,7 @@ data class UserCadastro(
     var senha: String? = null,
     var telefone: String? = null,
     var profissional: Boolean? = false
-): Serializable
+) : Serializable
 
 data class UserCadastroDeserealize(
     var cpf: String? = null,
