@@ -3,7 +3,6 @@ package com.example.tophair.app.data.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.tophair.app.data.api.AgendaApi
 import com.example.tophair.app.data.api.EmpresaApi
 import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.EmpresaPorId
@@ -15,13 +14,10 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EmpresaViewModel: ViewModel() {
-
-
+class EmpresaViewModel : ViewModel() {
     val empresaTop5: MutableLiveData<List<Empresa>> = MutableLiveData()
     val empresaFiltro: MutableLiveData<List<Empresa>> = MutableLiveData()
     val empresaHome: MutableLiveData<List<Empresa>> = MutableLiveData()
-
     val empresaGetId: MutableLiveData<EmpresaPorId?> = MutableLiveData()
 
     val apiToken: EmpresaApi = RetrofitService.getApiServiceWithToken(EmpresaApi::class.java)
@@ -68,7 +64,8 @@ class EmpresaViewModel: ViewModel() {
                     Log.d("adwa", "${empresa}")
                     empresaGetId.postValue(empresa)
 
-                } else { Log.e("EmpresaViewModel", "Erro no getEmpresaById ${response}")
+                } else {
+                    Log.e("EmpresaViewModel", "Erro no getEmpresaById ${response}")
                     erroApi.postValue(response.errorBody()!!.string())
                 }
             } catch (e: Exception) {
@@ -78,8 +75,6 @@ class EmpresaViewModel: ViewModel() {
         }
     }
 
-
-
     fun getHomeEmpresas() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -88,8 +83,10 @@ class EmpresaViewModel: ViewModel() {
                 }
                 if (!userId.isNullOrEmpty()) {
                     val response = apiToken.getTop5MelhoresEmpresas(userId.toInt())
+
                     if (response.isSuccessful) {
                         val empresaBody = response.body()
+
                         empresaBody?.let {
                             empresaHome.postValue(it)
                         }
@@ -113,9 +110,12 @@ class EmpresaViewModel: ViewModel() {
                     SessionManager.getUserIdFlow().firstOrNull()
                 }
                 if (!userId.isNullOrEmpty()) {
-                    val response = apiToken.getFiltroEmpresas(userId.toInt(), estado, servico, nomeEmpresa)
+                    val response =
+                        apiToken.getFiltroEmpresas(userId.toInt(), estado, servico, nomeEmpresa)
+
                     if (response.isSuccessful) {
                         val empresaBody = response.body()
+
                         empresaBody?.let {
                             empresaFiltro.postValue(it)
                         }
@@ -131,5 +131,4 @@ class EmpresaViewModel: ViewModel() {
             }
         }
     }
-
 }

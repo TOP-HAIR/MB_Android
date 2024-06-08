@@ -8,7 +8,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EmpresaApi {
-
     @GET("/api/empresas/top5-empresas/{id}")
     suspend fun getTop5MelhoresEmpresas(@Path("id") userId: Int): Response<List<Empresa>>
 
@@ -16,5 +15,10 @@ interface EmpresaApi {
     suspend fun getEmpresaPeloId(@Path("id") empresaId: Int?): Response<EmpresaPorId>
 
     @GET("/api/empresas/filtro-empresas/{id}")
-    suspend fun getFiltroEmpresas(@Path("id") userId: Int, @Query("estado") estado: String, @Query("nomeServico") nomeServico: String, @Query("nomeEmpresa") nomeEmpresa: String): Response<List<Empresa>>
+    suspend fun getFiltroEmpresas(
+        @Path("id") userId: Int,
+        @Query("estado") estado: String,
+        @Query("nomeServico") nomeServico: String,
+        @Query("nomeEmpresa") nomeEmpresa: String
+    ): Response<List<Empresa>>
 }

@@ -1,7 +1,6 @@
 package com.example.tophair.app.data.api
 
 import com.example.tophair.app.data.entities.User
-import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
 import com.example.tophair.app.data.entities.UserGet
 import com.example.tophair.app.data.entities.UserLogin
@@ -13,7 +12,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface UserApi {
     @POST("/api/usuarios/login")

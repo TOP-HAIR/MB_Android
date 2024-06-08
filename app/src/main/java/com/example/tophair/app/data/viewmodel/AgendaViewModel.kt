@@ -13,10 +13,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AgendaViewModel: ViewModel() {
-
+class AgendaViewModel : ViewModel() {
     val agendaAtual: MutableLiveData<Any> = MutableLiveData()
-//    val agendas = MutableLiveData(SnapshotStateList<AgendaUser>())
     val agenda: MutableLiveData<List<Agenda>> = MutableLiveData()
 
     val apiToken: AgendaApi = RetrofitService.getApiServiceWithToken(AgendaApi::class.java)
@@ -34,10 +32,13 @@ class AgendaViewModel: ViewModel() {
                 }
                 if (!userId.isNullOrEmpty()) {
                     val response = apiToken.getAgendaUser(userId.toInt())
+
                     if (response.isSuccessful) {
                         val agendaBody = response.body()
+
                         agendaBody?.let {
                             agenda.postValue(it)
+                            Log.e("Erro", "erro agenda ${it}")
                         }
 
                     } else {

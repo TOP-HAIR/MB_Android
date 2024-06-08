@@ -5,18 +5,10 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -25,7 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 fun HideSystemBars() {
     val context = LocalContext.current
     val activity = (context as? Activity)
-    if (activity!= null) {
+    if (activity != null) {
         val window = activity.window
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         WindowCompat.setDecorFitsSystemWindows(window, false)

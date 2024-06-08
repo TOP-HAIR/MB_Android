@@ -8,5 +8,4 @@ import retrofit2.http.Path
 interface AgendaApi {
     @GET("/api/agendas/usuario/{id}")
     suspend fun getAgendaUser(@Path("id") userId: Int): Response<List<Agenda>>
-
 }
