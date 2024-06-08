@@ -203,7 +203,6 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
             TextButton(
                 onClick = {
-                    // TODO: Implemente a lógica do que deve acontecer quando o texto for clicado
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
