@@ -4,6 +4,7 @@ import android.app.Activity
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomRowWithDividers
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +39,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
         setContent {
             TopHairTheme {
                 Surface(
@@ -53,7 +59,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TelaInicial() {
-    val typography = MaterialTheme.typography
     val route = LocalContext.current
 
     RegisterComponent(

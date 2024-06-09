@@ -60,7 +60,6 @@ import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomLogo
-import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -89,8 +88,6 @@ fun UserComponent(userViewModel: UserViewModel) {
         modifier = Modifier
             .verticalScroll(rememberScrollState())
     ) {
-        CustomLogo()
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

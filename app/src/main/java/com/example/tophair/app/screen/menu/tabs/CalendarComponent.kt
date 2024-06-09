@@ -3,6 +3,7 @@ package com.example.tophair.app.screen.menu.tabs
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -41,9 +44,6 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
         modifier = Modifier
             .fillMaxSize()
     ) {
-
-        CustomLogo()
-
         if (agenda != null && agenda.isNotEmpty()) {
             Column(
                 modifier = Modifier
@@ -70,47 +70,49 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                         .fillMaxSize()
                 ) {
                     agenda.forEach { agenda ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            val dataResponse: LocalDateTime? = agenda?.start
+                        Box(modifier = Modifier.clip(RoundedCornerShape(12.dp))) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
+                                val dataResponse: LocalDateTime? = agenda?.start
 
-                            Text(
-                                text = dataResponse.toString() ?: "Data inválida",
-                                color = Color.Black,
-                                fontSize = 20.sp
+                                Text(
+                                    text = dataResponse.toString() ?: "Data inválida",
+                                    color = Color.Black,
+                                    fontSize = 20.sp
+                                )
+
+                                Text(
+                                    text = agenda?.end.toString(),
+                                    color = Color.Black,
+                                    fontSize = 14.sp
+                                )
+                            }
+
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                painter = painterResource(id = R.mipmap.no_image),
+                                contentDescription = agenda.empresaDto?.razaoSocial,
+                                contentScale = ContentScale.Crop
                             )
 
                             Text(
-                                text = agenda?.end.toString(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = 4.dp),
+                                text = agenda?.empresaDto?.razaoSocial.toString(),
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+
+                            Text(
+                                text = agenda?.title.toString(),
                                 color = Color.Black,
                                 fontSize = 14.sp
                             )
                         }
-
-                        Image(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            painter = painterResource(id = R.mipmap.no_image),
-                            contentDescription = agenda.empresaDto?.razaoSocial,
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(vertical = 4.dp),
-                            text = agenda?.empresaDto?.razaoSocial.toString(),
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-
-                        Text(
-                            text = agenda?.title.toString(),
-                            color = Color.Black,
-                            fontSize = 14.sp
-                        )
                     }
                 }
             }

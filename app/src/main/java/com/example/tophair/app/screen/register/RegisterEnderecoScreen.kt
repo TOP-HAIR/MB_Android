@@ -2,6 +2,7 @@ package com.example.tophair.app.screen.register
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,6 +46,12 @@ import com.example.tophair.app.utils.fonts.TitleComposable
 class RegisterEnderecoView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         val extras = intent.extras
         setContent {

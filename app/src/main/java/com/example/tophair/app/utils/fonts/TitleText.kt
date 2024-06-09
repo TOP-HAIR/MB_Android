@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.ui.theme.TopHairTheme
@@ -30,22 +29,12 @@ fun TitleComposable(
         Font(R.font.poppins_medium)
     )
 ) {
-    val fontSize = when (typeTitle.tipoTitulo) {
-        "h1" -> 22.sp
-        "h2" -> 20.sp
-        "h3" -> 18.sp
-        "h4" -> 16.sp
-        "h5" -> 14.sp
-        "h6" -> 12.sp
-        else -> 14.sp
-    }
-
     Text(
         text = textTitle,
         modifier = modifier
             .fillMaxWidth(),
         style = TextStyle(
-            fontSize = fontSize,
+            fontSize = typeTitle.fontSize,
             color = Color.White,
             fontWeight = fontWeight,
             textAlign = textAlign,

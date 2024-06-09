@@ -1,5 +1,6 @@
 package com.example.tophair.app.screen.menu
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -47,6 +49,7 @@ import com.example.tophair.app.screen.menu.tabs.EmpresaComponent
 import com.example.tophair.app.screen.menu.tabs.HomeComponent
 import com.example.tophair.app.screen.menu.tabs.SearchComponent
 import com.example.tophair.app.screen.menu.tabs.UserComponent
+import com.example.tophair.app.utils.CustomLogo
 import com.example.tophair.ui.theme.TopHairTheme
 
 class MenuNavigationView : ComponentActivity() {
@@ -58,12 +61,11 @@ class MenuNavigationView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                android.graphics.Color.TRANSPARENT
-            )
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
         )
-
         setContent {
             TopHairTheme {
                 Surface(
@@ -99,6 +101,8 @@ fun MenuNavigationView(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
+        CustomLogo()
+
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -181,27 +185,6 @@ fun NavHostWithScreens(
         composable(NavMenuEnum.SEARCH.name) {
             SearchComponent(empresaViewModel, navController)
         }
-//        composable(NavMenuEnum.SEARCH.name, arguments = listOf(navArgument("filtro") {
-//            type = NavType.StringType
-//            defaultValue = ""
-//            nullable = true
-//        })) { backStackEntry ->
-//            SearchComponent(
-//                empresaViewModel = empresaViewModel,
-//                navController = navController,
-//                savedStateHandle = savedStateHandle
-//            )
-//        }
-//        composable(
-//            route = "Search/{filtroHome}",
-//            arguments = listOf(navArgument("filtroHome") { type = NavType.IntType })
-//        ) { backStackEntry ->
-//            val filtroHome = backStackEntry.arguments?.getString("filtroHome")
-//            if (filtroHome != null) {
-//                SearchComponent(empresaViewModel = empresaViewModel, navController = navController, filtroHome = filtroHome)
-//            } else {
-//            }
-//        }
         composable(NavMenuEnum.CALENDAR.name) {
             CalendarComponent(agendaViewModel, empresaViewModel)
         }

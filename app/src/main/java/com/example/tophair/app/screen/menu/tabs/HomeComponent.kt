@@ -24,14 +24,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.Empresa
@@ -39,6 +44,7 @@ import com.example.tophair.app.data.entities.enum.FilterServicoEnum
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CustomLogo
 import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.ui.theme.TopHairTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -56,8 +62,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top
     ) {
-        CustomLogo()
-
         Column(
             modifier = Modifier
                 .padding(14.dp)
@@ -150,6 +154,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                             .padding(20.dp)
                             .fillMaxWidth()
                             .height(200.dp)
+                            .clip(RoundedCornerShape(12.dp))
                             .clickable {
                                 navController.navigate("Empresa/${empresa.idEmpresa}")
                             }
@@ -178,7 +183,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .background(Color(0x80000000))
-                                .padding(20.dp)
+                                .padding(18.dp)
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
@@ -309,5 +314,18 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeComponentPreview() {
+    val fakeEmpresaViewModel = EmpresaViewModel()
+
+    TopHairTheme {
+        HomeComponent(
+            fakeEmpresaViewModel,
+            rememberNavController()
+        )
     }
 }

@@ -2,6 +2,8 @@ package com.example.tophair.app.screen.register
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.ActivityInfo.*
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -28,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowCompat.*
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
@@ -41,10 +45,10 @@ class RegisterSucessoCadastroView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                android.graphics.Color.TRANSPARENT
-            )
+        requestedOrientation = SCREEN_ORIENTATION_PORTRAIT
+        setDecorFitsSystemWindows(
+            window,
+            false
         )
 
         setContent {
