@@ -100,6 +100,8 @@ fun RegisterSucessoCadastroScreen() {
                 },
                 Color(31, 116, 109, 255),
             )
+
+            MarginSpace(32.dp)
         }
     )
 }

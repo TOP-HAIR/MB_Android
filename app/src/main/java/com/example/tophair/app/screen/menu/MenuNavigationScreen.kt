@@ -47,7 +47,6 @@ import com.example.tophair.app.screen.menu.tabs.EmpresaComponent
 import com.example.tophair.app.screen.menu.tabs.HomeComponent
 import com.example.tophair.app.screen.menu.tabs.SearchComponent
 import com.example.tophair.app.screen.menu.tabs.UserComponent
-import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.ui.theme.TopHairTheme
 
 class MenuNavigationView : ComponentActivity() {

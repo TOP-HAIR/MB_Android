@@ -28,4 +28,7 @@ interface UserApi {
 
     @PUT("/api/usuarios/{id}")
     suspend fun updateUser(@Path("id") userId: Long, @Body updatedUser: UserUpdate): Response<User>
+
+    @PUT("/api/usuarios/vincular-endereco/{idEndereco}/{idUsuario}")
+    suspend fun updateVincularEnderecoUser(@Path("idEndereco") idEndereco: Long, @Path("idUsuario") idUsuario: Long): Response<User>
 }

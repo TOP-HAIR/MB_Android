@@ -36,9 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.Endereco
+import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.entities.Usuario
 import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
@@ -57,7 +61,6 @@ class RegisterSenhaView : ComponentActivity() {
         )
 
         val extras = intent.extras
-
         setContent {
             TopHairTheme {
                 Surface(
@@ -65,7 +68,9 @@ class RegisterSenhaView : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val user = extras?.getSerializable("user") as? UserCadastro
-                    RegisterSenhaScreen(user, UserViewModel())
+                    val endereco = extras?.getSerializable("endereco") as? EnderecoSerializable
+
+                    RegisterSenhaScreen(user, endereco, UserViewModel(), EnderecoViewModel())
                 }
             }
         }
@@ -75,13 +80,18 @@ class RegisterSenhaView : ComponentActivity() {
 @Composable
 fun RegisterSenhaScreen(
     userParam: UserCadastro?,
-    userViewModel: UserViewModel = UserViewModel()
+    enderecoParam: EnderecoSerializable?,
+    userViewModel: UserViewModel = UserViewModel(),
+    enderecoViewModel: EnderecoViewModel = EnderecoViewModel()
 ) {
     val route = LocalContext.current
     val userCadastro by userViewModel.userAtual.observeAsState()
-    val erroApi by userViewModel.erroApi.observeAsState()
+    val userEndereco by enderecoViewModel.endereco.observeAsState()
+    val erroApiUser by userViewModel.erroApi.observeAsState()
+    val erroApiEndereco by enderecoViewModel.erroApi.observeAsState()
 
     val (user, userSetter) = remember { mutableStateOf(userParam) }
+    val (endereco) = remember { mutableStateOf(enderecoParam) }
     var senhaConfirm by remember { mutableStateOf("") }
 
     RegisterComponent(
@@ -127,7 +137,7 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() == senhaConfirm && erroApi == null && erroApi == "") {
+            if (user?.senha.toString() == senhaConfirm && erroApiUser == null && erroApiUser == "") {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
@@ -137,11 +147,11 @@ fun RegisterSenhaScreen(
                 )
             }
 
-            if (erroApi != null && erroApi != "") {
+            if (erroApiUser != null && erroApiUser != "") {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = erroApi.toString(),
+                    text = erroApiUser.toString(),
                     fontSize = 14.sp,
                     color = Color.Red
                 )
@@ -153,7 +163,7 @@ fun RegisterSenhaScreen(
                 stringResource(R.string.btn_txt_continue),
                 onClick = {
                     if ((user?.senha.toString() == senhaConfirm)) {
-                        val obj = UserCadastroDeserealize(
+                        val objUser = UserCadastroDeserealize(
                             user?.cpf.toString(),
                             user?.nomeCompleto.toString(),
                             user?.email.toString(),
@@ -162,7 +172,27 @@ fun RegisterSenhaScreen(
                             false
                         )
 
-                        userViewModel.postUserCadastro(obj)
+                        userViewModel.postUserCadastro(objUser)
+
+                        val objEndereco = Endereco(
+                            endereco?.logradouro.toString(),
+                            endereco?.bairro.toString(),
+                            endereco?.numero.toString().toInt(),
+                            endereco?.estado.toString(),
+                            endereco?.complemento.toString(),
+                            endereco?.cidade.toString(),
+                            endereco?.cep.toString(),
+                        )
+
+                        enderecoViewModel.postEndereco(objEndereco)
+
+                        if (userCadastro != null && userEndereco != null) {
+                            val userEntidade: Usuario? = userCadastro as? Usuario
+                            userViewModel.putVincularUserEndereco(
+                                userEntidade?.idUsuario,
+                                userEndereco?.idEndereco
+                            )
+                        }
 
                         val registerSucessoCadastroView =
                             Intent(route, RegisterSucessoCadastroView::class.java)
@@ -186,6 +216,6 @@ fun RegisterSenhaScreen(
 @Composable
 fun RegisterSenhaPreview() {
     TopHairTheme {
-        RegisterSenhaScreen(null, UserViewModel())
+        RegisterSenhaScreen(null, null, UserViewModel(), EnderecoViewModel())
     }
 }

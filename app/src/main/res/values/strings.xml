@@ -20,6 +20,13 @@
     <string name="titulo_tela_cadastro_endereco">Cadastre seu endereço:</string>
     <string name="titulo_tela_cadastro_dado_pessoal">Cadastre seus dados:</string>
     <string name="txt_nome_completo">Nome Completo</string>
+    <string name="txt_cep">CEP</string>
+    <string name="txt_logradouro">Logradouro</string>
+    <string name="txt_bairro">Bairro</string>
+    <string name="txt_numero">Nº:</string>
+    <string name="txt_estado_endereco">Estado</string>
+    <string name="txt_cidade">Cidade</string>
+    <string name="txt_complemento">Complemento (Opcional)</string>
     <string name="txt_telefone">Telefone</string>
     <string name="btn_txt_continue">Continue</string>
     <string name="titulo_tela_cadastro_senha">Crie sua senha com no mínimo 8 dígitos.</string>

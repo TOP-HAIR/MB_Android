@@ -1,7 +1,5 @@
 package com.example.tophair.app.data.entities.enum
 
-import com.example.tophair.R
-
 enum class TitleType(val tipoTitulo: String) {
     H1(tipoTitulo = "h1"),
     H2(tipoTitulo = "h2"),

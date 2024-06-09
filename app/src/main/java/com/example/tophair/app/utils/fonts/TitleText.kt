@@ -3,8 +3,6 @@ package com.example.tophair.app.utils.fonts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,11 +13,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Typography
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.ui.theme.TopHairTheme
@@ -61,7 +56,7 @@ fun TitleComposable(
 
 @Preview
 @Composable
-fun TitleComposablePreview(){
+fun TitleComposablePreview() {
     TopHairTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             TitleComposable(

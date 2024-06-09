@@ -29,7 +29,6 @@ import com.example.tophair.R
 import com.example.tophair.app.data.viewmodel.AgendaViewModel
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CustomLogo
-import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import java.time.LocalDateTime
 

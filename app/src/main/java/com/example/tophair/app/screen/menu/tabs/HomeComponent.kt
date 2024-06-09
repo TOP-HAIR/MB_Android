@@ -38,7 +38,6 @@ import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.enum.FilterServicoEnum
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CustomLogo
-import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager

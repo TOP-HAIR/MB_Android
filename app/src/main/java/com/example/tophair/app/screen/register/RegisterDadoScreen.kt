@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +32,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
@@ -63,6 +61,7 @@ class RegisterDadoView : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val user = extras?.getSerializable("user") as? UserCadastro
+
                     RegisterDadoScreen(user)
                 }
             }
@@ -113,12 +112,12 @@ fun RegisterDadoScreen(userParam: UserCadastro?) {
             MarginSpace(16.dp)
 
             CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
-                val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
+                val registerEnderecoView = Intent(route, RegisterEnderecoView::class.java)
 
                 if (!user?.telefone.isNullOrEmpty() && !user?.nomeCompleto.isNullOrEmpty()) {
-                    registerSenhaView.putExtra("user", user)
+                    registerEnderecoView.putExtra("user", user)
 
-                    route.startActivity(registerSenhaView)
+                    route.startActivity(registerEnderecoView)
                     (route as? Activity)?.overridePendingTransition(
                         R.anim.animate_slide_left_enter,
                         R.anim.animate_slide_left_exit
