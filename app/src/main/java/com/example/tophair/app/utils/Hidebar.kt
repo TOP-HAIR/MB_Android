@@ -15,33 +15,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
 fun HideSystemBars() {
-    val context = LocalContext.current
-    val activity = (context as? Activity)
-    if (activity != null) {
-        val window = activity.window
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.apply {
-            hide(WindowInsetsCompat.Type.statusBars())
-            hide(WindowInsetsCompat.Type.navigationBars())
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-
-        val view = LocalView.current
-        DisposableEffect(view) {
-            val listener = ViewTreeObserver.OnGlobalLayoutListener {
-                insetsController.hide(WindowInsetsCompat.Type.statusBars())
-                insetsController.hide(WindowInsetsCompat.Type.navigationBars())
-            }
-            view.viewTreeObserver.addOnGlobalLayoutListener(listener)
-
-            onDispose {
-                view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
-            }
-        }
-    }
 }
 
 fun Context.findActivity(): Activity? {

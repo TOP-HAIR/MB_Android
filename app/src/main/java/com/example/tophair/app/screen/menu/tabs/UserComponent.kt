@@ -77,8 +77,6 @@ fun UserComponent(userViewModel: UserViewModel) {
 
     val userDataState by userViewModel.user.observeAsState()
 
-    HideSystemBars()
-
     LaunchedEffect(userDataState) {
         userDataState?.let { user ->
             nomeCompleto = user.nomeCompleto ?: ""

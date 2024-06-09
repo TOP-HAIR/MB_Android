@@ -1,9 +1,12 @@
 package com.example.tophair.app.screen.register
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,14 +29,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.screen.login.LoginView
+import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterSucessoCadastroView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                android.graphics.Color.TRANSPARENT
+            )
+        )
+
         setContent {
             TopHairTheme {
                 Surface(
@@ -53,16 +66,13 @@ fun RegisterSucessoCadastroScreen() {
 
     RegisterComponent(
         componentContent = {
-            Text(
-                stringResource(id = R.string.titulo_tela_cadastro_sucesso),
-                fontSize = 28.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+            TitleComposable(
+                typeTitle = TitleType.H1,
+                textTitle = stringResource(R.string.titulo_tela_cadastro_sucesso).toUpperCase(),
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                lineHeight = 40.sp,
-                color = Color.White,
-                fontWeight = FontWeight.ExtraBold
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -75,12 +85,18 @@ fun RegisterSucessoCadastroScreen() {
                     .size(width = 120.dp, height = 120.dp)
             )
 
+            MarginSpace(16.dp)
+
             CustomButton(
                 text = stringResource(id = R.string.btn_txt_voltar_login),
                 onClick = {
                     val loginView = Intent(route, LoginView::class.java)
 
                     route.startActivity(loginView)
+                    (route as? Activity)?.overridePendingTransition(
+                        R.anim.animate_slide_left_enter,
+                        R.anim.animate_slide_left_exit
+                    )
                 },
                 Color(31, 116, 109, 255),
             )

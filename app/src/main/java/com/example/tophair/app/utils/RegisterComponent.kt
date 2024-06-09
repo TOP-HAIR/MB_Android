@@ -32,8 +32,6 @@ import com.example.tophair.R
 fun RegisterComponent(
     componentContent: @Composable ColumnScope.() -> Unit
 ) {
-    HideSystemBars()
-
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()
     ) {

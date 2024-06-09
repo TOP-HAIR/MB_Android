@@ -71,6 +71,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.tophair.app.data.entities.UserLogin
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
@@ -79,6 +80,7 @@ import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.OutlinedTextFieldBackground
 import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -87,7 +89,6 @@ class LoginView : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         SessionManager.initialize(this)
-
         setContent {
             TopHairTheme {
                 Surface(
@@ -113,18 +114,13 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
     RegisterComponent(
         componentContent = {
-            Text(
-                stringResource(
-                    R.string.titulo_tela_login
-                ),
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+            TitleComposable(
+                typeTitle = TitleType.H1,
+                textTitle = stringResource(R.string.titulo_tela_login).toUpperCase(),
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                lineHeight = 40.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -193,9 +189,13 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
             LaunchedEffect(tokenState) {
                 if (user != null && tokenState != null) {
-                    Log.d("Token", "Token salvo: $tokenState")
                     val menuNavigationView = Intent(route, MenuNavigationView::class.java)
+
                     route.startActivity(menuNavigationView)
+                    (route as? Activity)?.overridePendingTransition(
+                        R.anim.animate_slide_left_enter,
+                        R.anim.animate_slide_left_exit
+                    )
                 }
             }
 

@@ -51,8 +51,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
     val empresasTop5 = empresasState.value ?: emptyList()
     val empresaHome = empresaHomeState.value ?: emptyList()
 
-    HideSystemBars()
-
     Column(
         modifier = Modifier
             .fillMaxSize()

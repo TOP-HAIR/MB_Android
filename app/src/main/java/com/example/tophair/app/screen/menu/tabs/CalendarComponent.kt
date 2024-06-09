@@ -38,8 +38,6 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
     val agendaState = agendaViewModel.agenda.observeAsState()
     val agenda = agendaState.value ?: emptyList()
 
-    HideSystemBars()
-
     Column(
         modifier = Modifier
             .fillMaxSize()

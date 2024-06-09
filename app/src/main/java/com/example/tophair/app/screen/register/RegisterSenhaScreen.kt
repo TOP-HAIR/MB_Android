@@ -1,9 +1,12 @@
 package com.example.tophair.app.screen.register
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,16 +38,26 @@ import androidx.compose.ui.unit.sp
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                android.graphics.Color.TRANSPARENT
+            )
+        )
+
         val extras = intent.extras
+
         setContent {
             TopHairTheme {
                 Surface(
@@ -64,7 +77,6 @@ fun RegisterSenhaScreen(
     userParam: UserCadastro?,
     userViewModel: UserViewModel = UserViewModel()
 ) {
-
     val route = LocalContext.current
     val userCadastro by userViewModel.userAtual.observeAsState()
     val erroApi by userViewModel.erroApi.observeAsState()
@@ -74,18 +86,13 @@ fun RegisterSenhaScreen(
 
     RegisterComponent(
         componentContent = {
-            Text(
-                stringResource(
-                    R.string.titulo_tela_cadastro_senha
-                ),
-                fontSize = 28.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+            TitleComposable(
+                typeTitle = TitleType.H1,
+                textTitle = stringResource(R.string.titulo_tela_cadastro_senha).toUpperCase(),
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                lineHeight = 40.sp,
-                color = Color.White,
-                fontWeight = FontWeight.ExtraBold
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -159,7 +166,12 @@ fun RegisterSenhaScreen(
 
                         val registerSucessoCadastroView =
                             Intent(route, RegisterSucessoCadastroView::class.java)
+
                         route.startActivity(registerSucessoCadastroView)
+                        (route as? Activity)?.overridePendingTransition(
+                            R.anim.animate_slide_left_enter,
+                            R.anim.animate_slide_left_exit
+                        )
                     }
                 },
                 Color(31, 116, 109, 255),

@@ -2,7 +2,9 @@ package com.example.tophair.app.screen.menu
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -57,6 +59,12 @@ class MenuNavigationView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                android.graphics.Color.TRANSPARENT
+            )
+        )
+
         setContent {
             TopHairTheme {
                 Surface(
@@ -91,10 +99,7 @@ fun MenuNavigationView(
         }
     }
 
-    HideSystemBars()
-
     Column(modifier = modifier.fillMaxSize()) {
-
         Box(
             modifier = Modifier
                 .weight(1f)

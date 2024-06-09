@@ -70,7 +70,6 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
     var servico by remember { mutableStateOf("") }
     var nomeEmpresa by remember { mutableStateOf("") }
 
-    HideSystemBars()
     Column(
         modifier = Modifier
             .fillMaxSize()
