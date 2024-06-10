@@ -3,42 +3,40 @@ package com.example.tophair.app.utils
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
-fun HideSystemBars() {
+fun CustomSystemBar() {
     val context = LocalContext.current
-    val activity = (context as? Activity)
-    if (activity != null) {
-        val window = activity.window
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    val window = (context as? Activity)?.window
+    val view = LocalView.current
 
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.apply {
-            hide(WindowInsetsCompat.Type.statusBars())
-            hide(WindowInsetsCompat.Type.navigationBars())
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+    if (window != null) {
+        SideEffect {
+            window.statusBarColor = Color.Transparent.toArgb()
+            WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val view = LocalView.current
-        DisposableEffect(view) {
-            val listener = ViewTreeObserver.OnGlobalLayoutListener {
-                insetsController.hide(WindowInsetsCompat.Type.statusBars())
-                insetsController.hide(WindowInsetsCompat.Type.navigationBars())
-            }
-            view.viewTreeObserver.addOnGlobalLayoutListener(listener)
+            ViewCompat.getWindowInsetsController(view)?.apply {
+                isAppearanceLightStatusBars = true
 
-            onDispose {
-                view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.hide(android.view.WindowInsets.Type.navigationBars())
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.decorView.systemUiVisibility = (
+                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
+                }
             }
         }
     }

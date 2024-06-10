@@ -1,9 +1,14 @@
 package com.example.tophair.app.screen.register
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.ActivityInfo.*
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,18 +37,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.Endereco
+import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.entities.Usuario
+import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = SCREEN_ORIENTATION_PORTRAIT
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
         val extras = intent.extras
         setContent {
             TopHairTheme {
@@ -52,7 +71,9 @@ class RegisterSenhaView : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val user = extras?.getSerializable("user") as? UserCadastro
-                    RegisterSenhaScreen(user, UserViewModel())
+                    val endereco = extras?.getSerializable("endereco") as? EnderecoSerializable
+
+                    RegisterSenhaScreen(user, endereco, UserViewModel(), EnderecoViewModel())
                 }
             }
         }
@@ -62,30 +83,29 @@ class RegisterSenhaView : ComponentActivity() {
 @Composable
 fun RegisterSenhaScreen(
     userParam: UserCadastro?,
-    userViewModel: UserViewModel = UserViewModel()
+    enderecoParam: EnderecoSerializable?,
+    userViewModel: UserViewModel = UserViewModel(),
+    enderecoViewModel: EnderecoViewModel = EnderecoViewModel()
 ) {
-
     val route = LocalContext.current
     val userCadastro by userViewModel.userAtual.observeAsState()
-    val erroApi by userViewModel.erroApi.observeAsState()
+    val userEndereco by enderecoViewModel.endereco.observeAsState()
+    val erroApiUser by userViewModel.erroApi.observeAsState()
+    val erroApiEndereco by enderecoViewModel.erroApi.observeAsState()
 
     val (user, userSetter) = remember { mutableStateOf(userParam) }
+    val (endereco) = remember { mutableStateOf(enderecoParam) }
     var senhaConfirm by remember { mutableStateOf("") }
 
     RegisterComponent(
         componentContent = {
-            Text(
-                stringResource(
-                    R.string.titulo_tela_cadastro_senha
-                ),
-                fontSize = 28.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+            TitleComposable(
+                typeTitle = TitleType.H1,
+                textTitle = stringResource(R.string.titulo_tela_cadastro_senha).toUpperCase(),
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                lineHeight = 40.sp,
-                color = Color.White,
-                fontWeight = FontWeight.ExtraBold
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -120,7 +140,7 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() == senhaConfirm && erroApi == null && erroApi == "") {
+            if (user?.senha.toString() == senhaConfirm && erroApiUser == null && erroApiUser == "") {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
@@ -130,11 +150,11 @@ fun RegisterSenhaScreen(
                 )
             }
 
-            if (erroApi != null && erroApi != "") {
+            if (erroApiUser != null && erroApiUser != "") {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = erroApi.toString(),
+                    text = erroApiUser.toString(),
                     fontSize = 14.sp,
                     color = Color.Red
                 )
@@ -146,7 +166,7 @@ fun RegisterSenhaScreen(
                 stringResource(R.string.btn_txt_continue),
                 onClick = {
                     if ((user?.senha.toString() == senhaConfirm)) {
-                        val obj = UserCadastroDeserealize(
+                        val objUser = UserCadastroDeserealize(
                             user?.cpf.toString(),
                             user?.nomeCompleto.toString(),
                             user?.email.toString(),
@@ -155,11 +175,36 @@ fun RegisterSenhaScreen(
                             false
                         )
 
-                        userViewModel.postUserCadastro(obj)
+                        userViewModel.postUserCadastro(objUser)
+
+                        val objEndereco = Endereco(
+                            endereco?.logradouro.toString(),
+                            endereco?.bairro.toString(),
+                            endereco?.numero.toString().toInt(),
+                            endereco?.estado.toString(),
+                            endereco?.complemento.toString(),
+                            endereco?.cidade.toString(),
+                            endereco?.cep.toString(),
+                        )
+
+                        enderecoViewModel.postEndereco(objEndereco)
+
+                        if (userCadastro != null && userEndereco != null) {
+                            val userEntidade: Usuario? = userCadastro as? Usuario
+                            userViewModel.putVincularUserEndereco(
+                                userEntidade?.idUsuario,
+                                userEndereco?.idEndereco
+                            )
+                        }
 
                         val registerSucessoCadastroView =
                             Intent(route, RegisterSucessoCadastroView::class.java)
+
                         route.startActivity(registerSucessoCadastroView)
+                        (route as? Activity)?.overridePendingTransition(
+                            R.anim.animate_slide_left_enter,
+                            R.anim.animate_slide_left_exit
+                        )
                     }
                 },
                 Color(31, 116, 109, 255),
@@ -174,6 +219,6 @@ fun RegisterSenhaScreen(
 @Composable
 fun RegisterSenhaPreview() {
     TopHairTheme {
-        RegisterSenhaScreen(null, UserViewModel())
+        RegisterSenhaScreen(null, null, UserViewModel(), EnderecoViewModel())
     }
 }

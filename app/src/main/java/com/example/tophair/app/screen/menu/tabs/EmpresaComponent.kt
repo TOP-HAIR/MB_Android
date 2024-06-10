@@ -66,8 +66,6 @@ fun EmpresaComponent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        CustomLogo()
-
         if (empresaState != null) {
             val empresa = empresaState.value
 

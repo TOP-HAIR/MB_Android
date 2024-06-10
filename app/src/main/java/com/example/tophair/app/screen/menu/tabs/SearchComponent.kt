@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -53,7 +55,6 @@ import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomLogo
-import com.example.tophair.app.utils.HideSystemBars
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -70,109 +71,133 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
     var servico by remember { mutableStateOf("") }
     var nomeEmpresa by remember { mutableStateOf("") }
 
-    HideSystemBars()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
-        CustomLogo()
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            if ((empresaHome != null && empresaHome.isNotEmpty()) && empresaFiltro.isNullOrEmpty()) {
-                empresaHome.forEach { empresa ->
-                    Box(
+        if ((empresaHome != null && empresaHome.isNotEmpty()) && empresaFiltro.isNullOrEmpty()) {
+            empresaHome.forEach { empresa ->
+                Box(
+                    modifier = Modifier
+                        .padding(34.dp)
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable {
+                            navController.navigate("Empresa/${empresa.idEmpresa}")
+                        }
+                ) {
+                    if (!empresa.arquivoDtos.isNullOrEmpty()) {
+                        AsyncImage(
+                            model = "http://34.237.189.174/api/arquivos/exibir/${
+                                empresa.arquivoDtos?.get(
+                                    0
+                                )?.id
+                            }",
+                            contentDescription = empresa.razaoSocial,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.mipmap.no_image),
+                            contentDescription = "Sem Imagem",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    Column(
                         modifier = Modifier
-                            .padding(34.dp)
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clickable {
-                                navController.navigate("Empresa/${empresa.idEmpresa}")
-                            }
+                            .align(Alignment.TopEnd)
+                            .background(Color(0x80000000))
+                            .padding(18.dp)
                     ) {
-                        if (!empresa.arquivoDtos.isNullOrEmpty()) {
-                            AsyncImage(
-                                model = "http://34.237.189.174/api/arquivos/exibir/${
-                                    empresa.arquivoDtos?.get(
-                                        0
-                                    )?.id
-                                }",
-                                contentDescription = empresa.razaoSocial,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                                color = Color.White,
+                                fontSize = 16.sp
                             )
-                        } else {
-                            Image(
-                                painter = painterResource(id = R.mipmap.no_image),
-                                contentDescription = "Sem Imagem",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
+
+                            Spacer(modifier = Modifier.width(4.dp))
+
+                            Text(
+                                text = "⭐",
+                                fontSize = 8.sp,
+                                color = Color.White
                             )
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .background(Color(0x80000000))
-                                .padding(20.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
-                                    color = Color.White,
-                                    fontSize = 16.sp
-                                )
-
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                Text(
-                                    text = "⭐",
-                                    fontSize = 8.sp,
-                                    color = Color.White
-                                )
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .background(Color(0x80000000))
-                        ) {
-                            Column(modifier = Modifier.padding(8.dp)) {
-                                Text(
-                                    text = empresa.razaoSocial.toString(),
-                                    color = Color.White,
-                                    fontSize = 14.sp
-                                )
-
-                                Text(
-                                    text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
-                                            "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
-                                    color = Color.White,
-                                    fontSize = 12.sp
-                                )
-                            }
                         }
                     }
 
-                }
-            } else {
-                if (empresaFiltro != null && empresaFiltro.isNotEmpty()) {
-                    Column(
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .background(Color(0x80000000))
+                    ) {
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            Text(
+                                text = empresa.razaoSocial.toString(),
+                                color = Color.White,
+                                fontSize = 14.sp
+                            )
+
+                            Text(
+                                text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
+                                        "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+                }
+
+            }
+        } else {
+            if (empresaFiltro != null && empresaFiltro.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    OutlinedTextField(
+                        value = nomeEmpresa,
+                        onValueChange = { nomeEmpresa = it },
+                        label = {
+                            androidx.compose.material3.Text(
+                                stringResource(R.string.txt_nome_empresa),
+                                style = TextStyle(color = Color.Black)
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textStyle = TextStyle(color = Color.Black),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            cursorColor = Color.Black
+                        ),
+                        singleLine = true
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .padding(vertical = 8.dp)
                     ) {
                         OutlinedTextField(
-                            value = nomeEmpresa,
-                            onValueChange = { nomeEmpresa = it },
+                            value = servico,
+                            onValueChange = { servico = it },
                             label = {
                                 androidx.compose.material3.Text(
-                                    stringResource(R.string.txt_nome_empresa),
+                                    stringResource(R.string.txt_servico),
                                     style = TextStyle(color = Color.Black)
                                 )
                             },
@@ -181,7 +206,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                                 imeAction = ImeAction.Next
                             ),
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .weight(0.67f),
                             textStyle = TextStyle(color = Color.Black),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = Color.Black,
@@ -191,187 +216,157 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                             singleLine = true
                         )
 
-                        Row(
+                        Spacer(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                                .padding(vertical = 8.dp)
-                        ) {
-                            OutlinedTextField(
-                                value = servico,
-                                onValueChange = { servico = it },
-                                label = {
-                                    androidx.compose.material3.Text(
-                                        stringResource(R.string.txt_servico),
-                                        style = TextStyle(color = Color.Black)
-                                    )
-                                },
-                                keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Next
-                                ),
-                                modifier = Modifier
-                                    .weight(0.67f),
-                                textStyle = TextStyle(color = Color.Black),
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color.Black,
-                                    unfocusedBorderColor = Color.Black,
-                                    cursorColor = Color.Black
-                                ),
-                                singleLine = true
-                            )
+                                .weight(0.03f)
+                        )
 
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(0.03f)
-                            )
+                        OutlinedTextField(
+                            value = estado,
+                            onValueChange = { estado = it },
+                            label = {
+                                androidx.compose.material3.Text(
+                                    stringResource(R.string.txt_estado),
+                                    style = TextStyle(color = Color.Black)
+                                )
+                            },
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Email,
+                                imeAction = ImeAction.Next
+                            ),
+                            modifier = Modifier
+                                .weight(0.30f),
+                            textStyle = TextStyle(color = Color.Black),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Color.Black,
+                                unfocusedBorderColor = Color.Black,
+                                cursorColor = Color.Black
+                            ),
+                            singleLine = true
+                        )
+                    }
 
-                            OutlinedTextField(
-                                value = estado,
-                                onValueChange = { estado = it },
-                                label = {
-                                    androidx.compose.material3.Text(
-                                        stringResource(R.string.txt_estado),
-                                        style = TextStyle(color = Color.Black)
-                                    )
-                                },
-                                keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Next
-                                ),
-                                modifier = Modifier
-                                    .weight(0.30f),
-                                textStyle = TextStyle(color = Color.Black),
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color.Black,
-                                    unfocusedBorderColor = Color.Black,
-                                    cursorColor = Color.Black
-                                ),
-                                singleLine = true
-                            )
+                    CustomButton(stringResource(R.string.btn_txt_filtrar), onClick = {
+                        if ((estado.isNotBlank() || servico.isNotBlank() || nomeEmpresa.isNotBlank())) {
+                            val result =
+                                empresaViewModel.getFiltroEmpresas(estado, servico, nomeEmpresa)
                         }
+                    })
 
-                        CustomButton(stringResource(R.string.btn_txt_filtrar), onClick = {
-                            if ((estado.isNotBlank() || servico.isNotBlank() || nomeEmpresa.isNotBlank())) {
-                                val result =
-                                    empresaViewModel.getFiltroEmpresas(estado, servico, nomeEmpresa)
+                    empresaFiltro.forEach { empresa ->
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable {
+                                    navController.navigate("Empresa/${empresa.idEmpresa}")
+                                }
+                        ) {
+                            if (!empresa.arquivoDtos.isNullOrEmpty()) {
+                                AsyncImage(
+                                    model = "http://34.235.119.206/api/arquivos/exibir/${
+                                        empresa.arquivoDtos?.get(
+                                            0
+                                        )?.id
+                                    }",
+                                    contentDescription = empresa.razaoSocial,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource(id = R.mipmap.no_image),
+                                    contentDescription = "Sem Imagem",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
                             }
-                        })
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .background(Color(0x80000000))
+                                    .padding(18.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                                        color = Color.White,
+                                        fontSize = 16.sp
+                                    )
 
-                        empresaFiltro.forEach { empresa ->
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    Text(
+                                        text = "⭐",
+                                        fontSize = 8.sp,
+                                        color = Color.White
+                                    )
+                                }
+                            }
+
                             Box(
                                 modifier = Modifier
-                                    .padding(vertical = 8.dp)
+                                    .align(Alignment.BottomCenter)
                                     .fillMaxWidth()
-                                    .height(200.dp)
-                                    .clickable {
-                                        navController.navigate("Empresa/${empresa.idEmpresa}")
-                                    }
+                                    .background(Color(0x80000000))
                             ) {
-                                if (!empresa.arquivoDtos.isNullOrEmpty()) {
-                                    AsyncImage(
-                                        model = "http://34.235.119.206/api/arquivos/exibir/${
-                                            empresa.arquivoDtos?.get(
-                                                0
-                                            )?.id
-                                        }",
-                                        contentDescription = empresa.razaoSocial,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize()
+                                Column(modifier = Modifier.padding(8.dp)) {
+                                    Text(
+                                        text = empresa.razaoSocial.toString(),
+                                        color = Color.White,
+                                        fontSize = 14.sp
                                     )
-                                } else {
-                                    Image(
-                                        painter = painterResource(id = R.mipmap.no_image),
-                                        contentDescription = "Sem Imagem",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize()
+
+                                    Text(
+                                        text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
+                                                "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
+                                        color = Color.White,
+                                        fontSize = 12.sp
                                     )
-                                }
-                                Column(
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .background(Color(0x80000000))
-                                        .padding(20.dp)
-                                ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text(
-                                            text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
-                                            color = Color.White,
-                                            fontSize = 16.sp
-                                        )
-
-                                        Spacer(modifier = Modifier.width(4.dp))
-
-                                        Text(
-                                            text = "⭐",
-                                            fontSize = 8.sp,
-                                            color = Color.White
-                                        )
-                                    }
-                                }
-
-                                Box(
-                                    modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .fillMaxWidth()
-                                        .background(Color(0x80000000))
-                                ) {
-                                    Column(modifier = Modifier.padding(8.dp)) {
-                                        Text(
-                                            text = empresa.razaoSocial.toString(),
-                                            color = Color.White,
-                                            fontSize = 14.sp
-                                        )
-
-                                        Text(
-                                            text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
-                                                    "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
-                                            color = Color.White,
-                                            fontSize = 12.sp
-                                        )
-                                    }
                                 }
                             }
                         }
                     }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.mipmap.search_icon),
-                            contentDescription = "Icon Calendar",
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(100.dp)
-                        )
-
-                        MarginSpace(24.dp)
-
-                        Text(
-                            stringResource(R.string.titulo_tela_de_busca_sem_resultado),
-                            style = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
-                            fontSize = 28.sp,
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                        )
-
-                        MarginSpace(12.dp)
-
-                        Text(
-                            stringResource(R.string.txt_tela_de_busca_sem_resultado),
-                            style = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                        )
-                    }
-
-                    MarginSpace(40.dp)
                 }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.mipmap.search_icon),
+                        contentDescription = "Icon Calendar",
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(100.dp)
+                    )
+
+                    MarginSpace(24.dp)
+
+                    Text(
+                        stringResource(R.string.titulo_tela_de_busca_sem_resultado),
+                        style = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
+                        fontSize = 28.sp,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                    )
+
+                    MarginSpace(12.dp)
+
+                    Text(
+                        stringResource(R.string.txt_tela_de_busca_sem_resultado),
+                        style = TextStyle(color = Color.Black, textAlign = TextAlign.Center),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                    )
+                }
+
+                MarginSpace(40.dp)
             }
         }
     }

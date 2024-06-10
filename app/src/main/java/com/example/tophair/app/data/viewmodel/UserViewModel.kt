@@ -22,6 +22,7 @@ import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
     val userAtual: MutableLiveData<Any> = MutableLiveData()
+    val userVincular: MutableLiveData<Any> = MutableLiveData()
     val users = MutableLiveData(SnapshotStateList<User>())
     val user: MutableLiveData<UserGet> = MutableLiveData()
     val userCadastro: MutableLiveData<UserCadastro> = MutableLiveData()
@@ -72,7 +73,6 @@ class UserViewModel : ViewModel() {
 
                     user?.let {
                         userAtual.postValue(it)
-
                     }
                 } else {
                     Log.e("UserViewModel", "erro no postUserLogin ${response}")
@@ -84,6 +84,7 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+
     fun putUser(user: UserUpdate) {
         viewModelScope.launch {
             try {
@@ -106,6 +107,34 @@ class UserViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in UserUpdate! ${e.message}")
+                erroApi.postValue(e.message)
+            }
+        }
+    }
+
+    fun putVincularUserEndereco(userId: Integer? = null, enderecoId: Integer? = null) {
+        viewModelScope.launch {
+            try {
+                if (userId != null && enderecoId != null) {
+                    val response = apiUsersToken.updateVincularEnderecoUser(
+                        enderecoId.toLong(),
+                        userId.toLong()
+                    )
+
+                    if (response.isSuccessful) {
+                        val user = response.body()
+
+                        user?.let {
+                            userVincular.postValue(it)
+                        }
+                    } else {
+                        Log.e("UserViewModel", "erro no putVincularUserEndereco ${response}")
+                        erroApi.postValue(response.errorBody()?.string())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.e("UserViewModel", "Error in putVincularUserEndereco! ${e.message}")
                 erroApi.postValue(e.message)
             }
         }

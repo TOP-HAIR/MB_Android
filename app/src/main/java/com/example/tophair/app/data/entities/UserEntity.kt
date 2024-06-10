@@ -10,7 +10,7 @@ data class User(
 )
 
 data class Usuario(
-    val idUsuario: Int? = null,
+    val idUsuario: Integer? = null,
     val cpf: String? = null,
     val nomeCompleto: String? = null,
     val email: String? = null,
