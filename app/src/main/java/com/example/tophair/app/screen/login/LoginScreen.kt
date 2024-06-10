@@ -161,6 +161,10 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
                     userViewModel.postUserLogin(obj)
                 }
+
+                val menuNavigationView = Intent(route, MenuNavigationView::class.java)
+
+                route.startActivity(menuNavigationView)
             })
 
             LaunchedEffect(tokenState) {
