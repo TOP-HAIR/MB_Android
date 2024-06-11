@@ -7,12 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.tophair.R
 import com.example.tophair.ui.theme.TopHairTheme
 
 @Composable
@@ -27,11 +26,25 @@ fun FormattedPhoneNumberTextField(
     TextField(
         value = textState,
         onValueChange = { newText ->
-            val formattedText = formatPhoneNumber(newText.text)
-            textState = textState.copy(text = formattedText)
-            onValueChange(formattedText)
+            val digits = newText.text.filter { it.isDigit() }
+            if (newText.text.length <= textState.text.length) {
+                // Exclusão: limpar a máscara e atualizar o estado
+                textState = textState.copy(
+                    text = digits,
+                    selection = TextRange(digits.length) // move cursor to the end
+                )
+                onValueChange(digits)
+            } else if (digits.length <= 11) {
+                // Inserção: aplicar a máscara e atualizar o estado
+                val formattedText = formatPhoneNumber(digits)
+                textState = textState.copy(
+                    text = formattedText,
+                    selection = TextRange(formattedText.length) // move cursor to the end
+                )
+                onValueChange(digits)
+            }
         },
-        label = { Text(stringResource(R.string.txt_telefone)) },
+        label = { Text("Telefone") },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Phone,
@@ -47,37 +60,29 @@ fun FormattedPhoneNumberTextField(
     )
 }
 
-fun formatPhoneNumber(input: String): String {
-    val digits = input.filter { it.isDigit() }
-    if (digits.isEmpty()) return ""
-
-    val formatted = buildString {
-        append("(")
-        for (i in digits.indices) {
-            append(digits[i])
-            if (i == 1) append(") ")
-            if (i == 6) append("-")
-            if (i == 10) break
-        }
+fun formatPhoneNumber(digits: String): String {
+    val formatted = StringBuilder()
+    for (i in digits.indices) {
+        formatted.append(digits[i])
+        if (i == 1) formatted.append(") ")
+        if (i == 6) formatted.append("-")
     }
-    return formatted
+    return if (digits.isNotEmpty()) "(${formatted.toString()}" else formatted.toString()
 }
 
-fun removeRegexPhoneNumber(input: String) {
-
-    return
+fun removePhoneNumberMask(input: String): String {
+    return input.filter { it.isDigit() }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun FormattedPhoneNumberTextFieldPreview() {
     TopHairTheme {
-        val telefone = remember { mutableStateOf("") }
+        val phone = remember { mutableStateOf("") }
 
         FormattedPhoneNumberTextField(
-            initialValue = telefone.value,
-            onValueChange = { telefone.value = it },
+            initialValue = phone.value,
+            onValueChange = { phone.value = removePhoneNumberMask(it) },
             modifier = Modifier.fillMaxWidth()
         )
     }
