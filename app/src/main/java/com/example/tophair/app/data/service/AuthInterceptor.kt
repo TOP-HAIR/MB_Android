@@ -1,9 +1,9 @@
 package com.example.tophair.app.data.service
 
-import okhttp3.Interceptor
-import okhttp3.Request
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
+import okhttp3.Interceptor
+import okhttp3.Request
 
 object AuthInterceptor {
     private suspend fun getTokenFromDataStore(): String {

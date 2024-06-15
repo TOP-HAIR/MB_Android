@@ -72,7 +72,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
     var servico by remember { mutableStateOf("") }
     var nomeEmpresa by remember { mutableStateOf("") }
 
-    if(empresaHome.isNullOrEmpty()){
+    if (empresaHome.isNullOrEmpty()) {
         empresaViewModel.getHomeEmpresas()
     }
 

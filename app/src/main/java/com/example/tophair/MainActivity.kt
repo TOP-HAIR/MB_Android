@@ -1,14 +1,11 @@
 package com.example.tophair
 
 import android.app.Activity
-import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.CustomRowWithDividers
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,11 +22,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.tophair.app.data.entities.enum.TitleType
-import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.login.LoginView
 import com.example.tophair.app.screen.register.RegisterEmailView
+import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.CustomRowWithDividers
+import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme

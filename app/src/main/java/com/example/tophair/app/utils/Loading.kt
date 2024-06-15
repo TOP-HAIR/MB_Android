@@ -35,7 +35,7 @@ fun CircleLoader(
     smoothTransition: Boolean = true,
     strokeStyle: StrokeStyle = StrokeStyle(),
     cycleDuration: Int = 1400,
-){
+) {
     val tailToDisplay = remember { Animatable(0f) }
 
     LaunchedEffect(isVisible) {
@@ -45,6 +45,7 @@ fun CircleLoader(
                 targetValue = targetTail,
                 animationSpec = tween(cycleDuration, easing = LinearEasing)
             )
+
             else -> tailToDisplay.snapTo(targetTail)
         }
     }

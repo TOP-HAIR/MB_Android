@@ -1,7 +1,7 @@
 package com.example.tophair.app.data.entities
 
-import java.io.Serializable
 import kotlinx.serialization.SerializationStrategy
+import java.io.Serializable
 import java.time.LocalDateTime
 
 data class Agenda(

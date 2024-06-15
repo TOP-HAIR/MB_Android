@@ -132,7 +132,6 @@ class UserViewModel : ViewModel() {
                         erroApi.postValue(response.errorBody()?.string())
                     }
                 }
-
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in putVincularUserEndereco! ${e.message}")
                 erroApi.postValue(e.message)

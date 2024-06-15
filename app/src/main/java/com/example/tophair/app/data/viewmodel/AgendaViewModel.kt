@@ -41,7 +41,6 @@ class AgendaViewModel : ViewModel() {
                         agendaBody?.let {
                             agenda.postValue(it)
                         }
-
                     } else {
                         Log.e("AgendaViewModel", "erro no getAgendaUser ${response}")
                         erroApi.postValue(response.errorBody()!!.string())

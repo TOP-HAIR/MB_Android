@@ -10,6 +10,6 @@ fun AgendaComponent(
     idServico: Int,
     idEmpresa: Int,
 ) {
-    Text(text =  "No message ${idServico} ${idEmpresa}")
+    Text(text = "No message ${idServico} ${idEmpresa}")
 
 }

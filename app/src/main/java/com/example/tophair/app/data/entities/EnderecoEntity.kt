@@ -1,6 +1,5 @@
 package com.example.tophair.app.data.entities
 
-import android.icu.number.IntegerWidth
 import java.io.Serializable
 
 data class Endereco(

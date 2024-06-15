@@ -2,14 +2,10 @@ package com.example.tophair.app.screen.register
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.content.pm.ActivityInfo.*
+import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +41,6 @@ import com.example.tophair.app.data.entities.Endereco
 import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
-import com.example.tophair.app.data.entities.Usuario
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
@@ -205,7 +200,8 @@ fun RegisterSenhaScreen(
                         userEndereco!!.idEndereco?.toInt()
                     )
 
-                    val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
+                    val registerSucessoCadastroView =
+                        Intent(route, RegisterSucessoCadastroView::class.java)
                     route.startActivity(registerSucessoCadastroView)
                     (route as? Activity)?.overridePendingTransition(
                         R.anim.animate_slide_left_enter,

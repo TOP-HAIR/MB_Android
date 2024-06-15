@@ -32,18 +32,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.FormattedCepTextField
-import com.example.tophair.app.utils.FormattedCpfTextField
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.ui.theme.TopHairTheme
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
+import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterEnderecoView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

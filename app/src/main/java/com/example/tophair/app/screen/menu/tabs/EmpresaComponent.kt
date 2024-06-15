@@ -83,7 +83,11 @@ fun EmpresaComponent(
             } else {
                 if (!empresa?.arquivos.isNullOrEmpty()) {
                     AsyncImage(
-                        model = "http://34.237.189.174/api/arquivos/exibir/${empresa?.arquivos?.get(0)?.id}",
+                        model = "http://34.237.189.174/api/arquivos/exibir/${
+                            empresa?.arquivos?.get(
+                                0
+                            )?.id
+                        }",
                         contentDescription = empresa?.razaoSocial,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
