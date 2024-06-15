@@ -23,10 +23,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.enum.TextType
+import com.example.tophair.app.utils.fonts.TextComposable
 
 @Composable
 fun RegisterComponent(
@@ -57,10 +60,11 @@ fun RegisterComponent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(28.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(modifier = Modifier.padding(vertical = 32.dp)) {
+                Column(modifier = Modifier) {
                     Image(
                         painter = painterResource(
                             id = R.mipmap.logo_inicial
@@ -68,14 +72,15 @@ fun RegisterComponent(
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(280.dp)
+                            .height(200.dp)
                     )
                 }
 
+                MarginSpace(12.dp)
+
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     content = componentContent
@@ -84,12 +89,11 @@ fun RegisterComponent(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = stringResource(R.string.txt_politicas_e_termos),
-                        fontSize = 10.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        modifier = Modifier.padding(16.dp)
+                    TextComposable(
+                        typeTitle = TextType.EXTRA_SMALL,
+                        textTitle = stringResource(R.string.txt_politicas_e_termos),
+                        fontWeight = FontWeight.Light,
+                        textAlign = TextAlign.Center
                     )
                 }
             }

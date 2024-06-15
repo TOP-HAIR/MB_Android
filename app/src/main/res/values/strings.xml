@@ -5,7 +5,7 @@
     <string name="txt_condicional_inicial">OU</string>
     <string name="btn_txt_cadastro">Criar Conta</string>
     <string name="txt_politicas_e_termos">Ao continuar, você concorda integralmente com nossos Termos de Serviço e Política de Privacidade.</string>
-    <string name="titulo_tela_login">Seja bem vindo(a) de volta ao APP!!!</string>
+    <string name="titulo_tela_login">Bem vindo(a) ao APP!!!</string>
     <string name="txt_email">Email</string>
     <string name="txt_nome_empresa">Buscar por Empresa</string>
     <string name="txt_data_input">Data</string>

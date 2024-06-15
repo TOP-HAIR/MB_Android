@@ -22,6 +22,7 @@ import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
     val userAtual: MutableLiveData<Any> = MutableLiveData()
+    val userId: MutableLiveData<Long> = MutableLiveData()
     val userVincular: MutableLiveData<Any> = MutableLiveData()
     val users = MutableLiveData(SnapshotStateList<User>())
     val user: MutableLiveData<UserGet> = MutableLiveData()
@@ -70,9 +71,9 @@ class UserViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     val user = response.body()
-
+                    Log.d("UserViewModel", "User response body: $user")
                     user?.let {
-                        userAtual.postValue(it)
+                        userId.postValue(it)
                     }
                 } else {
                     Log.e("UserViewModel", "erro no postUserLogin ${response}")
@@ -112,15 +113,14 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun putVincularUserEndereco(userId: Integer? = null, enderecoId: Integer? = null) {
+    fun putVincularUserEndereco(userId: Int? = null, enderecoId: Int? = null) {
         viewModelScope.launch {
             try {
                 if (userId != null && enderecoId != null) {
-                    val response = apiUsersToken.updateVincularEnderecoUser(
+                    val response = apiUsers.updateVincularEnderecoUser(
                         enderecoId.toLong(),
                         userId.toLong()
                     )
-
                     if (response.isSuccessful) {
                         val user = response.body()
 

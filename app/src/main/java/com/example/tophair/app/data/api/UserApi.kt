@@ -18,7 +18,7 @@ interface UserApi {
     suspend fun postUserLogin(@Body userLogin: UserLogin): Response<User>
 
     @POST("/api/usuarios/cadastrar")
-    suspend fun postUserCadastrar(@Body userCadastro: UserCadastroDeserealize): Response<Any>
+    suspend fun postUserCadastrar(@Body userCadastro: UserCadastroDeserealize): Response<Long>
 
     @GET("/api/usuarios/{id}")
     suspend fun getUser(@Path("id") userId: Int): Response<UserGet>

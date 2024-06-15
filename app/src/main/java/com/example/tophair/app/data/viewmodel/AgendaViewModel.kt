@@ -19,6 +19,7 @@ class AgendaViewModel : ViewModel() {
 
     val apiToken: AgendaApi = RetrofitService.getApiServiceWithToken(AgendaApi::class.java)
     val erroApi = MutableLiveData("")
+    val agendaLoader: MutableLiveData<Boolean> = MutableLiveData(true)
 
     init {
         getAgendaUser()
@@ -26,6 +27,7 @@ class AgendaViewModel : ViewModel() {
 
     fun getAgendaUser() {
         CoroutineScope(Dispatchers.IO).launch {
+            agendaLoader.postValue(true)
             try {
                 val userId = withContext(Dispatchers.Main) {
                     SessionManager.getUserIdFlow().firstOrNull()
@@ -38,7 +40,6 @@ class AgendaViewModel : ViewModel() {
 
                         agendaBody?.let {
                             agenda.postValue(it)
-                            Log.e("Erro", "erro agenda ${it}")
                         }
 
                     } else {
@@ -49,6 +50,8 @@ class AgendaViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("AgendaViewModel", "Error in getAgendaUser! ${e.message}")
                 erroApi.postValue(e.message)
+            } finally {
+                agendaLoader.postValue(false)
             }
         }
     }

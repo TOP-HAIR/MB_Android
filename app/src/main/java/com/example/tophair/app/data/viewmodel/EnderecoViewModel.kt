@@ -23,7 +23,7 @@ class EnderecoViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     val enderecoResponse = response.body()
-
+                    Log.d("EnderecoViewModel", "Endereco response body: $enderecoResponse")
                     enderecoResponse?.let {
                         endereco.postValue(it)
                     }

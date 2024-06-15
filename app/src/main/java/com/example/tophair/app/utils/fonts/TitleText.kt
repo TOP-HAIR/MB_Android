@@ -24,6 +24,7 @@ fun TitleComposable(
     typeTitle: TitleType,
     modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
+    textColor: Color = Color.White,
     textAlign: TextAlign = TextAlign.Start,
     fontFamily: FontFamily = FontFamily(
         Font(R.font.poppins_medium)
@@ -35,7 +36,7 @@ fun TitleComposable(
             .fillMaxWidth(),
         style = TextStyle(
             fontSize = typeTitle.fontSize,
-            color = Color.White,
+            color = textColor,
             fontWeight = fontWeight,
             textAlign = textAlign,
             fontFamily = fontFamily

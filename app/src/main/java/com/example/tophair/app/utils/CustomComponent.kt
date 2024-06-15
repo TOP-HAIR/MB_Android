@@ -92,7 +92,7 @@ fun CustomLogo() {
     val temaTopHair = Color(red = 4, green = 23, blue = 32)
     Column(
         modifier = Modifier
-            .height(110.dp)
+            .height(88.dp)
     ) {
         Row(
             modifier = Modifier

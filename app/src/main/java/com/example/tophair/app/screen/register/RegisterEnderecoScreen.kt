@@ -38,6 +38,8 @@ import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.FormattedCepTextField
+import com.example.tophair.app.utils.FormattedCpfTextField
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.ui.theme.TopHairTheme
 import com.example.tophair.app.utils.RegisterComponent
@@ -88,17 +90,10 @@ fun RegisterEnderecoScreen(userParam: UserCadastro?) {
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            TextField(
-                value = endereco?.cep ?: "",
+            FormattedCepTextField(
+                initialValue = endereco?.cep ?: "",
                 onValueChange = { enderecoSetter(endereco.copy(cep = it)) },
-                label = { Text(stringResource(R.string.txt_cep)) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true
+                modifier = Modifier.fillMaxWidth()
             )
 
             MarginSpace(16.dp)
@@ -118,18 +113,18 @@ fun RegisterEnderecoScreen(userParam: UserCadastro?) {
 
             MarginSpace(16.dp)
 
-            TextField(
-                value = endereco?.bairro ?: "",
-                onValueChange = { enderecoSetter(endereco.copy(bairro = it)) },
-                label = { Text(stringResource(R.string.txt_bairro)) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true
-            )
+//            TextField(
+//                value = endereco?.bairro ?: "",
+//                onValueChange = { enderecoSetter(endereco.copy(bairro = it)) },
+//                label = { Text(stringResource(R.string.txt_bairro)) },
+//                keyboardOptions = KeyboardOptions.Default.copy(
+//                    keyboardType = KeyboardType.Text,
+//                    imeAction = ImeAction.Next
+//                ),
+//                modifier = Modifier
+//                    .fillMaxWidth(),
+//                singleLine = true
+//            )
 
             MarginSpace(16.dp)
 
@@ -209,7 +204,7 @@ fun RegisterEnderecoScreen(userParam: UserCadastro?) {
             CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
                 val registerSenhaView = Intent(route, RegisterSenhaView::class.java)
 
-                if (!endereco?.cep.isNullOrEmpty() && !endereco?.numero.isNullOrEmpty() && !endereco?.bairro.isNullOrEmpty() && !endereco?.logradouro.isNullOrEmpty() && !endereco?.estado.isNullOrEmpty() && !endereco?.cidade.isNullOrEmpty()) {
+                if (!endereco?.cep.isNullOrEmpty() && !endereco?.numero.isNullOrEmpty() && !endereco?.logradouro.isNullOrEmpty() && !endereco?.estado.isNullOrEmpty() && !endereco?.cidade.isNullOrEmpty()) {
                     registerSenhaView.putExtra("user", user)
                     registerSenhaView.putExtra("endereco", endereco)
 

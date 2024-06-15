@@ -36,6 +36,7 @@ import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.FormattedCpfTextField
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
@@ -96,17 +97,10 @@ fun RegisterEmailScreen() {
 
             MarginSpace(16.dp)
 
-            TextField(
-                value = user.cpf ?: "",
+            FormattedCpfTextField(
+                initialValue = user?.cpf ?: "",
                 onValueChange = { userSetter(user.copy(cpf = it)) },
-                label = { Text(stringResource(R.string.txt_cpf)) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true
+                modifier = Modifier.fillMaxWidth()
             )
 
             MarginSpace(16.dp)

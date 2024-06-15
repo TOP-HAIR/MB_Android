@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.ActivityInfo.*
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +53,10 @@ import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
+import com.example.tophair.app.utils.removeCepMask
+import com.example.tophair.app.utils.removeCpfMask
 import com.example.tophair.ui.theme.TopHairTheme
+import removePhoneNumberMask
 
 class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +93,7 @@ fun RegisterSenhaScreen(
     enderecoViewModel: EnderecoViewModel = EnderecoViewModel()
 ) {
     val route = LocalContext.current
-    val userCadastro by userViewModel.userAtual.observeAsState()
+    val userCadastro by userViewModel.userId.observeAsState()
     val userEndereco by enderecoViewModel.endereco.observeAsState()
     val erroApiUser by userViewModel.erroApi.observeAsState()
     val erroApiEndereco by enderecoViewModel.erroApi.observeAsState()
@@ -165,13 +170,13 @@ fun RegisterSenhaScreen(
             CustomButton(
                 stringResource(R.string.btn_txt_continue),
                 onClick = {
-                    if ((user?.senha.toString() == senhaConfirm)) {
+                    if ((user?.senha.toString() == senhaConfirm) && user?.senha?.length ?: 0 >= 8) {
                         val objUser = UserCadastroDeserealize(
-                            user?.cpf.toString(),
+                            removeCpfMask(user?.cpf.toString()),
                             user?.nomeCompleto.toString(),
                             user?.email.toString(),
                             user?.senha.toString(),
-                            user?.telefone.toString(),
+                            removePhoneNumberMask(user?.telefone.toString()),
                             false
                         )
 
@@ -179,36 +184,35 @@ fun RegisterSenhaScreen(
 
                         val objEndereco = Endereco(
                             endereco?.logradouro.toString(),
-                            endereco?.bairro.toString(),
+                            //endereco?.bairro.toString(),
                             endereco?.numero.toString().toInt(),
                             endereco?.estado.toString(),
                             endereco?.complemento.toString(),
                             endereco?.cidade.toString(),
-                            endereco?.cep.toString(),
+                            removeCepMask(endereco?.cep.toString()),
                         )
 
                         enderecoViewModel.postEndereco(objEndereco)
-
-                        if (userCadastro != null && userEndereco != null) {
-                            val userEntidade: Usuario? = userCadastro as? Usuario
-                            userViewModel.putVincularUserEndereco(
-                                userEntidade?.idUsuario,
-                                userEndereco?.idEndereco
-                            )
-                        }
-
-                        val registerSucessoCadastroView =
-                            Intent(route, RegisterSucessoCadastroView::class.java)
-
-                        route.startActivity(registerSucessoCadastroView)
-                        (route as? Activity)?.overridePendingTransition(
-                            R.anim.animate_slide_left_enter,
-                            R.anim.animate_slide_left_exit
-                        )
                     }
                 },
                 Color(31, 116, 109, 255),
             )
+
+            LaunchedEffect(userCadastro, userEndereco) {
+                if (userCadastro != null && userEndereco != null) {
+                    userViewModel.putVincularUserEndereco(
+                        userCadastro!!.toInt(),
+                        userEndereco!!.idEndereco?.toInt()
+                    )
+
+                    val registerSucessoCadastroView = Intent(route, RegisterSucessoCadastroView::class.java)
+                    route.startActivity(registerSucessoCadastroView)
+                    (route as? Activity)?.overridePendingTransition(
+                        R.anim.animate_slide_left_enter,
+                        R.anim.animate_slide_left_exit
+                    )
+                }
+            }
 
             MarginSpace(32.dp)
         }

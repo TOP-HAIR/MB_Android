@@ -13,10 +13,13 @@ import kotlinx.coroutines.launch
 class ServicoViewModel : ViewModel() {
     val empresaServicoList: MutableLiveData<List<Servico>> = MutableLiveData()
     val apiToken: ServicoApi = RetrofitService.getApiServiceWithToken(ServicoApi::class.java)
+
     val erroApi = MutableLiveData("")
+    val servicoLoader: MutableLiveData<Boolean> = MutableLiveData(true)
 
     fun getServicoEmpresa(idEmpresa: Int) {
         CoroutineScope(Dispatchers.IO).launch {
+            servicoLoader.postValue(true)
             try {
                 val response = apiToken.getServicoEmpresa(idEmpresa)
 
@@ -33,6 +36,8 @@ class ServicoViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("ServicoViewModel", "Error in getServicoEmpresa! ${e.message}")
                 erroApi.postValue(e.message)
+            } finally {
+                servicoLoader.postValue(false)
             }
         }
     }
