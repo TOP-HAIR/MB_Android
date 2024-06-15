@@ -1,6 +1,5 @@
 package com.example.tophair.app.data.entities
 
-import android.icu.number.IntegerWidth
 import java.io.Serializable
 
 data class Endereco(
@@ -11,6 +10,15 @@ data class Endereco(
     val complemento: String? = null,
     val cidade: String? = null,
     val cep: String? = null
+)
+
+data class CepResponse(
+    val cep: String,
+    val logradouro: String,
+    val complemento: String?,
+    val bairro: String,
+    val localidade: String,
+    val uf: String
 )
 
 data class EnderecoResponse(
