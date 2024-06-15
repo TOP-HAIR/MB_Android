@@ -98,7 +98,7 @@ fun TelaInicial() {
                         R.anim.animate_slide_left_exit
                     )
                 },
-                Color(47, 156, 127)
+                color = Color(47, 156, 127)
             )
 
             MarginSpace(32.dp)

@@ -3,13 +3,17 @@ package com.example.tophair.app.screen.menu.tabs
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -24,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,11 +37,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.enum.TextType
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.utils.CardComponent
 import com.example.tophair.app.utils.CircleLoader
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.fonts.TextComposable
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 @Composable
@@ -105,12 +115,13 @@ fun EmpresaComponent(
                     )
                 }
 
-                Text(
+                TitleComposable(
                     modifier = Modifier
                         .padding(horizontal = 20.dp, vertical = 12.dp),
-                    text = empresa?.razaoSocial.toString(),
-                    color = Color.Black,
-                    fontSize = 16.sp
+                    typeTitle = TitleType.H1,
+                    textTitle = empresa?.razaoSocial.toString(),
+                    fontWeight = FontWeight.SemiBold,
+                    textColor = Color.Black
                 )
 
                 Divider(
@@ -120,12 +131,13 @@ fun EmpresaComponent(
                         .background(color = Color.White)
                 )
 
-                Text(
+                TitleComposable(
                     modifier = Modifier
                         .padding(horizontal = 20.dp, vertical = 12.dp),
-                    text = stringResource(id = R.string.txt_servicos_empresa),
-                    color = Color.Black,
-                    fontSize = 16.sp
+                    typeTitle = TitleType.H2,
+                    textTitle = stringResource(id = R.string.txt_servicos_empresa),
+                    fontWeight = FontWeight.Medium,
+                    textColor = Color.Black
                 )
 
                 if (servico != null && servico.isNotEmpty()) {
@@ -136,23 +148,59 @@ fun EmpresaComponent(
                                 .fillMaxWidth(),
                             shape = RoundedCornerShape(8.dp)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                verticalArrangement = Arrangement.Center
+                            Box(
+                                modifier = Modifier
+                                    .padding(12.dp)
+                                    .fillMaxWidth()
+                                    .fillMaxHeight()
                             ) {
-                                Text(
-                                    text = servicoItem.nomeServico.toString(),
-                                    color = Color.Black,
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    TitleComposable(
+                                        typeTitle = TitleType.H3,
+                                        textTitle = servicoItem.nomeServico.toString(),
+                                        fontWeight = FontWeight.Normal,
+                                        textColor = Color.Black
+                                    )
 
-                                Spacer(modifier = Modifier.height(16.dp))
+                                    Spacer(modifier = Modifier.height(6.dp))
 
-                                CustomButton(stringResource(R.string.btn_txt_agendar),
-                                    onClick = {
-                                        navController.navigate("Empresa/${idEmpresa}/${servicoItem.idServico}")
-                                        navController.navigate("Agenda")
+                                    Row(
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .width(120.dp)
+                                                .align(Alignment.Top)
+                                        ) {
+                                            TextComposable(
+                                                typeText = TextType.LARGE,
+                                                textBody = "R$ ${servicoItem.preco.toString()}",
+                                                fontWeight = FontWeight.Light,
+                                                textColor = Color.Black
+                                            )
+                                        }
+
+                                        Box(
+                                            modifier = Modifier
+                                                .width(120.dp)
+                                                .align(Alignment.Bottom)
+                                        ) {
+                                            CustomButton(
+                                                stringResource(R.string.btn_txt_agendar),
+                                                onClick = {
+                                                    navController.navigate("Agenda/${idEmpresa}/${servicoItem.idServico}")
+                                                },
+                                                typeText = TextType.SMALL,
+                                            )
+                                        }
                                     }
-                                )
+                                }
                             }
                         }
                     }

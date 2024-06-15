@@ -239,7 +239,7 @@ fun UserComponent(userViewModel: UserViewModel) {
                 stringResource(R.string.btn_txt_deletar_perfil), onClick = {
                     userViewModel.deleteUser()
                 },
-                Color(0xFFDC3545)
+                color = Color(0xFFDC3545)
             )
         }
     }

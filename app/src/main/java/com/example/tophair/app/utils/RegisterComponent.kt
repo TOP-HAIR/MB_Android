@@ -88,8 +88,8 @@ fun RegisterComponent(
 
                 Box(modifier = Modifier.fillMaxWidth()) {
                     TextComposable(
-                        typeTitle = TextType.EXTRA_SMALL,
-                        textTitle = stringResource(R.string.txt_politicas_e_termos),
+                        typeText = TextType.EXTRA_SMALL,
+                        textBody = stringResource(R.string.txt_politicas_e_termos),
                         fontWeight = FontWeight.Light,
                         textAlign = TextAlign.Center
                     )

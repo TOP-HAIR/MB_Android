@@ -116,7 +116,7 @@ fun RegisterEmailScreen() {
                         )
                     }
                 },
-                Color(47, 156, 127)
+                color = Color(47, 156, 127)
             )
 
             MarginSpace(32.dp)

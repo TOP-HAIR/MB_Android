@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,9 +41,14 @@ import coil.compose.AsyncImage
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.enum.FilterServicoEnum
+import com.example.tophair.app.data.entities.enum.NavMenuEnum
+import com.example.tophair.app.data.entities.enum.TextType
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CircleLoader
 import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.app.utils.fonts.TextComposable
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -88,46 +94,51 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(alignment = Alignment.CenterHorizontally),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     FilterServicoEnum.values().forEach { icon ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .weight(1f)
+                            modifier = Modifier.weight(1f)
                         ) {
                             Image(
                                 painter = painterResource(id = icon.imagemFiltro),
                                 contentDescription = icon.descricaoFiltro,
                                 modifier = Modifier
-                                    .size(85.dp, 90.dp)
+                                    .size(75.dp, 80.dp)
                                     .border(
                                         2.dp,
                                         color = Color.DarkGray,
                                         shape = RoundedCornerShape(10.dp)
                                     )
                                     .clickable {
-                                        navController.navigate("Buscar")
+                                        empresaViewModel.clearEmpresaFiltro()
+                                        empresaViewModel.getFiltroEmpresas(servico = icon.textoFiltro.toString())
+                                        navController.navigate(NavMenuEnum.SEARCH.name)
                                     }
                             )
-                            Text(
-                                stringResource(id = icon.textoFiltro),
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
+                            TextComposable(
+                                textBody = stringResource(id = icon.textoFiltro),
+                                typeText = TextType.SMALL,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                textColor = Color.Black,
+                                modifier = Modifier.padding(top = 4.dp)
                             )
                         }
                     }
                 }
 
+
                 MarginSpace(height = 16.dp)
 
-                Text(
+                TitleComposable(
+                    typeTitle = TitleType.H2,
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados).toUpperCase(),
+                    fontWeight = FontWeight.Medium,
+                    textColor = Color.Black,
                     modifier = Modifier
                         .padding(horizontal = 20.dp, vertical = 4.dp),
-                    text = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados),
-                    color = Color.Black,
-                    fontSize = 16.sp
                 )
 
                 Divider(
@@ -145,12 +156,13 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                 MarginSpace(height = 12.dp)
 
-                Text(
+                TitleComposable(
+                    typeTitle = TitleType.H2,
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_recomendados).toUpperCase(),
+                    fontWeight = FontWeight.Medium,
+                    textColor = Color.Black,
                     modifier = Modifier
                         .padding(horizontal = 20.dp, vertical = 4.dp),
-                    color = Color.Black,
-                    text = stringResource(id = R.string.txt_estabelecimentos_recomendados),
-                    fontSize = 16.sp
                 )
 
                 Divider(
@@ -166,7 +178,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     empresaHome.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .padding(20.dp)
+                                .padding(horizontal = 20.dp, vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clip(RoundedCornerShape(12.dp))

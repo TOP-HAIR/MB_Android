@@ -94,7 +94,9 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                             .fillMaxSize()
                     ) {
                         agenda.forEach { agenda ->
-                            Box(modifier = Modifier.clip(RoundedCornerShape(12.dp))) {
+                            Box(modifier = Modifier
+                                .padding(horizontal = 20.dp, vertical = 14.dp)
+                                .clip(RoundedCornerShape(12.dp))) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -151,8 +153,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                         painter = painterResource(id = R.mipmap.calendar_icon),
                         contentDescription = "Icon Calendar",
                         modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
+                            .width(80.dp)
+                            .height(80.dp)
                     )
 
                     MarginSpace(24.dp)
@@ -170,8 +172,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                     MarginSpace(12.dp)
 
                     TextComposable(
-                        typeTitle = TextType.MEDIUM,
-                        textTitle = stringResource(R.string.txt_tela_de_agendamento_sem_reservas),
+                        typeText = TextType.MEDIUM,
+                        textBody = stringResource(R.string.txt_tela_de_agendamento_sem_reservas),
                         fontWeight = FontWeight.Light,
                         textAlign = TextAlign.Center,
                         textColor = Color.Black,

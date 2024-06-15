@@ -190,7 +190,7 @@ fun RegisterSenhaScreen(
                         enderecoViewModel.postEndereco(objEndereco)
                     }
                 },
-                Color(31, 116, 109, 255),
+                color = Color(31, 116, 109, 255),
             )
 
             LaunchedEffect(userCadastro, userEndereco) {

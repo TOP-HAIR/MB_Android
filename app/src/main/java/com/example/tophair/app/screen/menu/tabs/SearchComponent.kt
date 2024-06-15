@@ -62,18 +62,17 @@ import com.example.tophair.ui.theme.TopHairTheme
 @Composable
 fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostController) {
 
-    val empresaHomeState = empresaViewModel.empresaHome.observeAsState()!!
+
     val empresaFiltroState = empresaViewModel.empresaFiltro.observeAsState()!!
     val empresaFiltro = empresaFiltroState.value ?: emptyList()
-    val empresaHome = empresaHomeState.value ?: emptyList()
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
 
     var estado by remember { mutableStateOf("") }
     var servico by remember { mutableStateOf("") }
     var nomeEmpresa by remember { mutableStateOf("") }
 
-    if (empresaHome.isNullOrEmpty()) {
-        empresaViewModel.getHomeEmpresas()
+    if (empresaFiltro.isNullOrEmpty()) {
+        empresaViewModel.getFiltroEmpresas()
     }
 
     if (empresaLoader) {
@@ -91,93 +90,10 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
             )
         }
     } else {
-
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-
-        if ((empresaHome != null && empresaHome.isNotEmpty()) && empresaFiltro.isNullOrEmpty()) {
-            empresaHome.forEach { empresa ->
-                Box(
-                    modifier = Modifier
-                        .padding(34.dp)
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable {
-                            navController.navigate("Empresa/${empresa.idEmpresa}")
-                        }
-                ) {
-                    if (!empresa.arquivoDtos.isNullOrEmpty()) {
-                        AsyncImage(
-                            model = "http://34.237.189.174/api/arquivos/exibir/${
-                                empresa.arquivoDtos?.get(
-                                    0
-                                )?.id
-                            }",
-                            contentDescription = empresa.razaoSocial,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.mipmap.no_image),
-                            contentDescription = "Sem Imagem",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .background(Color(0x80000000))
-                            .padding(18.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
-
-                            Spacer(modifier = Modifier.width(4.dp))
-
-                            Text(
-                                text = "⭐",
-                                fontSize = 8.sp,
-                                color = Color.White
-                            )
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .background(Color(0x80000000))
-                    ) {
-                        Column(modifier = Modifier.padding(8.dp)) {
-                            Text(
-                                text = empresa.razaoSocial.toString(),
-                                color = Color.White,
-                                fontSize = 14.sp
-                            )
-
-                            Text(
-                                text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
-                                        "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
-                                color = Color.White,
-                                fontSize = 12.sp
-                            )
-                        }
-                    }
-                }
-
-            }
-        } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             if (empresaFiltro != null && empresaFiltro.isNotEmpty()) {
                 Column(
                     modifier = Modifier
@@ -278,7 +194,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                     empresaFiltro.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .padding(vertical = 8.dp)
+                                .padding(horizontal = 20.dp, vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clip(RoundedCornerShape(12.dp))
@@ -305,6 +221,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
+
                             Column(
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
@@ -363,8 +280,8 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                         painter = painterResource(id = R.mipmap.search_icon),
                         contentDescription = "Icon Calendar",
                         modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
+                            .width(80.dp)
+                            .height(80.dp)
                     )
 
                     MarginSpace(24.dp)
@@ -382,8 +299,8 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                     MarginSpace(12.dp)
 
                     TextComposable(
-                        typeTitle = TextType.MEDIUM,
-                        textTitle = stringResource(R.string.txt_tela_de_busca_sem_resultado),
+                        typeText = TextType.MEDIUM,
+                        textBody = stringResource(R.string.txt_tela_de_busca_sem_resultado),
                         fontWeight = FontWeight.Light,
                         textColor = Color.Black,
                         textAlign = TextAlign.Center,

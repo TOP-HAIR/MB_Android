@@ -123,6 +123,8 @@ class EmpresaViewModel : ViewModel() {
                         apiToken.getFiltroEmpresas(userId.toInt(), estado, servico, nomeEmpresa)
 
                     if (response.isSuccessful) {
+                        clearEmpresaFiltro()
+
                         val empresaBody = response.body()
 
                         empresaBody?.let {
@@ -139,5 +141,9 @@ class EmpresaViewModel : ViewModel() {
                 erroApi.postValue(e.message)
             }
         }
+    }
+
+    fun clearEmpresaFiltro() {
+        empresaFiltro.value = emptyList()
     }
 }

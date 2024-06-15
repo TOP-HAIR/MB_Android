@@ -31,24 +31,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.tophair.R
+import com.example.tophair.app.data.entities.enum.TextType
 
 @Preview(showBackground = true)
 @Composable
-fun CustomButton(text: String = "", onClick: () -> Unit = {}, color: Color = Color(0xFF26A69A)) {
+fun CustomButton(
+    text: String = "",
+    typeText: TextType = TextType.LARGE,
+    onClick: () -> Unit = {},
+    color: Color = Color(0xFF26A69A),
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .height(50.dp)
+) {
     Button(
         onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
             containerColor = color
         ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
+        modifier = modifier,
         shape = MaterialTheme.shapes.small
     ) {
-        Text(text, fontSize = 18.sp)
+        Text(text, fontSize = typeText.fontSize)
     }
 }
 

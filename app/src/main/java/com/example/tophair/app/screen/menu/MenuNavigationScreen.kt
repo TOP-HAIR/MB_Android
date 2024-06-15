@@ -150,8 +150,8 @@ fun MenuNavigationView(
                         )
 
                         TextComposable(
-                            typeTitle = TextType.EXTRA_SMALL,
-                            textTitle = tela.nom_rota,
+                            typeText = TextType.EXTRA_SMALL,
+                            textBody = tela.nom_rota,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Center
                         )

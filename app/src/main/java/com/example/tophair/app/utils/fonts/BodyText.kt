@@ -20,8 +20,8 @@ import com.example.tophair.ui.theme.TopHairTheme
 
 @Composable
 fun TextComposable(
-    textTitle: String,
-    typeTitle: TextType,
+    textBody: String,
+    typeText: TextType,
     modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
     textColor: Color = Color.White,
@@ -31,10 +31,10 @@ fun TextComposable(
     )
 ) {
     Text(
-        text = textTitle,
+        text = textBody,
         modifier = modifier.fillMaxWidth(),
         style = TextStyle(
-            fontSize = typeTitle.fontSize,
+            fontSize = typeText.fontSize,
             color = textColor,
             fontWeight = fontWeight,
             textAlign = textAlign,
@@ -49,32 +49,32 @@ fun TextComposablePreview() {
     TopHairTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             TextComposable(
-                typeTitle = TextType.EXTRA_LARGE,
-                textTitle = stringResource(R.string.lorem_ipsum),
+                typeText = TextType.EXTRA_LARGE,
+                textBody = stringResource(R.string.lorem_ipsum),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
             TextComposable(
-                typeTitle = TextType.LARGE,
-                textTitle = stringResource(R.string.lorem_ipsum),
+                typeText = TextType.LARGE,
+                textBody = stringResource(R.string.lorem_ipsum),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
             TextComposable(
-                typeTitle = TextType.MEDIUM,
-                textTitle = stringResource(R.string.lorem_ipsum),
+                typeText = TextType.MEDIUM,
+                textBody = stringResource(R.string.lorem_ipsum),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
             TextComposable(
-                typeTitle = TextType.SMALL,
-                textTitle = stringResource(R.string.lorem_ipsum),
+                typeText = TextType.SMALL,
+                textBody = stringResource(R.string.lorem_ipsum),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
             TextComposable(
-                typeTitle = TextType.EXTRA_SMALL,
-                textTitle = stringResource(R.string.lorem_ipsum),
+                typeText = TextType.EXTRA_SMALL,
+                textBody = stringResource(R.string.lorem_ipsum),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )

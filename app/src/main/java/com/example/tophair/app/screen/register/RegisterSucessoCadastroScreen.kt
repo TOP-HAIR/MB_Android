@@ -96,7 +96,7 @@ fun RegisterSucessoCadastroScreen() {
                         R.anim.animate_slide_left_exit
                     )
                 },
-                Color(31, 116, 109, 255),
+                color = Color(31, 116, 109, 255),
             )
 
             MarginSpace(32.dp)

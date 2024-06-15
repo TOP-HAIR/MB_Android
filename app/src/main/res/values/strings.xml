@@ -37,7 +37,7 @@
     <string name="txt_tintura">TINTURA</string>
     <string name="txt_cabelo_masculino">CABELO</string>
     <string name="txt_barba">BARBA</string>
-    <string name="txt_estabelecimentos_mais_avaliados">Estabelecimentos mais avaliados</string>
+    <string name="txt_estabelecimentos_mais_avaliados">Mais Avaliados</string>
     <string name="txt_agendamentos">Agendamentos</string>
     <string name="txt_servicos_empresa">Serviços</string>
     <string name="txt_servico_selecionado">Serviço Selecionado:</string>
@@ -45,7 +45,7 @@
     <string name="btn_txt_servico_dismiss">Cancelar</string>
     <string name="txt_taxa_de_avaliacao">3.5</string>
     <string name="txt_qtd_de_avaliacoes">10 avaliações</string>
-    <string name="txt_estabelecimentos_recomendados">Recomendado</string>
+    <string name="txt_estabelecimentos_recomendados">Recomendados</string>
     <string name="txt_taxa_de_avaliacao2">2.5</string>
     <string name="txt_qtd_de_avaliacoes2">3 avaliações</string>
     <string name="txt_input_pesquisa">Digite Aqui</string>
