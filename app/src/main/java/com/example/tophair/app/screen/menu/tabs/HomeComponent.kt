@@ -21,17 +21,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,9 +41,14 @@ import coil.compose.AsyncImage
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.enum.FilterServicoEnum
+import com.example.tophair.app.data.entities.enum.NavMenuEnum
+import com.example.tophair.app.data.entities.enum.TextType
+import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
-import com.example.tophair.app.utils.CustomLogo
+import com.example.tophair.app.utils.CircleLoader
 import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.app.utils.fonts.TextComposable
+import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -55,180 +60,203 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
     val empresaHomeState = empresaViewModel.empresaHome.observeAsState()!!
     val empresasTop5 = empresasState.value ?: emptyList()
     val empresaHome = empresaHomeState.value ?: emptyList()
+    val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top
-    ) {
+    if (empresaLoader) {
         Column(
             modifier = Modifier
-                .padding(14.dp)
-                .fillMaxSize()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            MarginSpace(height = 4.dp)
-
-            Row(
+            CircleLoader(
+                color = Color(0xFF2F9C7F),
+                secondColor = Color(0xFF0F3D3A),
+                modifier = Modifier.size(100.dp),
+                isVisible = empresaLoader
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.CenterHorizontally),
-                horizontalArrangement = Arrangement.Center
+                    .padding(14.dp)
+                    .fillMaxSize()
             ) {
-                FilterServicoEnum.values().forEach { icon ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .weight(1f)
-                    ) {
-                        Image(
-                            painter = painterResource(id = icon.imagemFiltro),
-                            contentDescription = icon.descricaoFiltro,
-                            modifier = Modifier
-                                .size(85.dp, 90.dp)
-                                .border(
-                                    2.dp,
-                                    color = Color.DarkGray,
-                                    shape = RoundedCornerShape(10.dp)
-                                )
-                                .clickable {
-                                    navController.navigate("Buscar")
-                                }
-                        )
-                        Text(
-                            stringResource(id = icon.textoFiltro),
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
+                MarginSpace(height = 4.dp)
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(alignment = Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    FilterServicoEnum.values().forEach { icon ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Image(
+                                painter = painterResource(id = icon.imagemFiltro),
+                                contentDescription = icon.descricaoFiltro,
+                                modifier = Modifier
+                                    .size(75.dp, 80.dp)
+                                    .border(
+                                        2.dp,
+                                        color = Color.DarkGray,
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .clickable {
+                                        empresaViewModel.clearEmpresaFiltro()
+                                        empresaViewModel.getFiltroEmpresas(servico = icon.textoFiltro.toString())
+                                        navController.navigate(NavMenuEnum.SEARCH.name)
+                                    }
+                            )
+                            TextComposable(
+                                textBody = stringResource(id = icon.textoFiltro),
+                                typeText = TextType.SMALL,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                textColor = Color.Black,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
                     }
                 }
-            }
 
-            MarginSpace(height = 16.dp)
 
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 4.dp),
-                text = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados),
-                color = Color.Black,
-                fontSize = 16.sp
-            )
+                MarginSpace(height = 16.dp)
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .background(color = Color.White)
-            )
+                TitleComposable(
+                    typeTitle = TitleType.H2,
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados).toUpperCase(),
+                    fontWeight = FontWeight.Medium,
+                    textColor = Color.Black,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 4.dp),
+                )
 
-            MarginSpace(height = 4.dp)
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .background(color = Color.White)
+                )
 
-            if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
-                EmpresaPager(empresas = empresasTop5, navController)
-            }
+                MarginSpace(height = 4.dp)
 
-            MarginSpace(height = 12.dp)
+                if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
+                    EmpresaPager(empresas = empresasTop5, navController)
+                }
 
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 4.dp),
-                color = Color.Black,
-                text = stringResource(id = R.string.txt_estabelecimentos_recomendados),
-                fontSize = 16.sp
-            )
+                MarginSpace(height = 12.dp)
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .background(color = Color.White)
-            )
+                TitleComposable(
+                    typeTitle = TitleType.H2,
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_recomendados).toUpperCase(),
+                    fontWeight = FontWeight.Medium,
+                    textColor = Color.Black,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 4.dp),
+                )
 
-            MarginSpace(height = 4.dp)
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .background(color = Color.White)
+                )
 
-            if (empresaHome != null && empresaHome.isNotEmpty()) {
-                empresaHome.forEach { empresa ->
-                    Box(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable {
-                                navController.navigate("Empresa/${empresa.idEmpresa}")
-                            }
-                    ) {
-                        if (!empresa.arquivoDtos.isNullOrEmpty()) {
-                            AsyncImage(
-                                model = "http://34.237.189.174/api/arquivos/exibir/${
-                                    empresa.arquivoDtos?.get(
-                                        0
-                                    )?.id
-                                }",
-                                contentDescription = empresa.razaoSocial,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        } else {
-                            Image(
-                                painter = painterResource(id = R.mipmap.no_image),
-                                contentDescription = "Sem Imagem",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                MarginSpace(height = 4.dp)
 
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .background(Color(0x80000000))
-                                .padding(18.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
-                                    color = Color.White,
-                                    fontSize = 16.sp
-                                )
-
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                Text(
-                                    text = "⭐",
-                                    fontSize = 8.sp,
-                                    color = Color.White
-                                )
-                            }
-                        }
-
+                if (empresaHome != null && empresaHome.isNotEmpty()) {
+                    empresaHome.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .align(Alignment.BottomCenter)
+                                .padding(horizontal = 20.dp, vertical = 14.dp)
                                 .fillMaxWidth()
-                                .background(Color(0x80000000))
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable {
+                                    navController.navigate("Empresa/${empresa.idEmpresa}")
+                                }
                         ) {
-                            Column(modifier = Modifier.padding(8.dp)) {
-                                Text(
-                                    text = empresa.razaoSocial.toString(),
-                                    color = Color.White,
-                                    fontSize = 14.sp
+                            if (!empresa.arquivoDtos.isNullOrEmpty()) {
+                                AsyncImage(
+                                    model = "http://34.237.189.174/api/arquivos/exibir/${
+                                        empresa.arquivoDtos?.get(
+                                            0
+                                        )?.id
+                                    }",
+                                    contentDescription = empresa.razaoSocial,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
                                 )
+                            } else {
+                                Image(
+                                    painter = painterResource(id = R.mipmap.no_image),
+                                    contentDescription = "Sem Imagem",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
 
-                                Text(
-                                    text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
-                                            "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
-                                    color = Color.White,
-                                    fontSize = 12.sp
-                                )
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .background(Color(0x80000000))
+                                    .padding(18.dp)
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                                        color = Color.White,
+                                        fontSize = 16.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    Text(
+                                        text = "⭐",
+                                        fontSize = 8.sp,
+                                        color = Color.White
+                                    )
+                                }
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .fillMaxWidth()
+                                    .background(Color(0x80000000))
+                            ) {
+                                Column(modifier = Modifier.padding(8.dp)) {
+                                    Text(
+                                        text = empresa.razaoSocial.toString(),
+                                        color = Color.White,
+                                        fontSize = 14.sp
+                                    )
+
+                                    Text(
+                                        text = "${empresa.endereco?.logradouro}, ${empresa.endereco?.numero}\n" +
+                                                "${empresa.endereco?.cep} - ${empresa.endereco?.cidade}/${empresa.endereco?.estado}",
+                                        color = Color.White,
+                                        fontSize = 12.sp
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        MarginSpace(height = 15.dp)
+            MarginSpace(height = 15.dp)
+        }
     }
 }
 
@@ -250,6 +278,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
             .padding(20.dp)
             .fillMaxWidth()
             .height(200.dp)
+            .clip(RoundedCornerShape(12.dp))
             .clickable {
                 navController.navigate("Empresa/${empresa.idEmpresa}")
             }

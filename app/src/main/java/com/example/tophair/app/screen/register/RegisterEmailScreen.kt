@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +34,7 @@ import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.FormattedCpfTextField
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
@@ -96,17 +95,10 @@ fun RegisterEmailScreen() {
 
             MarginSpace(16.dp)
 
-            TextField(
-                value = user.cpf ?: "",
+            FormattedCpfTextField(
+                initialValue = user?.cpf ?: "",
                 onValueChange = { userSetter(user.copy(cpf = it)) },
-                label = { Text(stringResource(R.string.txt_cpf)) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true
+                modifier = Modifier.fillMaxWidth()
             )
 
             MarginSpace(16.dp)
@@ -124,7 +116,7 @@ fun RegisterEmailScreen() {
                         )
                     }
                 },
-                Color(47, 156, 127)
+                color = Color(47, 156, 127)
             )
 
             MarginSpace(32.dp)

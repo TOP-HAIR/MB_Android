@@ -18,7 +18,7 @@ interface UserApi {
     suspend fun postUserLogin(@Body userLogin: UserLogin): Response<User>
 
     @POST("/api/usuarios/cadastrar")
-    suspend fun postUserCadastrar(@Body userCadastro: UserCadastroDeserealize): Response<Any>
+    suspend fun postUserCadastrar(@Body userCadastro: UserCadastroDeserealize): Response<Long>
 
     @GET("/api/usuarios/{id}")
     suspend fun getUser(@Path("id") userId: Int): Response<UserGet>
@@ -30,5 +30,8 @@ interface UserApi {
     suspend fun updateUser(@Path("id") userId: Long, @Body updatedUser: UserUpdate): Response<User>
 
     @PUT("/api/usuarios/vincular-endereco/{idEndereco}/{idUsuario}")
-    suspend fun updateVincularEnderecoUser(@Path("idEndereco") idEndereco: Long, @Path("idUsuario") idUsuario: Long): Response<User>
+    suspend fun updateVincularEnderecoUser(
+        @Path("idEndereco") idEndereco: Long,
+        @Path("idUsuario") idUsuario: Long
+    ): Response<User>
 }

@@ -7,5 +7,6 @@ enum class NavMenuEnum(val descricao: String, val nom_rota: String, val imagem: 
     SEARCH("Tela de Busca", "Buscar", R.mipmap.icon_search),
     CALENDAR("Tela Agendamento", "Agenda", R.mipmap.icon_calendar),
     USER("Tela do Usuário", "Perfil", R.mipmap.icon_user_perfil),
-    EMPRESA("Tela da Empresa", "Empresa", R.mipmap.icon_user_perfil)
+    EMPRESA("Tela da Empresa", "Empresa", R.mipmap.icon_user_perfil),
+    AGENDA("Tela da Agenda", "Agenda", R.mipmap.icon_user_perfil),
 }

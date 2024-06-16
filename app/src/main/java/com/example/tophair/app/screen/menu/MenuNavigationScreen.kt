@@ -1,11 +1,8 @@
 package com.example.tophair.app.screen.menu
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,9 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -40,16 +37,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tophair.app.data.entities.enum.NavMenuEnum
+import com.example.tophair.app.data.entities.enum.TextType
 import com.example.tophair.app.data.viewmodel.AgendaViewModel
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
+import com.example.tophair.app.screen.menu.tabs.AgendaComponent
 import com.example.tophair.app.screen.menu.tabs.CalendarComponent
 import com.example.tophair.app.screen.menu.tabs.EmpresaComponent
 import com.example.tophair.app.screen.menu.tabs.HomeComponent
 import com.example.tophair.app.screen.menu.tabs.SearchComponent
 import com.example.tophair.app.screen.menu.tabs.UserComponent
 import com.example.tophair.app.utils.CustomLogo
+import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 class MenuNavigationView : ComponentActivity() {
@@ -61,11 +61,6 @@ class MenuNavigationView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
         setContent {
             TopHairTheme {
                 Surface(
@@ -123,13 +118,13 @@ fun MenuNavigationView(
                 .background(color = Color(0xFF041720))
         ) {
             NavMenuEnum.values().filter { tela ->
-                tela != NavMenuEnum.EMPRESA
+                tela != NavMenuEnum.EMPRESA && tela != NavMenuEnum.AGENDA
             }.forEach { tela ->
                 Card(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(8.dp)
-                        .height(90.dp)
+                        .padding(14.dp)
+                        .height(56.dp)
                         .background(color = Color.Transparent)
                         .clickable {
                             navControllers.forEach { it.value.value = false };
@@ -151,14 +146,14 @@ fun MenuNavigationView(
                         Image(
                             painter = painterResource(id = tela.imagem),
                             contentDescription = tela.descricao,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(30.dp)
                         )
 
-                        Text(
-                            text = tela.nom_rota,
-                            modifier = Modifier
-                                .padding(4.dp),
-                            color = Color.White
+                        TextComposable(
+                            typeText = TextType.EXTRA_SMALL,
+                            textBody = tela.nom_rota,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -202,6 +197,20 @@ fun NavHostWithScreens(
                     idEmpresa = idEmpresa,
                     servicoViewModel = servicoViewModel,
                     empresaViewModel = empresaViewModel
+                )
+            }
+        }
+        composable(
+            route = "Agenda/{idEmpresa}/{idServico}",
+            arguments = listOf(navArgument("idServico") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val idServico = backStackEntry.arguments?.getInt("idServico")
+            val idEmpresa = backStackEntry.arguments?.getInt("idEmpresa")
+            if (idServico != null && idEmpresa != null) {
+                AgendaComponent(
+                    navController = navController,
+                    idServico = idServico,
+                    idEmpresa = idEmpresa
                 )
             }
         }

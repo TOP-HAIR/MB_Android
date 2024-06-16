@@ -20,8 +20,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,16 +34,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.FormattedCepTextField
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.ui.theme.TopHairTheme
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tophair.ui.theme.TopHairTheme
 
 class RegisterEnderecoView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +78,20 @@ fun RegisterEnderecoScreen(userParam: UserCadastro?) {
     val route = LocalContext.current
     val (endereco, enderecoSetter) = remember { mutableStateOf(EnderecoSerializable()) }
     val (user) = remember { mutableStateOf(userParam) }
+    val enderecoViewModel: EnderecoViewModel = viewModel()
+
+    val cepInfo by enderecoViewModel.cepInfo.observeAsState()
+
+    cepInfo?.let {
+        enderecoSetter(
+            endereco.copy(
+                logradouro = it.logradouro,
+                bairro = it.bairro,
+                cidade = it.localidade,
+                estado = it.uf
+            )
+        )
+    }
 
     RegisterComponent(
         componentContent = {
@@ -88,17 +106,16 @@ fun RegisterEnderecoScreen(userParam: UserCadastro?) {
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            TextField(
-                value = endereco?.cep ?: "",
-                onValueChange = { enderecoSetter(endereco.copy(cep = it)) },
-                label = { Text(stringResource(R.string.txt_cep)) },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true
+            FormattedCepTextField(
+                initialValue = endereco?.cep ?: "",
+                onValueChange = {
+                    enderecoSetter(endereco.copy(cep = it))
+
+                    if (it.length == 8) {
+                        enderecoViewModel.fetchCepInfo(it)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
             )
 
             MarginSpace(16.dp)

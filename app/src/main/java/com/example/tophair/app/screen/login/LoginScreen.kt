@@ -38,18 +38,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tophair.R
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserLogin
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
+import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.screen.menu.MenuNavigationView
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
@@ -161,10 +161,6 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
                     userViewModel.postUserLogin(obj)
                 }
-
-                val menuNavigationView = Intent(route, MenuNavigationView::class.java)
-
-                route.startActivity(menuNavigationView)
             })
 
             LaunchedEffect(tokenState) {

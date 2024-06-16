@@ -5,7 +5,7 @@
     <string name="txt_condicional_inicial">OU</string>
     <string name="btn_txt_cadastro">Criar Conta</string>
     <string name="txt_politicas_e_termos">Ao continuar, você concorda integralmente com nossos Termos de Serviço e Política de Privacidade.</string>
-    <string name="titulo_tela_login">Seja bem vindo(a) de volta ao APP!!!</string>
+    <string name="titulo_tela_login">Bem vindo(a) ao APP!!!</string>
     <string name="txt_email">Email</string>
     <string name="txt_nome_empresa">Buscar por Empresa</string>
     <string name="txt_data_input">Data</string>
@@ -23,7 +23,8 @@
     <string name="txt_cep">CEP</string>
     <string name="txt_logradouro">Logradouro</string>
     <string name="txt_bairro">Bairro</string>
-    <string name="txt_numero">Nº:</string>
+    <string name="txt_numero">Nº</string>
+    <string name="txt_senha_nao_bate">Senhas não batem</string>
     <string name="txt_estado_endereco">Estado</string>
     <string name="txt_cidade">Cidade</string>
     <string name="txt_complemento">Complemento (Opcional)</string>
@@ -37,7 +38,7 @@
     <string name="txt_tintura">TINTURA</string>
     <string name="txt_cabelo_masculino">CABELO</string>
     <string name="txt_barba">BARBA</string>
-    <string name="txt_estabelecimentos_mais_avaliados">Estabelecimentos mais avaliados</string>
+    <string name="txt_estabelecimentos_mais_avaliados">Mais Avaliados</string>
     <string name="txt_agendamentos">Agendamentos</string>
     <string name="txt_servicos_empresa">Serviços</string>
     <string name="txt_servico_selecionado">Serviço Selecionado:</string>
@@ -45,7 +46,7 @@
     <string name="btn_txt_servico_dismiss">Cancelar</string>
     <string name="txt_taxa_de_avaliacao">3.5</string>
     <string name="txt_qtd_de_avaliacoes">10 avaliações</string>
-    <string name="txt_estabelecimentos_recomendados">Recomendado</string>
+    <string name="txt_estabelecimentos_recomendados">Recomendados</string>
     <string name="txt_taxa_de_avaliacao2">2.5</string>
     <string name="txt_qtd_de_avaliacoes2">3 avaliações</string>
     <string name="txt_input_pesquisa">Digite Aqui</string>
