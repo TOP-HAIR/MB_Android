@@ -13,11 +13,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.tophair.R
 import com.example.tophair.ui.theme.TopHairTheme
 
 @Composable
@@ -48,7 +50,7 @@ fun FormattedCpfTextField(
                 onValueChange(digits)
             }
         },
-        label = { Text("CPF") },
+        label = { Text(stringResource(id = R.string.txt_cpf)) },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,

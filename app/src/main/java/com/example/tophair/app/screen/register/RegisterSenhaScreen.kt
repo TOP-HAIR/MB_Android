@@ -140,11 +140,11 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() == senhaConfirm && erroApiUser == null && erroApiUser == "") {
+            if (user?.senha.toString() == senhaConfirm) {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = "Senhas não batem",
+                    text = stringResource(id = R.string.txt_senha_nao_bate),
                     fontSize = 14.sp,
                     color = Color.Red
                 )
@@ -179,7 +179,7 @@ fun RegisterSenhaScreen(
 
                         val objEndereco = Endereco(
                             endereco?.logradouro.toString(),
-                            //endereco?.bairro.toString(),
+                            endereco?.bairro.toString(),
                             endereco?.numero.toString().toInt(),
                             endereco?.estado.toString(),
                             endereco?.complemento.toString(),

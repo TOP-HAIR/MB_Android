@@ -23,7 +23,8 @@
     <string name="txt_cep">CEP</string>
     <string name="txt_logradouro">Logradouro</string>
     <string name="txt_bairro">Bairro</string>
-    <string name="txt_numero">Nº:</string>
+    <string name="txt_numero">Nº</string>
+    <string name="txt_senha_nao_bate">Senhas não batem</string>
     <string name="txt_estado_endereco">Estado</string>
     <string name="txt_cidade">Cidade</string>
     <string name="txt_complemento">Complemento (Opcional)</string>
