@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -61,8 +63,7 @@ import com.example.tophair.ui.theme.TopHairTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostController) {
-
-
+    val keyboardController = LocalSoftwareKeyboardController.current
     val empresaFiltroState = empresaViewModel.empresaFiltro.observeAsState()!!
     val empresaFiltro = empresaFiltroState.value ?: emptyList()
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
@@ -98,32 +99,9 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = 20.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    OutlinedTextField(
-                        value = nomeEmpresa,
-                        onValueChange = { nomeEmpresa = it },
-                        label = {
-                            androidx.compose.material3.Text(
-                                stringResource(R.string.txt_nome_empresa),
-                                style = TextStyle(color = Color.Black)
-                            )
-                        },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        textStyle = TextStyle(color = Color.Black),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                            cursorColor = Color.Black
-                        ),
-                        singleLine = true
-                    )
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -131,17 +109,26 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                             .padding(vertical = 8.dp)
                     ) {
                         OutlinedTextField(
-                            value = servico,
-                            onValueChange = { servico = it },
+                            value = nomeEmpresa,
+                            onValueChange = { nomeEmpresa = it },
                             label = {
                                 androidx.compose.material3.Text(
-                                    stringResource(R.string.txt_servico),
+                                    stringResource(R.string.txt_nome_empresa),
                                     style = TextStyle(color = Color.Black)
                                 )
                             },
                             keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    empresaViewModel.getFiltroEmpresas(
+                                        nomeEmpresa = nomeEmpresa,
+                                        estado = estado
+                                    )
+                                    keyboardController?.hide()
+                                }
                             ),
                             modifier = Modifier
                                 .weight(0.67f),
@@ -169,8 +156,17 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                                 )
                             },
                             keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Email,
-                                imeAction = ImeAction.Next
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    empresaViewModel.getFiltroEmpresas(
+                                        nomeEmpresa = nomeEmpresa,
+                                        estado = estado
+                                    )
+                                    keyboardController?.hide()
+                                }
                             ),
                             modifier = Modifier
                                 .weight(0.30f),
@@ -184,17 +180,11 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                         )
                     }
 
-                    CustomButton(stringResource(R.string.btn_txt_filtrar), onClick = {
-                        if ((estado.isNotBlank() || servico.isNotBlank() || nomeEmpresa.isNotBlank())) {
-                            val result =
-                                empresaViewModel.getFiltroEmpresas(estado, servico, nomeEmpresa)
-                        }
-                    })
 
                     empresaFiltro.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 14.dp)
+                                .padding(vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clip(RoundedCornerShape(12.dp))

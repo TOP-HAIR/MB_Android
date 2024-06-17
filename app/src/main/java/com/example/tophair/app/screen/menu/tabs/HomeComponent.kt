@@ -80,15 +80,16 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
         Column(
             modifier = Modifier
                 .fillMaxSize()
+
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
             Column(
                 modifier = Modifier
-                    .padding(14.dp)
                     .fillMaxSize()
+                    .padding(horizontal = 20.dp)
             ) {
-                MarginSpace(height = 4.dp)
+                MarginSpace(height = 12.dp)
 
                 Row(
                     modifier = Modifier
@@ -117,6 +118,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                         navController.navigate(NavMenuEnum.SEARCH.name)
                                     }
                             )
+
                             TextComposable(
                                 textBody = stringResource(id = icon.textoFiltro),
                                 typeText = TextType.SMALL,
@@ -129,7 +131,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     }
                 }
 
-
                 MarginSpace(height = 16.dp)
 
                 TitleComposable(
@@ -138,17 +139,16 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     fontWeight = FontWeight.Medium,
                     textColor = Color.Black,
                     modifier = Modifier
-                        .padding(horizontal = 20.dp, vertical = 4.dp),
+                        .padding(vertical = 4.dp),
                 )
 
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
                         .background(color = Color.White)
                 )
 
-                MarginSpace(height = 4.dp)
+                MarginSpace(height = 12.dp)
 
                 if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
                     EmpresaPager(empresas = empresasTop5, navController)
@@ -162,13 +162,12 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     fontWeight = FontWeight.Medium,
                     textColor = Color.Black,
                     modifier = Modifier
-                        .padding(horizontal = 20.dp, vertical = 4.dp),
+                        .padding(vertical = 4.dp),
                 )
 
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
                         .background(color = Color.White)
                 )
 
@@ -178,7 +177,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     empresaHome.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 14.dp)
+                                .padding(vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clip(RoundedCornerShape(12.dp))
@@ -275,7 +274,6 @@ fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
 fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
     Box(
         modifier = Modifier
-            .padding(20.dp)
             .fillMaxWidth()
             .height(200.dp)
             .clip(RoundedCornerShape(12.dp))

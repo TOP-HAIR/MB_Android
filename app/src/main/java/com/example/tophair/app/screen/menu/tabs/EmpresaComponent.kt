@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -58,15 +59,13 @@ fun EmpresaComponent(
     val empresaState = empresaViewModel.empresaGetId.observeAsState()
     val servicoState = servicoViewModel.empresaServicoList.observeAsState()
     val servico = servicoState.value ?: emptyList()
-//    val openDialog = remember { mutableStateOf(false) }
-//    var servicoSelecionado = remember { mutableStateOf("") }
-//    var dataAgendamento = remember { mutableStateOf("") }
-//    var horarioAgendamento = remember { mutableStateOf("") }
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
     val servicoLoader by servicoViewModel.servicoLoader.observeAsState(true)
 
-    empresaViewModel.getEmpresaById(idEmpresa)
-    servicoViewModel.getServicoEmpresa(idEmpresa)
+    LaunchedEffect(Unit) {
+        empresaViewModel.getEmpresaById(idEmpresa)
+        servicoViewModel.getListaServicoEmpresa(idEmpresa)
+    }
 
     Column(
         modifier = Modifier
@@ -193,8 +192,15 @@ fun EmpresaComponent(
                                         ) {
                                             CustomButton(
                                                 stringResource(R.string.btn_txt_agendar),
+
                                                 onClick = {
-                                                    navController.navigate("Agenda/${idEmpresa}/${servicoItem.idServico}")
+                                                    if (servicoItem.idServico != null) {
+                                                        servicoViewModel.getListaServicoEmpresa(
+                                                            servicoItem.idServico
+                                                        )
+
+                                                        navController.navigate("Agenda/${idEmpresa}/${servicoItem.idServico}")
+                                                    }
                                                 },
                                                 typeText = TextType.SMALL,
                                             )
@@ -207,79 +213,6 @@ fun EmpresaComponent(
                 }
             }
         }
-
-//        if (openDialog.value) {
-//            AlertDialog(
-//                containerColor = Color.White,
-//                onDismissRequest = { openDialog.value = false },
-//                title = {
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//
-//                        ) {
-//
-//                        Text(
-//                            text = stringResource(id = R.string.txt_servico_selecionado),
-//                            textAlign = TextAlign.Center,
-//                            fontSize = 16.sp,
-//                            color = Color.Black,
-//                        )
-//
-//                        Text(
-//                            text = servicoSelecionado.value.toString(),
-//                            textAlign = TextAlign.Center,
-//                            fontWeight = FontWeight.ExtraBold,
-//                            fontSize = 14.sp,
-//                            color = Color(0x1A5646),
-//                        )
-//                    }
-//                },
-//                text = {
-//                    Column {
-//                        TextField(
-//                            value = dataAgendamento.value,
-//                            onValueChange = { dataAgendamento.value = it },
-//                            label = { Text(stringResource(id = R.string.txt_data_input)) }
-//                        )
-//
-//                        Spacer(modifier = Modifier.height(16.dp))
-//
-//                        TextField(
-//                            value = horarioAgendamento.value,
-//                            onValueChange = { horarioAgendamento.value = it },
-//                            label = { Text(stringResource(id = R.string.txt_horario_input)) }
-//                        )
-//                    }
-//                },
-//                dismissButton = {
-//                    TextButton(
-//                        onClick = {
-//                            openDialog.value = false
-//                        }
-//                    ) {
-//                        Text(
-//                            stringResource(id = R.string.btn_txt_servico_dismiss),
-//                            fontSize = 14.sp,
-//                            color = Color.Black,
-//                        )
-//                    }
-//                },
-//                confirmButton = {
-//                    Button(
-//                        onClick = {
-//                            openDialog.value = false
-//                        }
-//                    ) {
-//                        Text(
-//                            stringResource(id = R.string.btn_txt_servico_confirm),
-//                            fontSize = 14.sp,
-//                            color = Color.Black,
-//                        )
-//                    }
-//                }
-//            )
-//        }
     }
 }
 
