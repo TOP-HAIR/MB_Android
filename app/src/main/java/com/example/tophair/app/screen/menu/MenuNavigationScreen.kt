@@ -202,13 +202,18 @@ fun NavHostWithScreens(
         }
         composable(
             route = "Agenda/{idEmpresa}/{idServico}",
-            arguments = listOf(navArgument("idServico") { type = NavType.IntType })
+            arguments = listOf(
+                navArgument("idServico") { type = NavType.IntType },
+                navArgument("idEmpresa") { type = NavType.IntType })
         ) { backStackEntry ->
             val idServico = backStackEntry.arguments?.getInt("idServico")
             val idEmpresa = backStackEntry.arguments?.getInt("idEmpresa")
             if (idServico != null && idEmpresa != null) {
                 AgendaComponent(
                     navController = navController,
+                    servicoViewModel = servicoViewModel,
+                    agendaViewModel = agendaViewModel,
+                    userViewModel = userViewModel,
                     idServico = idServico,
                     idEmpresa = idEmpresa
                 )

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -47,7 +48,10 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
     val agenda = agendaState.value ?: emptyList()
     val agendaLoader by agendaViewModel.agendaLoader.observeAsState(true)
 
-    agendaViewModel.getAgendaUser()
+    LaunchedEffect(Unit) {
+        agendaViewModel.getAgendaUser()
+    }
+
 
     if (agendaLoader) {
         Column(
@@ -67,21 +71,24 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 20.dp)
         ) {
             if (agenda != null && agenda.isNotEmpty()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(34.dp),
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        modifier = Modifier,
-                        text = stringResource(id = R.string.txt_agendamentos),
-                        color = Color.Black,
-                        fontSize = 18.sp
+                    MarginSpace(height = 12.dp)
+
+                    TitleComposable(
+                        typeTitle = TitleType.H2,
+                        textTitle = stringResource(R.string.txt_agendamentos),
+                        fontWeight = FontWeight.Normal
                     )
+
+                    MarginSpace(height = 12.dp)
 
                     Divider(
                         modifier = Modifier
@@ -94,23 +101,23 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                             .fillMaxSize()
                     ) {
                         agenda.forEach { agenda ->
-                            Box(modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 14.dp)
-                                .clip(RoundedCornerShape(12.dp))) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(vertical = 14.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                            ) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxSize()
                                 ) {
-                                    val dataResponse: LocalDateTime? = agenda?.start
-
                                     Text(
-                                        text = dataResponse.toString() ?: "Data inválida",
+                                        text = "adawd",//agenda?.start ?: "Data inválida",
                                         color = Color.Black,
                                         fontSize = 20.sp
                                     )
 
                                     Text(
-                                        text = agenda?.end.toString(),
+                                        text = "adawd",//agenda?.end.toString(),
                                         color = Color.Black,
                                         fontSize = 14.sp
                                     )
@@ -120,7 +127,7 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     painter = painterResource(id = R.mipmap.no_image),
-                                    contentDescription = agenda.empresaDto?.razaoSocial,
+                                    contentDescription = "adawd",//agenda.empresaDto?.razaoSocial,
                                     contentScale = ContentScale.Crop
                                 )
 
@@ -128,13 +135,13 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(vertical = 4.dp),
-                                    text = agenda?.empresaDto?.razaoSocial.toString(),
+                                    text = "adawd",// agenda?.empresaDto?.razaoSocial.toString(),
                                     color = Color.Black,
                                     fontSize = 18.sp
                                 )
 
                                 Text(
-                                    text = agenda?.status.toString(),
+                                    text = "adawd",//agenda?.status.toString(),
                                     color = Color.Black,
                                     fontSize = 14.sp
                                 )

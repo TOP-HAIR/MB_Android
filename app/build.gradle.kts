@@ -62,6 +62,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

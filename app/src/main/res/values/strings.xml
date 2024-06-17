@@ -20,6 +20,11 @@
     <string name="titulo_tela_cadastro_endereco">Cadastre seu endereço:</string>
     <string name="titulo_tela_cadastro_dado_pessoal">Cadastre seus dados:</string>
     <string name="txt_nome_completo">Nome Completo</string>
+    <string name="txt_data_agenda">Data</string>
+    <string name="txt_data_escolher">Escolher Data</string>
+    <string name="titulo_agendamento">Agendamento</string>
+    <string name="btn_fazer_agendamento">Fazer Agendamento</string>
+    <string name="txt_agendamento">Faça seu agendamentos, escolhendo a data e a hora do seu atendimento!!!</string>
     <string name="txt_cep">CEP</string>
     <string name="txt_logradouro">Logradouro</string>
     <string name="txt_bairro">Bairro</string>

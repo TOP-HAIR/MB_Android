@@ -3,6 +3,7 @@ package com.example.tophair.app.data.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tophair.app.data.api.EmpresaApi
 import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.EmpresaPorId
@@ -31,81 +32,73 @@ class EmpresaViewModel : ViewModel() {
     }
 
     fun getTop5MelhoresEmpresas() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             empresaLoader.postValue(true)
             try {
-                val userId = withContext(Dispatchers.Main) {
-                    SessionManager.getUserIdFlow().firstOrNull()
-                }
+                val userId = SessionManager.getUserIdFlow().firstOrNull()
                 if (!userId.isNullOrEmpty()) {
                     val response = apiToken.getTop5MelhoresEmpresas(userId.toInt())
                     if (response.isSuccessful) {
                         val empresaBody = response.body()
-                        empresaBody?.let {
-                            empresaTop5.postValue(it)
-                        }
-
+                        empresaTop5.value = empresaBody
                     } else {
                         Log.e("EmpresaViewModel", "erro no getTop5MelhoresEmpresas ${response}")
-                        erroApi.postValue(response.errorBody()!!.string())
+                        erroApi.value =
+                            response.errorBody()?.string()
                     }
                 }
             } catch (e: Exception) {
                 Log.e("EmpresaViewModel", "Error in getTop5MelhoresEmpresas! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.value = e.message
             } finally {
                 empresaLoader.postValue(false)
             }
         }
     }
 
+
     fun getEmpresaById(empresaId: Int?) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             empresaLoader.postValue(true)
             try {
                 val response = apiToken.getEmpresaPeloId(empresaId)
                 if (response.isSuccessful) {
                     val empresa = response.body()
-
-                    empresaGetId.postValue(empresa)
+                    empresaGetId.value = empresa
                 } else {
                     Log.e("EmpresaViewModel", "Erro no getEmpresaById ${response}")
-                    erroApi.postValue(response.errorBody()!!.string())
+                    erroApi.value =
+                        response.errorBody()?.string()
                 }
             } catch (e: Exception) {
                 Log.e("EmpresaViewModel", "Erro no getEmpresaById! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.value = e.message
             } finally {
                 empresaLoader.postValue(false)
             }
         }
     }
 
+
     fun getHomeEmpresas() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             empresaLoader.postValue(true)
             try {
-                val userId = withContext(Dispatchers.Main) {
-                    SessionManager.getUserIdFlow().firstOrNull()
-                }
+                val userId = SessionManager.getUserIdFlow().firstOrNull()
                 if (!userId.isNullOrEmpty()) {
                     val response = apiToken.getTop5MelhoresEmpresas(userId.toInt())
-
                     if (response.isSuccessful) {
                         val empresaBody = response.body()
-
-                        empresaBody?.let {
-                            empresaHome.postValue(it)
-                        }
-
+                        empresaHome.value = empresaBody
                     } else {
                         Log.e("EmpresaViewModel", "erro no getTop5MelhoresEmpresas ${response}")
-                        erroApi.postValue(response.errorBody()!!.string())
+                        erroApi.value =
+                            response.errorBody()?.string()
                     }
                 }
             } catch (e: Exception) {
                 Log.e("EmpresaViewModel", "Error in getTop5MelhoresEmpresas! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.value = e.message
             } finally {
                 empresaLoader.postValue(false)
             }
@@ -113,11 +106,9 @@ class EmpresaViewModel : ViewModel() {
     }
 
     fun getFiltroEmpresas(estado: String = "", servico: String = "", nomeEmpresa: String = "") {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             try {
-                val userId = withContext(Dispatchers.Main) {
-                    SessionManager.getUserIdFlow().firstOrNull()
-                }
+                val userId = SessionManager.getUserIdFlow().firstOrNull()
                 if (!userId.isNullOrEmpty()) {
                     val response =
                         apiToken.getFiltroEmpresas(userId.toInt(), estado, servico, nomeEmpresa)
@@ -126,19 +117,18 @@ class EmpresaViewModel : ViewModel() {
                         clearEmpresaFiltro()
 
                         val empresaBody = response.body()
-
                         empresaBody?.let {
-                            empresaFiltro.postValue(it)
+                            empresaFiltro.value = it
                         }
 
                     } else {
                         Log.e("EmpresaViewModel", "erro no getFiltroEmpresas ${response}")
-                        erroApi.postValue(response.errorBody()!!.string())
+                        erroApi.value = response.errorBody()?.string()
                     }
                 }
             } catch (e: Exception) {
                 Log.e("EmpresaViewModel", "Error in getFiltroEmpresas! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.value = e.message
             }
         }
     }

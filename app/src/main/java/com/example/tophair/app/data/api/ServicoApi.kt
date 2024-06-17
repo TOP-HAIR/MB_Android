@@ -7,5 +7,8 @@ import retrofit2.http.Path
 
 interface ServicoApi {
     @GET("/api/servicos/empresa/{id}")
-    suspend fun getServicoEmpresa(@Path("id") empresaId: Int): Response<List<Servico>>
+    suspend fun getListaServicoEmpresa(@Path("id") empresaId: Int): Response<List<Servico>>
+
+    @GET("/api/servicos/{id}")
+    suspend fun getServicoEmpresa(@Path("id") idServico: Int): Response<Servico>
 }
