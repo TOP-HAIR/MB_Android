@@ -32,7 +32,6 @@ fun FormattedCepTextField(
         onValueChange = { newText ->
             val digits = newText.text.filter { it.isDigit() }
             if (newText.text.length <= textState.text.length) {
-                // Exclusão: limpar a máscara e atualizar o estado
                 textState = textState.copy(
                     text = digits,
                     selection = TextRange(digits.length) // move cursor to the end

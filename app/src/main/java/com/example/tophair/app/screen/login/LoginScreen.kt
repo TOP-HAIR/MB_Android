@@ -6,25 +6,11 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -38,26 +24,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tophair.R
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserLogin
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
-import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.screen.menu.MenuNavigationView
-import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.*
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
 class LoginView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         WindowCompat.setDecorFitsSystemWindows(
             window,
@@ -86,7 +69,42 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     val erroApi by userViewModel.erroApi.observeAsState()
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+    var showModal by remember { mutableStateOf(false) }
+    var modalTitle by remember { mutableStateOf("") }
+    var modalMessage by remember { mutableStateOf("") }
+    var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
     val view = LocalView.current
+    val serverErrorMessage = stringResource(id = R.string.txt_modal_message_server_error)
+    val credentialErrorMessage = stringResource(id = R.string.txt_modal_message_credential_error)
+    val serverErrorTitle = stringResource(id = R.string.txt_modal_title_server_error)
+    val credentialErrorTitle = stringResource(id = R.string.txt_modal_title_credential_error)
+
+    LaunchedEffect(erroApi) {
+        if (erroApi != null && erroApi != "") {
+            showModal = true
+            when (erroApi) {
+                "Erro de servidor", "500" -> {
+                    modalTitle = serverErrorTitle
+                    modalMessage = serverErrorMessage
+                    iconResId = R.mipmap.icon_server_error
+                }
+                "Credenciais inválidas", "400" -> {
+                    modalTitle = credentialErrorTitle
+                    modalMessage = credentialErrorMessage
+                    iconResId = R.mipmap.icon_credential_error
+                }
+            }
+        }
+    }
+
+    if (showModal) {
+        ErrorModal(
+            title = modalTitle,
+            message = modalMessage,
+            iconResId = iconResId,
+            onDismiss = { showModal = false }
+        )
+    }
 
     RegisterComponent(
         componentContent = {
@@ -143,34 +161,18 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
                 singleLine = true
             )
 
-            if (erroApi != null && erroApi != "") {
-                Text(
-                    modifier = Modifier
-                        .padding(8.dp),
-                    text = erroApi.toString(),
-                    fontSize = 14.sp,
-                    color = Color.Red
-                )
-            }
-
             MarginSpace(16.dp)
 
             CustomButton(stringResource(R.string.btn_txt_login), onClick = {
                 if (!email.isNullOrEmpty() && !senha.isNullOrEmpty()) {
                     val obj = UserLogin(email, senha)
-
                     userViewModel.postUserLogin(obj)
                 }
-
-                val menuNavigationView = Intent(route, MenuNavigationView::class.java)
-
-                route.startActivity(menuNavigationView)
             })
 
             LaunchedEffect(tokenState) {
                 if (user != null && tokenState != null) {
                     val menuNavigationView = Intent(route, MenuNavigationView::class.java)
-
                     route.startActivity(menuNavigationView)
                     (route as? Activity)?.overridePendingTransition(
                         R.anim.animate_slide_left_enter,

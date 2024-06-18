@@ -3,28 +3,14 @@ package com.example.tophair.app.screen.register
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.ActivityInfo.*
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -47,9 +33,7 @@ import com.example.tophair.app.data.entities.Usuario
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
-import com.example.tophair.app.utils.CustomButton
-import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.utils.RegisterComponent
+import com.example.tophair.app.utils.*
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 
@@ -57,7 +41,7 @@ class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
@@ -92,10 +76,45 @@ fun RegisterSenhaScreen(
     val userEndereco by enderecoViewModel.endereco.observeAsState()
     val erroApiUser by userViewModel.erroApi.observeAsState()
     val erroApiEndereco by enderecoViewModel.erroApi.observeAsState()
+    val serverErrorMessage = stringResource(id = R.string.txt_modal_message_server_error)
+    val credentialErrorMessage = stringResource(id = R.string.txt_modal_message_credential_error)
+    val serverErrorTitle = stringResource(id = R.string.txt_modal_title_server_error)
+    val credentialErrorTitle = stringResource(id = R.string.txt_modal_title_credential_error)
 
     val (user, userSetter) = remember { mutableStateOf(userParam) }
     val (endereco) = remember { mutableStateOf(enderecoParam) }
     var senhaConfirm by remember { mutableStateOf("") }
+    var showModal by remember { mutableStateOf(false) }
+    var modalTitle by remember { mutableStateOf("") }
+    var modalMessage by remember { mutableStateOf("") }
+    var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
+
+    LaunchedEffect(erroApiUser, erroApiEndereco) {
+        if ((erroApiUser != null && erroApiUser != "") || (erroApiEndereco != null && erroApiEndereco != "")) {
+            showModal = true
+            when {
+                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" || erroApiUser == "500" || erroApiEndereco == "500" -> {
+                    modalTitle = serverErrorTitle
+                    modalMessage = serverErrorMessage
+                    iconResId = R.mipmap.icon_server_error
+                }
+                erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" || erroApiUser == "400" || erroApiEndereco == "400" -> {
+                    modalTitle = credentialErrorTitle
+                    modalMessage = credentialErrorMessage
+                    iconResId = R.mipmap.icon_credential_error
+                }
+            }
+        }
+    }
+
+    if (showModal) {
+        ErrorModal(
+            title = modalTitle,
+            message = modalMessage,
+            iconResId = iconResId,
+            onDismiss = { showModal = false }
+        )
+    }
 
     RegisterComponent(
         componentContent = {
@@ -140,11 +159,11 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() == senhaConfirm && erroApiUser == null && erroApiUser == "") {
+            if (user?.senha.toString() != senhaConfirm) {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
-                    text = "Senhas não batem",
+                    text = stringResource(R.string.txt_senhas_nao_batem),
                     fontSize = 14.sp,
                     color = Color.Red
                 )
@@ -165,7 +184,7 @@ fun RegisterSenhaScreen(
             CustomButton(
                 stringResource(R.string.btn_txt_continue),
                 onClick = {
-                    if ((user?.senha.toString() == senhaConfirm)) {
+                    if (user?.senha.toString() == senhaConfirm) {
                         val objUser = UserCadastroDeserealize(
                             user?.cpf.toString(),
                             user?.nomeCompleto.toString(),

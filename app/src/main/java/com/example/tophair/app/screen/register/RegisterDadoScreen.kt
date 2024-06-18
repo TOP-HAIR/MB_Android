@@ -9,20 +9,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,11 +23,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.ErrorModal
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
@@ -73,6 +67,37 @@ class RegisterDadoView : ComponentActivity() {
 fun RegisterDadoScreen(userParam: UserCadastro?) {
     val route = LocalContext.current
     val (user, userSetter) = remember { mutableStateOf(userParam) }
+    var nameError by remember { mutableStateOf("") }
+    var phoneError by remember { mutableStateOf("") }
+    var showModal by remember { mutableStateOf(false) }
+    var modalTitle by remember { mutableStateOf("") }
+    var modalMessage by remember { mutableStateOf("") }
+    var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
+
+    val nameInvalidMessage = stringResource(R.string.txt_nome_invalido)
+    val phoneInvalidMessage = stringResource(R.string.txt_telefone_invalido)
+
+    fun removePhoneNumberMask(input: String): String {
+        return input.filter { it.isDigit() }
+    }
+
+    fun validateFields(user: UserCadastro?, nameInvalidMessage: String, phoneInvalidMessage: String): Boolean {
+        val isNameValid = user?.nomeCompleto?.length ?: 0 > 3
+        val isPhoneValid = removePhoneNumberMask(user?.telefone ?: "").length == 11
+        nameError = if (!isNameValid) nameInvalidMessage else ""
+        phoneError = if (!isPhoneValid) phoneInvalidMessage else ""
+
+        return isNameValid && isPhoneValid
+    }
+
+    if (showModal) {
+        ErrorModal(
+            title = modalTitle,
+            message = modalMessage,
+            iconResId = iconResId,
+            onDismiss = { showModal = false }
+        )
+    }
 
     RegisterComponent(
         componentContent = {
@@ -100,6 +125,15 @@ fun RegisterDadoScreen(userParam: UserCadastro?) {
                 singleLine = true
             )
 
+            if (nameError.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = nameError,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
+
             MarginSpace(16.dp)
 
             FormattedPhoneNumberTextField(
@@ -108,12 +142,20 @@ fun RegisterDadoScreen(userParam: UserCadastro?) {
                 modifier = Modifier.fillMaxWidth()
             )
 
+            if (phoneError.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = phoneError,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
+
             MarginSpace(16.dp)
 
-            CustomButton(stringResource(R.string.btn_txt_continue), onClick = {
-                val registerEnderecoView = Intent(route, RegisterEnderecoView::class.java)
-
-                if (!user?.telefone.isNullOrEmpty() && !user?.nomeCompleto.isNullOrEmpty()) {
+            CustomButton(text = stringResource(R.string.btn_txt_continue), onClick = {
+                if (validateFields(user, nameInvalidMessage, phoneInvalidMessage)) {
+                    val registerEnderecoView = Intent(route, RegisterEnderecoView::class.java)
                     registerEnderecoView.putExtra("user", user)
 
                     route.startActivity(registerEnderecoView)
@@ -137,4 +179,3 @@ fun RegisterDadoPreview() {
         RegisterDadoScreen(null)
     }
 }
-
