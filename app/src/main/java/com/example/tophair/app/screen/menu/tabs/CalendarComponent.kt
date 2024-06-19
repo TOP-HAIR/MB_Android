@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -37,6 +39,7 @@ import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.AgendaViewModel
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CircleLoader
+import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
@@ -45,6 +48,7 @@ import java.time.LocalDateTime
 @Composable
 fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: EmpresaViewModel) {
     val agendaState = agendaViewModel.agenda.observeAsState()
+    val agendaCan = agendaViewModel.agendaCan.observeAsState()
     val agenda = agendaState.value ?: emptyList()
     val agendaLoader by agendaViewModel.agendaLoader.observeAsState(true)
 
@@ -103,48 +107,84 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                         agenda.forEach { agenda ->
                             Box(
                                 modifier = Modifier
-                                    .padding(vertical = 14.dp)
-                                    .clip(RoundedCornerShape(12.dp))
+                                    .shadow(4.dp, RoundedCornerShape(12.dp))
+                                    .padding(horizontal = 20.dp, vertical = 14.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                ) {
-                                    Text(
-                                        text = "adawd",//agenda?.start ?: "Data inválida",
-                                        color = Color.Black,
-                                        fontSize = 20.sp
+                                Column {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = agenda?.start ?: "Data inválida",
+                                            color = Color.Black,
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.width(4.dp))
+
+                                        Text(
+                                            text = agenda?.start ?: "Data inválida",
+                                            color = Color.Black,
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.width(4.dp))
+
+                                        Text(
+                                            text = agenda?.end.toString(),
+                                            color = Color.Black,
+                                            fontSize = 14.sp
+                                        )
+                                    }
+
+                                    Image(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(140.dp),
+                                        painter = painterResource(id = R.mipmap.no_image),
+                                        contentDescription = agenda.empresaDto?.razaoSocial,
+                                        contentScale = ContentScale.Crop
                                     )
 
-                                    Text(
-                                        text = "adawd",//agenda?.end.toString(),
-                                        color = Color.Black,
-                                        fontSize = 14.sp
-                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 8.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Column(
+                                        ) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(vertical = 4.dp),
+                                                text = agenda?.empresaDto?.razaoSocial.toString(),
+                                                color = Color.Black,
+                                                fontSize = 18.sp
+                                            )
+
+                                            Text(
+                                                text = agenda?.status.toString(),
+                                                color = Color.Black,
+                                                fontSize = 14.sp
+                                            )
+                                        }
+
+                                        CustomButton(
+                                            stringResource(R.string.btn_txt_cancelar),
+                                            modifier = Modifier.width(150.dp),
+                                            color = Color(0xFFFF0000),
+                                            onClick = {
+                                                if(agendaCan != null){
+                                                    agendaViewModel.putCancelarAgenda(agenda?.idAgenda)
+                                                }
+                                            },
+                                            typeText = TextType.SMALL,
+                                        )
+                                    }
                                 }
-
-                                Image(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    painter = painterResource(id = R.mipmap.no_image),
-                                    contentDescription = "adawd",//agenda.empresaDto?.razaoSocial,
-                                    contentScale = ContentScale.Crop
-                                )
-
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(vertical = 4.dp),
-                                    text = "adawd",// agenda?.empresaDto?.razaoSocial.toString(),
-                                    color = Color.Black,
-                                    fontSize = 18.sp
-                                )
-
-                                Text(
-                                    text = "adawd",//agenda?.status.toString(),
-                                    color = Color.Black,
-                                    fontSize = 14.sp
-                                )
                             }
                         }
                     }

@@ -82,3 +82,8 @@ data class EmpresaAgenda(
     val razaoSocial: String?,
     val cnpj: String?
 )
+
+data class AgendaCancelado(
+    val idAgenda: Int?,
+    val title: String?
+)

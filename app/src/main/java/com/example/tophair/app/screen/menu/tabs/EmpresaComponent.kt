@@ -151,11 +151,10 @@ fun EmpresaComponent(
                                 modifier = Modifier
                                     .padding(12.dp)
                                     .fillMaxWidth()
-                                    .fillMaxHeight()
                             ) {
                                 Column(
                                     modifier = Modifier
-                                        .fillMaxSize(),
+                                        .fillMaxWidth(),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
@@ -169,7 +168,8 @@ fun EmpresaComponent(
                                     Spacer(modifier = Modifier.height(6.dp))
 
                                     Row(
-                                        modifier = Modifier.fillMaxSize(),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Box(
@@ -185,26 +185,22 @@ fun EmpresaComponent(
                                             )
                                         }
 
-                                        Box(
-                                            modifier = Modifier
-                                                .width(120.dp)
-                                                .align(Alignment.Bottom)
-                                        ) {
-                                            CustomButton(
-                                                stringResource(R.string.btn_txt_agendar),
 
-                                                onClick = {
-                                                    if (servicoItem.idServico != null) {
-                                                        servicoViewModel.getListaServicoEmpresa(
-                                                            servicoItem.idServico
-                                                        )
+                                        CustomButton(
+                                            stringResource(R.string.btn_txt_agendar),
 
-                                                        navController.navigate("Agenda/${idEmpresa}/${servicoItem.idServico}")
-                                                    }
-                                                },
-                                                typeText = TextType.SMALL,
-                                            )
-                                        }
+                                            onClick = {
+                                                if (servicoItem.idServico != null) {
+                                                    servicoViewModel.getListaServicoEmpresa(
+                                                        servicoItem.idServico
+                                                    )
+
+                                                    navController.navigate("Agenda/${idEmpresa}/${servicoItem.idServico}")
+                                                }
+                                            },
+                                            typeText = TextType.SMALL,
+                                        )
+
                                     }
                                 }
                             }

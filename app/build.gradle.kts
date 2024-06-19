@@ -51,8 +51,9 @@ android {
 }
 
 dependencies {
+
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("com.google.accompanist:accompanist-pager:0.19.0")
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -64,6 +65,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -46,12 +47,15 @@ import com.example.tophair.app.data.entities.enum.TextType
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CircleLoader
+import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.CustomIconButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 
 @Composable
@@ -61,6 +65,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
     val empresasTop5 = empresasState.value ?: emptyList()
     val empresaHome = empresaHomeState.value ?: emptyList()
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
+    val scrollState = rememberScrollState()
 
     if (empresaLoader) {
         Column(
@@ -97,35 +102,53 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                         .align(alignment = Alignment.CenterHorizontally),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    FilterServicoEnum.values().forEach { icon ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.weight(1f)
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(scrollState)
                         ) {
-                            Image(
-                                painter = painterResource(id = icon.imagemFiltro),
-                                contentDescription = icon.descricaoFiltro,
+                            CustomIconButton(
                                 modifier = Modifier
-                                    .size(75.dp, 80.dp)
-                                    .border(
-                                        2.dp,
-                                        color = Color.DarkGray,
-                                        shape = RoundedCornerShape(10.dp)
-                                    )
-                                    .clickable {
-                                        empresaViewModel.clearEmpresaFiltro()
-                                        empresaViewModel.getFiltroEmpresas(servico = icon.textoFiltro.toString())
-                                        navController.navigate(NavMenuEnum.SEARCH.name)
-                                    }
+                                    .padding(horizontal = 20.dp)
+                                    .width(150.dp),
+                                text = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString(),
+                                painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
+                                contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
+                                onClick = {
+                                    empresaViewModel.clearEmpresaFiltro()
+                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString())
+                                    navController.navigate(NavMenuEnum.SEARCH.name)
+                                },
+                                color = Color(0xFF2F9C7F)
                             )
 
-                            TextComposable(
-                                textBody = stringResource(id = icon.textoFiltro),
-                                typeText = TextType.SMALL,
-                                fontWeight = FontWeight.Normal,
-                                textAlign = TextAlign.Center,
-                                textColor = Color.Black,
-                                modifier = Modifier.padding(top = 4.dp)
+                            CustomIconButton(
+                                modifier = Modifier.width(150.dp),
+                                text = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString(),
+                                painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
+                                contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
+                                onClick = {
+                                    empresaViewModel.clearEmpresaFiltro()
+                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString())
+                                    navController.navigate(NavMenuEnum.SEARCH.name)
+                                },
+                                color = Color(0xFF041720)
+                            )
+
+                            CustomIconButton(
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .width(150.dp),
+                                text = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString(),
+                                painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
+                                contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
+                                onClick = {
+                                    empresaViewModel.clearEmpresaFiltro()
+                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString())
+                                    navController.navigate(NavMenuEnum.SEARCH.name)
+                                },
+                                color = Color(0xFF0F3D3A)
                             )
                         }
                     }
@@ -180,7 +203,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                 .padding(vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .clip(RoundedCornerShape(12.dp))
+                                .shadow(4.dp, RoundedCornerShape(12.dp))
                                 .clickable {
                                     navController.navigate("Empresa/${empresa.idEmpresa}")
                                 }
@@ -265,8 +288,21 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
     val pagerState = rememberPagerState(initialPage = 0)
 
-    HorizontalPager(state = pagerState, count = empresas.size) { page ->
-        EmpresaItem(empresa = empresas[page], navController)
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HorizontalPager(state = pagerState, count = empresas.size) { page ->
+            EmpresaItem(empresa = empresas[page], navController)
+        }
+
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(16.dp)
+        )
     }
 }
 
@@ -276,7 +312,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .shadow(4.dp, RoundedCornerShape(12.dp))
             .clickable {
                 navController.navigate("Empresa/${empresa.idEmpresa}")
             }

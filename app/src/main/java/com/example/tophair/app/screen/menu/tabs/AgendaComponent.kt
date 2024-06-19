@@ -88,18 +88,12 @@ fun AgendaComponent(
     idServico: Int,
     idEmpresa: Int,
 ) {
-    val vincularUsuario = agendaViewModel.vincularUsuario.observeAsState()
-    val vincularServico = agendaViewModel.vincularServico.observeAsState()
-    val vincularEmpresa = agendaViewModel.vincularEmpresa.observeAsState()
-
-
     val servicoState = servicoViewModel.servicoEmpresa.observeAsState()
     val user = userViewModel.user.observeAsState()
     val agendaState = agendaViewModel.agendaRes.observeAsState()
     val servicoLoader by servicoViewModel.servicoLoader.observeAsState(true)
     var showTimePicker by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val focusManager = LocalFocusManager.current
     var showDatePickerDialog by remember {
@@ -268,24 +262,13 @@ fun AgendaComponent(
                         title = "${(servicoState?.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
                     )
 
-                    agendaViewModel.postAgenda(obj)
+                    agendaViewModel.postAgenda(obj,idServico,idEmpresa)
                 }
             })
         }
 
         LaunchedEffect(agendaState.value) {
-            agendaState.value?.let { agendaResponse ->
-                Log.d("Agendamento", "LaunchedEffect disparado ${agendaResponse.idAgenda}")
-
-
-                agendaResponse.idAgenda?.let { idAgenda ->
-                    agendaViewModel.putAgendaVincularUsuario(idAgenda.toInt())
-                    agendaViewModel.putAgendaVincularEmpresa(idAgenda.toInt(), idEmpresa)
-                    agendaViewModel.putAgendaVincularServico(idAgenda.toInt(), idServico)
-                }
-            }
-
-            if (vincularUsuario != null && vincularServico != null && vincularEmpresa != null) {
+            if (agendaState != null) {
                 navController.navigate(NavMenuEnum.CALENDAR.name)
             }
         }

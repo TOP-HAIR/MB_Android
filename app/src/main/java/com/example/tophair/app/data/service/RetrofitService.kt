@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitService {
-    val BASE_URL_USER: String = "http://100.27.119.11:8080/api/"
+    val BASE_URL_USER: String = "https://tophair.zapto.org/api/"
     val BASE_URL_VIA_CEP: String = "https://viacep.com.br/ws/"
 
     val okHttpClient: OkHttpClient by lazy {

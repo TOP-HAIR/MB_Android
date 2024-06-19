@@ -66,6 +66,7 @@
     <string name="txt_tela_de_agendamento_sem_reservas">Descubra e reserve serviços profissionais especializados e preocupados com o seu bem-estar perto da sua casa. Suas Reservas aparecerão aqui</string>
     <string name="titulo_tela_de_agendamentos_com_reservas">Agendamentos</string>
     <string name="btn_txt_agendar">Agendar</string>
+    <string name="btn_txt_cancelar">Cancelar</string>
     <string name="titulo_tela_de_perfil">Perfil</string>
     <string name="txt_input_nome">Nome</string>
     <string name="txt_input_email">Email</string>

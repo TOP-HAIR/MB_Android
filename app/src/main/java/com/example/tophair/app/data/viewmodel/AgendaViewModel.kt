@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tophair.app.data.api.AgendaApi
+import com.example.tophair.app.data.entities.AgendaCancelado
 import com.example.tophair.app.data.entities.AgendaEmpresa
 import com.example.tophair.app.data.entities.AgendaEmpresaDto
 import com.example.tophair.app.data.entities.AgendaPost
@@ -20,6 +21,7 @@ class AgendaViewModel : ViewModel() {
     val agendaAtual: MutableLiveData<Any> = MutableLiveData()
     val agenda: MutableLiveData<List<AgendaEmpresaDto>> = MutableLiveData()
     val agendaRes: MutableLiveData<AgendaResponse> = MutableLiveData()
+    val agendaCan: MutableLiveData<AgendaCancelado> = MutableLiveData()
     val vincularUsuario: MutableLiveData<UsuarioAgenda> = MutableLiveData()
     val vincularServico: MutableLiveData<AgendaServico> = MutableLiveData()
     val vincularEmpresa: MutableLiveData<AgendaEmpresa> = MutableLiveData()
@@ -32,20 +34,23 @@ class AgendaViewModel : ViewModel() {
         getAgendaUser()
     }
 
-    fun postAgenda(agendaValue: AgendaPost) {
+    fun postAgenda(agendaValue: AgendaPost, idEmpresa: Int, idServico: Int) {
         viewModelScope.launch {
             try {
-                val response = apiToken.postAgenda(agendaValue)
+                val userId = SessionManager.getUserIdFlow().firstOrNull()
+                if (!userId.isNullOrEmpty()) {
+                    val response = apiToken.postAgenda(agendaValue, idEmpresa, userId.toInt(), idServico)
 
-                if (response.isSuccessful) {
-                    val agendaResponse = response.body()
+                    if (response.isSuccessful) {
+                        val agendaResponse = response.body()
 
-                    agendaResponse?.let {
-                        agendaRes.postValue(it)
+                        agendaResponse?.let {
+                            agendaRes.postValue(it)
+                        }
+                    } else {
+                        Log.e("EnderecoViewModel", "erro no postAgenda ${response}")
+                        erroApi.postValue("Dados inválidos.")
                     }
-                } else {
-                    Log.e("EnderecoViewModel", "erro no postAgenda ${response}")
-                    erroApi.postValue("Dados inválidos.")
                 }
             } catch (e: Exception) {
                 Log.e("EnderecoViewModel", "Error in postAgenda! ${e.message}")
@@ -147,6 +152,32 @@ class AgendaViewModel : ViewModel() {
                     val agendaBody = response.body()
                     agendaBody?.let {
                         vincularEmpresa.value = it
+                    }
+                    Log.e("putAgendaVincularEmpresa", "${vincularEmpresa}")
+                } else {
+                    Log.e("AgendaViewModel", "erro no putAgendaVincularEmpresa ${response}")
+                    erroApi.value = response.errorBody()?.string()
+                }
+
+            } catch (e: Exception) {
+                Log.e("AgendaViewModel", "Error in putAgendaVincularEmpresa! ${e.message}")
+                erroApi.value = e.message
+            } finally {
+                agendaLoader.value = false
+            }
+        }
+    }
+
+    fun putCancelarAgenda(idAgenda: Int?) {
+        viewModelScope.launch {
+            agendaLoader.value = true
+            try {
+                val response = apiToken.putCancelarAgenda(idAgenda)
+
+                if (response.isSuccessful) {
+                    val agendaBody = response.body()
+                    agendaBody?.let {
+                        agendaCan.value = it
                     }
                     Log.e("putAgendaVincularEmpresa", "${vincularEmpresa}")
                 } else {

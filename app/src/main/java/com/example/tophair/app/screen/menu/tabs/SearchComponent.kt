@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -187,7 +188,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                                 .padding(vertical = 14.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .clip(RoundedCornerShape(12.dp))
+                                .shadow(4.dp, RoundedCornerShape(12.dp))
                                 .clickable {
                                     navController.navigate("Empresa/${empresa.idEmpresa}")
                                 }
