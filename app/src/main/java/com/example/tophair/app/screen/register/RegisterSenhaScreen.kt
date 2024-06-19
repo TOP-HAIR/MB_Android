@@ -90,15 +90,17 @@ fun RegisterSenhaScreen(
     var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
 
     LaunchedEffect(erroApiUser, erroApiEndereco) {
-        if ((erroApiUser != null && erroApiUser != "") || (erroApiEndereco != null && erroApiEndereco != "")) {
+        if (!erroApiUser.isNullOrEmpty() || !erroApiEndereco.isNullOrEmpty()) {
             showModal = true
             when {
-                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" || erroApiUser == "500" || erroApiEndereco == "500" -> {
+                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" ||
+                        erroApiUser == "500" || erroApiEndereco == "500" -> {
                     modalTitle = serverErrorTitle
                     modalMessage = serverErrorMessage
                     iconResId = R.mipmap.icon_server_error
                 }
-                erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" || erroApiUser == "400" || erroApiEndereco == "400" -> {
+                erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" ||
+                        erroApiUser == "400" || erroApiEndereco == "400" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
@@ -159,7 +161,8 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() != senhaConfirm) {
+            // Adiciona verificação para campos vazios
+            if (user?.senha?.isNotEmpty() == true && senhaConfirm.isNotEmpty() && user.senha != senhaConfirm) {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),
