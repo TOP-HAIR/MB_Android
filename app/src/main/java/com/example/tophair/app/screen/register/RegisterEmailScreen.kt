@@ -6,19 +6,15 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
@@ -66,6 +63,29 @@ class RegisterEmailView : ComponentActivity() {
 fun RegisterEmailScreen() {
     val route = LocalContext.current
     val (user, userSetter) = remember { mutableStateOf(UserCadastro()) }
+    var emailError by remember { mutableStateOf("") }
+    var cpfError by remember { mutableStateOf("") }
+
+    val emailInvalidMessage = stringResource(R.string.txt_email_invalido)
+    val cpfInvalidMessage = stringResource(R.string.txt_cpf_invalido)
+
+    fun removeMask(input: String): String {
+        return input.filter { it.isDigit() }
+    }
+
+    fun validateEmail(email: String?): Boolean {
+        return email != null && email.isNotEmpty() && email.contains("@") &&
+                email.substringBefore("@").length >= 3 && email.substringAfter("@").length >= 3
+    }
+
+    fun validateFields(user: UserCadastro?, emailInvalidMessage: String, cpfInvalidMessage: String): Boolean {
+        val isEmailValid = validateEmail(user?.email)
+        val isCpfValid = removeMask(user?.cpf ?: "").length == 11
+        emailError = if (!isEmailValid) emailInvalidMessage else ""
+        cpfError = if (!isCpfValid) cpfInvalidMessage else ""
+
+        return isEmailValid && isCpfValid
+    }
 
     RegisterComponent(
         componentContent = {
@@ -88,10 +108,18 @@ fun RegisterEmailScreen() {
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
+            if (emailError.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = emailError,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
 
             MarginSpace(16.dp)
 
@@ -101,12 +129,21 @@ fun RegisterEmailScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
+            if (cpfError.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = cpfError,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
+
             MarginSpace(16.dp)
 
             CustomButton(
                 stringResource(R.string.btn_txt_continue), onClick = {
-                    val registerDadoView = Intent(route, RegisterDadoView::class.java)
-                    if (!user.email.isNullOrEmpty() && !user.cpf.isNullOrEmpty()) {
+                    if (validateFields(user, emailInvalidMessage, cpfInvalidMessage)) {
+                        val registerDadoView = Intent(route, RegisterDadoView::class.java)
                         registerDadoView.putExtra("user", user)
 
                         route.startActivity(registerDadoView)
