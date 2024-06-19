@@ -85,7 +85,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
         Column(
             modifier = Modifier
                 .fillMaxSize()
-
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
@@ -112,7 +111,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                 modifier = Modifier
                                     .padding(horizontal = 20.dp)
                                     .width(150.dp),
-                                text = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString(),
+                                text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
                                 painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
                                 contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
                                 onClick = {
@@ -125,7 +124,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                             CustomIconButton(
                                 modifier = Modifier.width(150.dp),
-                                text = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString(),
+                                text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
                                 painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
                                 contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
                                 onClick = {
@@ -140,7 +139,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                                 modifier = Modifier
                                     .padding(horizontal = 20.dp)
                                     .width(150.dp),
-                                text = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString(),
+                                text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
                                 painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
                                 contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
                                 onClick = {

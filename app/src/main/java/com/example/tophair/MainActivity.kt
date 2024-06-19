@@ -6,13 +6,17 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -37,11 +41,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        WindowCompat.setDecorFitsSystemWindows(
+//            window,
+//            false
+//        )
         setContent {
             TopHairTheme {
                 Surface(
@@ -70,38 +74,45 @@ fun TelaInicial() {
                     .padding(vertical = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(18.dp))
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
 
-            CustomButton(stringResource(R.string.btn_txt_login), onClick = {
-                val loginView = Intent(route, LoginView::class.java)
+                ) {
+                Spacer(modifier = Modifier.height(24.dp))
 
-                route.startActivity(loginView)
-                (route as? Activity)?.overridePendingTransition(
-                    R.anim.animate_slide_left_enter,
-                    R.anim.animate_slide_left_exit
-                )
-            })
+                CustomButton(stringResource(R.string.btn_txt_login), onClick = {
+                    val loginView = Intent(route, LoginView::class.java)
 
-            MarginSpace(24.dp)
-
-            CustomRowWithDividers()
-
-            MarginSpace(24.dp)
-
-            CustomButton(
-                stringResource(R.string.btn_txt_cadastro), onClick = {
-                    val registerEmailView = Intent(route, RegisterEmailView::class.java)
-
-                    route.startActivity(registerEmailView)
+                    route.startActivity(loginView)
                     (route as? Activity)?.overridePendingTransition(
                         R.anim.animate_slide_left_enter,
                         R.anim.animate_slide_left_exit
                     )
-                },
-                color = Color(47, 156, 127)
-            )
+                })
 
-            MarginSpace(32.dp)
+                MarginSpace(24.dp)
+
+                CustomRowWithDividers()
+
+                MarginSpace(24.dp)
+
+                CustomButton(
+                    stringResource(R.string.btn_txt_cadastro), onClick = {
+                        val registerEmailView = Intent(route, RegisterEmailView::class.java)
+
+                        route.startActivity(registerEmailView)
+                        (route as? Activity)?.overridePendingTransition(
+                            R.anim.animate_slide_left_enter,
+                            R.anim.animate_slide_left_exit
+                        )
+                    },
+                    color = Color(47, 156, 127)
+                )
+
+                MarginSpace(32.dp)
+            }
         }
     )
 }
