@@ -33,7 +33,14 @@ class UserViewModel : ViewModel() {
     val erroApi = MutableLiveData("")
 
     init {
-        getUser()
+        viewModelScope.launch {
+            SessionManager.getUserIdFlow().collect { userSession ->
+                Log.e("session","${userSession}")
+                if (userSession != null && userSession != "") {
+                    getUser()
+                }
+            }
+        }
     }
 
     fun postUserLogin(login: UserLogin) {
@@ -55,7 +62,7 @@ class UserViewModel : ViewModel() {
                     }
                 } else {
                     Log.e("UserViewModel", "erro no postUserLogin ${response}")
-                    erroApi.postValue("Dados inválidos.")
+                    erroApi.postValue(response.code().toString())
                 }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in postUserLogin! ${e.message}")
@@ -77,11 +84,11 @@ class UserViewModel : ViewModel() {
                     }
                 } else {
                     Log.e("UserViewModel", "erro no postUserLogin ${response}")
-                    erroApi.postValue(response.errorBody()?.string())
+                    erroApi.postValue(response.code().toString())
                 }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in postUserLogin! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.postValue("500")
             }
         }
     }
@@ -108,7 +115,7 @@ class UserViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error in UserUpdate! ${e.message}")
-                erroApi.postValue(e.message)
+                erroApi.postValue("500")
             }
         }
     }

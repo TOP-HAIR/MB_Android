@@ -48,4 +48,21 @@ object SessionManager {
             preferences[USER_ID_KEY]
         }
     }
+
+    suspend fun clearToken() {
+        tokenDataStore.edit { preferences ->
+            preferences.remove(TOKEN_KEY)
+        }
+    }
+
+    suspend fun clearUserId() {
+        userIdDataStore.edit { preferences ->
+            preferences.remove(USER_ID_KEY)
+        }
+    }
+
+    suspend fun clearUserData() {
+        clearToken()
+        clearUserId()
+    }
 }

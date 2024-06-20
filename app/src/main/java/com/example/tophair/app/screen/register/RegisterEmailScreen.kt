@@ -36,12 +36,15 @@ import androidx.core.view.WindowCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.FormattedCpfTextField
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class RegisterEmailView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +55,13 @@ class RegisterEmailView : ComponentActivity() {
             window,
             false
         )
+
+        MainScope().launch {
+            SessionManager.initialize(applicationContext)
+            SessionManager.clearToken()
+            SessionManager.clearUserId()
+        }
+
         setContent {
             TopHairTheme {
                 Surface(

@@ -23,10 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -95,7 +92,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                     TitleComposable(
                         typeTitle = TitleType.H2,
                         textTitle = stringResource(R.string.txt_agendamentos),
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
+                        textColor = Color.Black
                     )
 
                     MarginSpace(height = 12.dp)
@@ -128,7 +126,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Text(
-                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.start) ?: "Data inválida",
+                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.start)
+                                                    ?: "Data inválida",
                                                 color = Color.Black,
                                                 fontSize = 14.sp,
                                                 modifier = Modifier
@@ -137,7 +136,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                             Spacer(modifier = Modifier.width(8.dp))
 
                                             Text(
-                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.end) ?: "Data inválida",
+                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.end)
+                                                    ?: "Data inválida",
                                                 color = Color.Black,
                                                 fontSize = 12.sp,
                                                 modifier = Modifier.weight(1f)
