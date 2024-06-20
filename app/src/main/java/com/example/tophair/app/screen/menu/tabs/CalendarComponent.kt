@@ -40,6 +40,7 @@ import com.example.tophair.app.data.entities.enum.TextType
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.AgendaViewModel
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
+import com.example.tophair.app.utils.CardComponent
 import com.example.tophair.app.utils.CircleLoader
 import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
@@ -110,68 +111,76 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                             .fillMaxWidth()
                     ) {
                         agenda.forEach { agenda ->
-                            Box(
+                            CardComponent(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp, vertical = 18.dp)
+                                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                                    .fillMaxWidth(),
+                                shape = RoundedCornerShape(8.dp)
                             ) {
-                                Column() {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.start) ?: "Data inválida",
-                                            color = Color.Black,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier
-                                        )
-
-                                        Spacer(modifier = Modifier.width(8.dp))
-
-                                        Text(
-                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.end) ?: "Data inválida",
-                                            color = Color.Black,
-                                            fontSize = 12.sp,
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Column(modifier = Modifier.width(140.dp)) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(12.dp)
+                                        .fillMaxWidth()
+                                ) {
+                                    Column() {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
                                             Text(
-                                                modifier = Modifier
-                                                    .padding(vertical = 4.dp),
-                                                text = agenda?.empresaDto?.razaoSocial.toString(),
+                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.start) ?: "Data inválida",
                                                 color = Color.Black,
-                                                fontSize = 16.sp
+                                                fontSize = 14.sp,
+                                                modifier = Modifier
                                             )
 
+                                            Spacer(modifier = Modifier.width(8.dp))
+
                                             Text(
-                                                text = agenda?.status.toString(),
+                                                text = formatarDataHoraParaPadraoBrasileiro(agenda?.end) ?: "Data inválida",
                                                 color = Color.Black,
-                                                fontSize = 14.sp
+                                                fontSize = 12.sp,
+                                                modifier = Modifier.weight(1f)
                                             )
                                         }
 
-                                        CustomButton(
-                                            stringResource(R.string.btn_txt_cancelar),
-                                            modifier = Modifier,
-                                            color = Color(0xFFFF0000),
-                                            onClick = {
-                                                agenda?.idAgenda?.let {
-                                                    agendaViewModel.putCancelarAgenda(it)
-                                                }
-                                            },
-                                            typeText = TextType.SMALL,
-                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 8.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column(modifier = Modifier.width(140.dp)) {
+                                                Text(
+                                                    modifier = Modifier
+                                                        .padding(vertical = 4.dp),
+                                                    text = agenda?.empresaDto?.razaoSocial.toString(),
+                                                    color = Color.Black,
+                                                    fontSize = 14.sp
+                                                )
+
+                                                Text(
+                                                    text = agenda?.status.toString(),
+                                                    color = Color.Black,
+                                                    fontSize = 12.sp
+                                                )
+                                            }
+
+                                            CustomButton(
+                                                stringResource(R.string.btn_txt_cancelar),
+                                                modifier = Modifier,
+                                                color = Color(0xFFFF0000),
+                                                onClick = {
+                                                    agenda?.idAgenda?.let {
+                                                        agendaViewModel.putCancelarAgenda(it)
+                                                    }
+                                                },
+                                                typeText = TextType.SMALL,
+                                            )
+                                        }
                                     }
                                 }
                             }
