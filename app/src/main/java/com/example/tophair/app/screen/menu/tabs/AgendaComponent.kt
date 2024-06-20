@@ -2,6 +2,7 @@ package com.example.tophair.app.screen.menu.tabs
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -202,7 +203,6 @@ fun AgendaComponent(
                 readOnly = true,
                 singleLine = true
             )
-
             MarginSpace(8.dp)
 
             OutlinedTextField(
@@ -219,6 +219,7 @@ fun AgendaComponent(
                     .fillMaxWidth()
                     .onFocusEvent {
                         if (it.isFocused) {
+                            focusManager.clearFocus(force = true)
                             popTimePicker(context) { selectedHour, selectedMinute ->
                                 hour = selectedHour
                                 minute = selectedMinute
@@ -244,25 +245,22 @@ fun AgendaComponent(
                     var datetimeFormatado = formatDateTime(date = selectedDate, time = timeText)
                     var dateTimeFinal = addTimeToFormattedDateTime(
                         formattedDateTime = datetimeFormatado.toString(),
-                        durationToAdd = servicoState.value?.qtdTempoServico
+                        durationToAdd = servicoState?.value?.qtdTempoServico
                     )
+
 
                     val obj = AgendaPost(
                         startTime = datetimeFormatado.toString(),
                         endTime = dateTimeFinal.toString(),
                         background = StatusAgendamento.AGENDADO.toString(),
-                        title = "${(servicoState.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
+                        title = "${(servicoState?.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
                     )
 
                     agendaViewModel.postAgenda(obj, idServico, idEmpresa)
+
+                    navController.navigate(NavMenuEnum.CALENDAR.name)
                 }
             })
-        }
-
-        LaunchedEffect(agendaState.value) {
-            if (agendaState != null) {
-                navController.navigate(NavMenuEnum.CALENDAR.name)
-            }
         }
     }
 }

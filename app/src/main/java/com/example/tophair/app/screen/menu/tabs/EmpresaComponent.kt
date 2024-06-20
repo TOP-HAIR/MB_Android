@@ -139,7 +139,7 @@ fun EmpresaComponent(
                     servico.forEach { servicoItem ->
                         CardComponent(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 4.dp)
+                                .padding(horizontal = 20.dp, vertical = 12.dp)
                                 .fillMaxWidth(),
                             shape = RoundedCornerShape(8.dp)
                         ) {

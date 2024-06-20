@@ -45,6 +45,9 @@ import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: EmpresaViewModel) {
@@ -109,7 +112,7 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                         agenda.forEach { agenda ->
                             Box(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp, vertical = 14.dp)
+                                    .padding(horizontal = 20.dp, vertical = 18.dp)
                             ) {
                                 Column() {
                                     Row(
@@ -117,18 +120,18 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = agenda?.start ?: "Data inválida",
+                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.start) ?: "Data inválida",
                                             color = Color.Black,
-                                            fontSize = 18.sp,
+                                            fontSize = 16.sp,
                                             modifier = Modifier
                                         )
 
                                         Spacer(modifier = Modifier.width(8.dp))
 
                                         Text(
-                                            text = agenda?.end ?: "Data inválida",
+                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.end) ?: "Data inválida",
                                             color = Color.Black,
-                                            fontSize = 14.sp,
+                                            fontSize = 12.sp,
                                             modifier = Modifier.weight(1f)
                                         )
                                     }
@@ -137,28 +140,12 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
 
                                     Row(
                                         modifier = Modifier
-                                            .shadow(3.dp, RoundedCornerShape(12.dp))
-                                            .height(140.dp)
-                                            .fillMaxWidth()
-                                    ) {
-                                        Image(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clip(RoundedCornerShape(12.dp)),
-                                            painter = painterResource(id = R.mipmap.no_image),
-                                            contentDescription = agenda?.empresaDto?.razaoSocial,
-                                            contentScale = ContentScale.Crop
-                                        )
-                                    }
-
-                                    Row(
-                                        modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(top = 8.dp),
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Column {
+                                        Column(modifier = Modifier.width(140.dp)) {
                                             Text(
                                                 modifier = Modifier
                                                     .padding(vertical = 4.dp),
@@ -247,4 +234,14 @@ fun CalendarComponentPreview() {
         agendaViewModel = fakeAgendaViewModel,
         empresaViewModel = fakeEmpresaViewModel
     )
+}
+
+fun formatarDataHoraParaPadraoBrasileiro(dataHora: String? = ""): String {
+    val formatoEntrada = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
+    val dataHoraOriginal: Date = formatoEntrada.parse(dataHora)
+
+    val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("pt", "BR"))
+
+    return formatoBrasileiro.format(dataHoraOriginal)
 }

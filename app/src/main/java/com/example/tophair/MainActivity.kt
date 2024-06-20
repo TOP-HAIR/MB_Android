@@ -7,10 +7,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -74,44 +76,48 @@ fun TelaInicial() {
                     .padding(vertical = 16.dp)
             )
 
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Spacer(modifier = Modifier.height(18.dp))
 
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                Spacer(modifier = Modifier.height(24.dp))
-
-                CustomButton(stringResource(R.string.btn_txt_login), onClick = {
-                    val loginView = Intent(route, LoginView::class.java)
-
-                    route.startActivity(loginView)
-                    (route as? Activity)?.overridePendingTransition(
-                        R.anim.animate_slide_left_enter,
-                        R.anim.animate_slide_left_exit
-                    )
-                })
-
-                MarginSpace(24.dp)
-
-                CustomRowWithDividers()
-
-                MarginSpace(24.dp)
-
-                CustomButton(
-                    stringResource(R.string.btn_txt_cadastro), onClick = {
-                        val registerEmailView = Intent(route, RegisterEmailView::class.java)
-
-                        route.startActivity(registerEmailView)
+                    CustomButton(stringResource(R.string.btn_txt_login), onClick = {
+                        val loginView = Intent(route, LoginView::class.java)
+                        route.startActivity(loginView)
                         (route as? Activity)?.overridePendingTransition(
                             R.anim.animate_slide_left_enter,
                             R.anim.animate_slide_left_exit
                         )
-                    },
-                    color = Color(47, 156, 127)
-                )
+                    })
 
-                MarginSpace(32.dp)
+                    MarginSpace(24.dp)
+
+                    CustomRowWithDividers()
+
+                    MarginSpace(24.dp)
+
+                    CustomButton(
+                        stringResource(R.string.btn_txt_cadastro), onClick = {
+                            val registerEmailView = Intent(route, RegisterEmailView::class.java)
+                            route.startActivity(registerEmailView)
+                            (route as? Activity)?.overridePendingTransition(
+                                R.anim.animate_slide_left_enter,
+                                R.anim.animate_slide_left_exit
+                            )
+                        },
+                        color = Color(47, 156, 127)
+                    )
+
+                    MarginSpace(32.dp)
+                }
             }
         }
     )

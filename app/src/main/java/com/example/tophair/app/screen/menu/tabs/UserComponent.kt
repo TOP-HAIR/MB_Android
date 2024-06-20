@@ -183,40 +183,6 @@ fun UserComponent(userViewModel: UserViewModel) {
 
             MarginSpace(8.dp)
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .background(color = Color.DarkGray)
-            )
-
-            OutlinedTextField(
-                value = senha,
-                onValueChange = { senha = it },
-                label = {
-                    Text(
-                        stringResource(R.string.txt_senha),
-                        style = TextStyle(color = Color.Black)
-                    )
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textStyle = TextStyle(color = Color.Black),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    cursorColor = Color.Black
-                ),
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true
-            )
-
-            MarginSpace(8.dp)
-
             CustomButton(stringResource(R.string.btn_txt_update_user), onClick = {
                 if ((nomeCompleto.isNotBlank() || email.isNotBlank() || telefone.isNotBlank())) {
                     val obj = UserUpdate(nomeCompleto, email, telefone, false)

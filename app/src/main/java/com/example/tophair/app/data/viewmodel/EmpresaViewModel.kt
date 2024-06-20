@@ -11,14 +11,18 @@ import com.example.tophair.app.data.service.RetrofitService
 import com.example.tophair.app.data.service.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EmpresaViewModel : ViewModel() {
-    val empresaTop5: MutableLiveData<List<Empresa>> = MutableLiveData()
-    val empresaFiltro: MutableLiveData<List<Empresa>> = MutableLiveData()
-    val empresaHome: MutableLiveData<List<Empresa>> = MutableLiveData()
+    val empresaTop5: MutableLiveData<List<Empresa>?> = MutableLiveData()
+    private val _empresaFiltro = MutableStateFlow<List<Empresa>>(emptyList())
+    val empresaFiltro: StateFlow<List<Empresa>> = _empresaFiltro
+
+    val empresaHome: MutableLiveData<List<Empresa>?> = MutableLiveData()
     val empresaGetId: MutableLiveData<EmpresaPorId?> = MutableLiveData()
 
     val apiToken: EmpresaApi = RetrofitService.getApiServiceWithToken(EmpresaApi::class.java)
@@ -118,7 +122,7 @@ class EmpresaViewModel : ViewModel() {
 
                         val empresaBody = response.body()
                         empresaBody?.let {
-                            empresaFiltro.value = it
+                            _empresaFiltro.value = it
                         }
 
                     } else {
@@ -134,6 +138,6 @@ class EmpresaViewModel : ViewModel() {
     }
 
     fun clearEmpresaFiltro() {
-        empresaFiltro.value = emptyList()
+        _empresaFiltro.value = emptyList()
     }
 }

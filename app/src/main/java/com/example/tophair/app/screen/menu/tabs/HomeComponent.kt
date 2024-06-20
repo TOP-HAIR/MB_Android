@@ -62,7 +62,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
     val scrollState = rememberScrollState()
 
-    if (!empresaLoader) {
+    if (empresaLoader) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -93,12 +93,13 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(top = 14.dp)
                             .horizontalScroll(scrollState)
                     ) {
                         CustomIconButton(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .width(160.dp),
+                                .padding(start = 20.dp)
+                                .width(190.dp),
                             text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
                             painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
                             contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
@@ -111,7 +112,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                         )
 
                         CustomIconButton(
-                            modifier = Modifier.width(160.dp),
+                            modifier = Modifier.width(170.dp).padding(horizontal = 10.dp),
                             text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
                             painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
                             contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
@@ -125,8 +126,8 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                         CustomIconButton(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .width(160.dp),
+                                .padding(end = 20.dp)
+                                .width(170.dp),
                             text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
                             painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
                             contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
@@ -146,8 +147,6 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                     .fillMaxSize()
                     .padding(horizontal = 20.dp)
             ) {
-                MarginSpace(height = 12.dp)
-
                 MarginSpace(height = 16.dp)
 
                 TitleComposable(
@@ -188,13 +187,11 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                         .background(color = Color.White)
                 )
 
-                MarginSpace(height = 4.dp)
-
                 if (empresaHome.isNotEmpty()) {
                     empresaHome.forEach { empresa ->
                         Box(
                             modifier = Modifier
-                                .padding(vertical = 14.dp)
+                                .padding(vertical = 16.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .shadow(4.dp, RoundedCornerShape(12.dp))
@@ -287,7 +284,7 @@ fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(state = pagerState, count = empresas.size) { page ->
+        HorizontalPager(state = pagerState, count = empresas.size, modifier = Modifier.shadow(1.dp, RoundedCornerShape(12.dp))) { page ->
             EmpresaItem(empresa = empresas[page], navController)
         }
 
@@ -306,7 +303,6 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .shadow(4.dp, RoundedCornerShape(12.dp))
             .clickable {
                 navController.navigate("Empresa/${empresa.idEmpresa}")
             }

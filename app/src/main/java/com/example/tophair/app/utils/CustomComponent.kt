@@ -69,7 +69,7 @@ fun CustomIconButton(
     color: Color = Color(0xFF26A69A),
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .height(35.dp),
+        .height(40.dp),
     painter: Int,
     contentDescription: String? = null
 ) {
