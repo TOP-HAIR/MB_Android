@@ -41,6 +41,7 @@ import com.example.tophair.app.data.entities.Endereco
 import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
+import com.example.tophair.app.data.entities.Usuario
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
@@ -105,16 +106,17 @@ fun RegisterSenhaScreen(
     var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
 
     LaunchedEffect(erroApiUser, erroApiEndereco) {
-        if ((erroApiUser != null && erroApiUser != "") || (erroApiEndereco != null && erroApiEndereco != "")) {
+        if (!erroApiUser.isNullOrEmpty() || !erroApiEndereco.isNullOrEmpty()) {
             showModal = true
             when {
-                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" || erroApiUser == "500" || erroApiEndereco == "500" -> {
+                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" ||
+                        erroApiUser == "500" || erroApiEndereco == "500" -> {
                     modalTitle = serverErrorTitle
                     modalMessage = serverErrorMessage
                     iconResId = R.mipmap.icon_server_error
                 }
-
-                erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" || erroApiUser == "400" || erroApiEndereco == "400" -> {
+                erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" ||
+                        erroApiUser == "400" || erroApiEndereco == "400" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
@@ -175,7 +177,8 @@ fun RegisterSenhaScreen(
                 singleLine = true
             )
 
-            if (user?.senha.toString() != senhaConfirm) {
+            // Adiciona verificação para campos vazios
+            if (user?.senha?.isNotEmpty() == true && senhaConfirm.isNotEmpty() && user.senha != senhaConfirm) {
                 Text(
                     modifier = Modifier
                         .padding(8.dp),

@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -108,10 +109,9 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                         agenda.forEach { agenda ->
                             Box(
                                 modifier = Modifier
-                                    .shadow(2.dp, RoundedCornerShape(12.dp))
                                     .padding(horizontal = 20.dp, vertical = 14.dp)
                             ) {
-                                Column {
+                                Column() {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         verticalAlignment = Alignment.CenterVertically
@@ -119,11 +119,11 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                         Text(
                                             text = agenda?.start ?: "Data inválida",
                                             color = Color.Black,
-                                            fontSize = 14.sp,
-                                            modifier = Modifier.weight(1f)
+                                            fontSize = 18.sp,
+                                            modifier = Modifier
                                         )
 
-                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Spacer(modifier = Modifier.width(8.dp))
 
                                         Text(
                                             text = agenda?.end ?: "Data inválida",
@@ -133,11 +133,18 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                         )
                                     }
 
-                                    Row {
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Row(
+                                        modifier = Modifier
+                                            .shadow(3.dp, RoundedCornerShape(12.dp))
+                                            .height(140.dp)
+                                            .fillMaxWidth()
+                                    ) {
                                         Image(
                                             modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(140.dp),
+                                                .fillMaxSize()
+                                                .clip(RoundedCornerShape(12.dp)),
                                             painter = painterResource(id = R.mipmap.no_image),
                                             contentDescription = agenda?.empresaDto?.razaoSocial,
                                             contentScale = ContentScale.Crop
@@ -169,7 +176,7 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
 
                                         CustomButton(
                                             stringResource(R.string.btn_txt_cancelar),
-                                            modifier = Modifier.width(150.dp),
+                                            modifier = Modifier,
                                             color = Color(0xFFFF0000),
                                             onClick = {
                                                 agenda?.idAgenda?.let {

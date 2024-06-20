@@ -76,7 +76,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     var showModal by remember { mutableStateOf(false) }
     var modalTitle by remember { mutableStateOf("") }
     var modalMessage by remember { mutableStateOf("") }
-    var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
+    var iconResId by remember { mutableStateOf(R.mipmap.icon_credential_error) }
     val view = LocalView.current
     val serverErrorMessage = stringResource(id = R.string.txt_modal_message_server_error)
     val credentialErrorMessage = stringResource(id = R.string.txt_modal_message_credential_error)
@@ -87,15 +87,15 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
         if (erroApi != null && erroApi != "") {
             showModal = true
             when (erroApi) {
-                "Erro de servidor", "500" -> {
-                    modalTitle = serverErrorTitle
-                    modalMessage = serverErrorMessage
-                    iconResId = R.mipmap.icon_server_error
-                }
                 "Credenciais inválidas", "400" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
+                }
+                "Erro de servidor", "500" -> {
+                    modalTitle = serverErrorTitle
+                    modalMessage = serverErrorMessage
+                    iconResId = R.mipmap.icon_server_error
                 }
             }
         }
