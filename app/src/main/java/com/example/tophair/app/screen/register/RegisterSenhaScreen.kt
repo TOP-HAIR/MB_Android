@@ -41,8 +41,8 @@ import com.example.tophair.app.data.entities.Endereco
 import com.example.tophair.app.data.entities.EnderecoSerializable
 import com.example.tophair.app.data.entities.UserCadastro
 import com.example.tophair.app.data.entities.UserCadastroDeserealize
-import com.example.tophair.app.data.entities.Usuario
 import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.EnderecoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.utils.CustomButton
@@ -52,6 +52,8 @@ import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.app.utils.removeCepMask
 import com.example.tophair.ui.theme.TopHairTheme
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class RegisterSenhaView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +64,12 @@ class RegisterSenhaView : ComponentActivity() {
             window,
             false
         )
+
+        MainScope().launch {
+            SessionManager.initialize(applicationContext)
+            SessionManager.clearToken()
+            SessionManager.clearUserId()
+        }
 
         val extras = intent.extras
         setContent {
@@ -115,6 +123,7 @@ fun RegisterSenhaScreen(
                     modalMessage = serverErrorMessage
                     iconResId = R.mipmap.icon_server_error
                 }
+
                 erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" ||
                         erroApiUser == "400" || erroApiEndereco == "400" -> {
                     modalTitle = credentialErrorTitle

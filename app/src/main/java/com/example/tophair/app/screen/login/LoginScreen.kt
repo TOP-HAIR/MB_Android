@@ -2,18 +2,29 @@ package com.example.tophair.app.screen.login
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -24,26 +35,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.UserLogin
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.data.viewmodel.UserViewModel
 import com.example.tophair.app.screen.menu.MenuNavigationView
-import com.example.tophair.app.utils.*
+import com.example.tophair.app.utils.CustomButton
+import com.example.tophair.app.utils.ErrorModal
+import com.example.tophair.app.utils.MarginSpace
+import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class LoginView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
+//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        MainScope().launch {
+            SessionManager.initialize(applicationContext)
+            SessionManager.clearToken()
+            SessionManager.clearUserId()
+        }
         SessionManager.initialize(this)
         setContent {
             TopHairTheme {
@@ -79,8 +95,21 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     LaunchedEffect(erroApi) {
         if (!erroApi.isNullOrEmpty()) {
             showModal = true
+            Log.e("erro", "${erroApi}")
             when (erroApi) {
-                "Credenciais invÃ¡lidas", "400" -> {
+                "Credenciais inválidas", "400" -> {
+                    modalTitle = credentialErrorTitle
+                    modalMessage = credentialErrorMessage
+                    iconResId = R.mipmap.icon_credential_error
+                }
+
+                "Erro de Servidor", "500" -> {
+                    modalTitle = serverErrorTitle
+                    modalMessage = serverErrorMessage
+                    iconResId = R.mipmap.icon_credential_error
+                }
+
+                "Credenciais inválidas", "401" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
@@ -120,18 +149,18 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
                     imeAction = ImeAction.Next
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            val window = (view.context as Activity).window
-                            val insetsController = WindowCompat.getInsetsController(window, view)
-                            insetsController?.apply {
-                                hide(WindowInsetsCompat.Type.statusBars())
-                                systemBarsBehavior =
-                                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                            }
-                        }
-                    },
+                    .fillMaxWidth(),
+//                    .onFocusChanged { focusState ->
+//                        if (focusState.isFocused) {
+//                            val window = (view.context as Activity).window
+//                            val insetsController = WindowCompat.getInsetsController(window, view)
+//                            insetsController?.apply {
+//                                hide(WindowInsetsCompat.Type.statusBars())
+//                                systemBarsBehavior =
+//                                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+//                            }
+//                        }
+//                    },
                 singleLine = true
             )
 
@@ -172,8 +201,6 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
             }
 
             MarginSpace(16.dp)
-
-
         }
     )
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.example.tophair.app.data.entities.enum.TitleType
+import com.example.tophair.app.data.service.SessionManager
 import com.example.tophair.app.screen.login.LoginView
 import com.example.tophair.app.screen.register.RegisterEmailView
 import com.example.tophair.app.utils.CustomButton
@@ -37,6 +38,8 @@ import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.RegisterComponent
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +51,12 @@ class MainActivity : ComponentActivity() {
 //            window,
 //            false
 //        )
+
+        MainScope().launch {
+            SessionManager.initialize(applicationContext)
+            SessionManager.clearToken()
+            SessionManager.clearUserId()
+        }
         setContent {
             TopHairTheme {
                 Surface(

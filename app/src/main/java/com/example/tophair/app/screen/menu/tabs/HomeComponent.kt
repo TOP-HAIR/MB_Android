@@ -104,7 +104,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                             ) {
                                 CustomIconButton(
                                     modifier = Modifier
-                                        .padding(start = 20.dp)
+                                        .padding(start = 10.dp)
                                         .width(170.dp),
                                     text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
                                     painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
@@ -134,7 +134,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                                 CustomIconButton(
                                     modifier = Modifier
-                                        .padding(end = 20.dp)
+                                        .padding(end = 10.dp)
                                         .width(170.dp),
                                     text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
                                     painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
