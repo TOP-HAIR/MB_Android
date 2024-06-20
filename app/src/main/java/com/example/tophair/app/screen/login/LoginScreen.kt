@@ -95,7 +95,6 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     LaunchedEffect(erroApi) {
         if (!erroApi.isNullOrEmpty()) {
             showModal = true
-            Log.e("erro", "${erroApi}")
             when (erroApi) {
                 "Credenciais inválidas", "400" -> {
                     modalTitle = credentialErrorTitle
@@ -103,16 +102,10 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
                     iconResId = R.mipmap.icon_credential_error
                 }
 
-                "Erro de Servidor", "500" -> {
+                else -> {
                     modalTitle = serverErrorTitle
                     modalMessage = serverErrorMessage
-                    iconResId = R.mipmap.icon_credential_error
-                }
-
-                "Credenciais inválidas", "401" -> {
-                    modalTitle = credentialErrorTitle
-                    modalMessage = credentialErrorMessage
-                    iconResId = R.mipmap.icon_credential_error
+                    iconResId = R.mipmap.icon_server_error
                 }
             }
         }

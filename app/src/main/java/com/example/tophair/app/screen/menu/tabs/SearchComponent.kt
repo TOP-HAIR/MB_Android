@@ -219,7 +219,11 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        text = "${"%d".format(empresa.mediaNivelAvaliacoes)}/5.0",
+                                        text = "${if (empresa.mediaNivelAvaliacoes != null) {
+                                            "${"%.1f".format(empresa.mediaNivelAvaliacoes)}/5.0"
+                                        } else {
+                                            "0.0"
+                                        }}/5.0",
                                         color = Color.White,
                                         fontSize = 16.sp
                                     )

@@ -117,18 +117,17 @@ fun RegisterSenhaScreen(
         if (!erroApiUser.isNullOrEmpty() || !erroApiEndereco.isNullOrEmpty()) {
             showModal = true
             when {
-                erroApiUser == "Erro de servidor" || erroApiEndereco == "Erro de servidor" ||
-                        erroApiUser == "500" || erroApiEndereco == "500" -> {
-                    modalTitle = serverErrorTitle
-                    modalMessage = serverErrorMessage
-                    iconResId = R.mipmap.icon_server_error
-                }
-
                 erroApiUser == "Credenciais inválidas" || erroApiEndereco == "Credenciais inválidas" ||
                         erroApiUser == "400" || erroApiEndereco == "400" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
+                }
+
+                else -> {
+                    modalTitle = serverErrorTitle
+                    modalMessage = serverErrorMessage
+                    iconResId = R.mipmap.icon_server_error
                 }
             }
         }
