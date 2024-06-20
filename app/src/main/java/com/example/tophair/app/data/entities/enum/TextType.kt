@@ -8,5 +8,6 @@ enum class TextType(val textType: String, val fontSize: TextUnit) {
     SMALL(textType = "SMALL", fontSize = 12.sp),
     MEDIUM(textType = "MEDIUM", fontSize = 14.sp),
     LARGE(textType = "LARGE", fontSize = 16.sp),
-    EXTRA_LARGE(textType = "EXTRA_LARGE", fontSize = 18.sp)
+    EXTRA_LARGE(textType = "EXTRA_LARGE", fontSize = 18.sp),
+    ULTRA_EXTRA_LARGE(textType = "EXTRA_LARGE", fontSize = 26.sp),
 }

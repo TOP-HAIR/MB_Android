@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,10 +23,7 @@ fun TextComposable(
     modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
     textColor: Color = Color.White,
-    textAlign: TextAlign = TextAlign.Start,
-    fontFamily: FontFamily = FontFamily(
-        Font(R.font.poppins_medium)
-    )
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = textBody,
@@ -37,8 +32,7 @@ fun TextComposable(
             fontSize = typeText.fontSize,
             color = textColor,
             fontWeight = fontWeight,
-            textAlign = textAlign,
-            fontFamily = fontFamily
+            textAlign = textAlign
         )
     )
 }

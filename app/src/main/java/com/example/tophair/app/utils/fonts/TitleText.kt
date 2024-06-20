@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,9 +24,6 @@ fun TitleComposable(
     fontWeight: FontWeight = FontWeight.Normal,
     textColor: Color = Color.White,
     textAlign: TextAlign = TextAlign.Start,
-    fontFamily: FontFamily = FontFamily(
-        Font(R.font.poppins_medium)
-    )
 ) {
     Text(
         text = textTitle,
@@ -38,8 +33,7 @@ fun TitleComposable(
             fontSize = typeTitle.fontSize,
             color = textColor,
             fontWeight = fontWeight,
-            textAlign = textAlign,
-            fontFamily = fontFamily
+            textAlign = textAlign
         )
     )
 }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -252,14 +253,14 @@ fun AgendaComponent(
                     var datetimeFormatado = formatDateTime(date = selectedDate, time = timeText)
                     var dateTimeFinal = addTimeToFormattedDateTime(
                         formattedDateTime = datetimeFormatado.toString(),
-                        durationToAdd = servicoState?.value?.qtdTempoServico
+                        durationToAdd = servicoState.value?.qtdTempoServico
                     )
 
                     val obj = AgendaPost(
                         startTime = datetimeFormatado.toString(),
                         endTime = dateTimeFinal.toString(),
                         background = StatusAgendamento.AGENDADO.toString(),
-                        title = "${(servicoState?.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
+                        title = "${(servicoState.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
                     )
 
                     agendaViewModel.postAgenda(obj,idServico,idEmpresa)

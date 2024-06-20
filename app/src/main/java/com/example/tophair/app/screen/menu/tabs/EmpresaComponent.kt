@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,10 +28,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -92,7 +88,7 @@ fun EmpresaComponent(
             } else {
                 if (!empresa?.arquivos.isNullOrEmpty()) {
                     AsyncImage(
-                        model = "http://34.237.189.174/api/arquivos/exibir/${
+                        model = "https://tophair.zapto.org/api/arquivos/exibir/${
                             empresa?.arquivos?.get(
                                 0
                             )?.id
@@ -161,7 +157,7 @@ fun EmpresaComponent(
                                     TitleComposable(
                                         typeTitle = TitleType.H3,
                                         textTitle = servicoItem.nomeServico.toString(),
-                                        fontWeight = FontWeight.Normal,
+                                        fontWeight = FontWeight.SemiBold,
                                         textColor = Color.Black
                                     )
 
@@ -174,21 +170,19 @@ fun EmpresaComponent(
                                     ) {
                                         Box(
                                             modifier = Modifier
-                                                .width(120.dp)
-                                                .align(Alignment.Top)
+                                                .width(140.dp)
                                         ) {
                                             TextComposable(
-                                                typeText = TextType.LARGE,
+                                                typeText = TextType.ULTRA_EXTRA_LARGE,
                                                 textBody = "R$ ${servicoItem.preco.toString()}",
                                                 fontWeight = FontWeight.Light,
                                                 textColor = Color.Black
                                             )
                                         }
 
-
                                         CustomButton(
                                             stringResource(R.string.btn_txt_agendar),
-
+                                            modifier = Modifier,
                                             onClick = {
                                                 if (servicoItem.idServico != null) {
                                                     servicoViewModel.getListaServicoEmpresa(
@@ -200,7 +194,6 @@ fun EmpresaComponent(
                                             },
                                             typeText = TextType.SMALL,
                                         )
-
                                     }
                                 }
                             }

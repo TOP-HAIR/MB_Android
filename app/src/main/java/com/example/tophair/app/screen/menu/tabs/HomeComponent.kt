@@ -2,7 +2,6 @@ package com.example.tophair.app.screen.menu.tabs
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +31,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,14 +41,11 @@ import com.example.tophair.R
 import com.example.tophair.app.data.entities.Empresa
 import com.example.tophair.app.data.entities.enum.FilterServicoEnum
 import com.example.tophair.app.data.entities.enum.NavMenuEnum
-import com.example.tophair.app.data.entities.enum.TextType
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CircleLoader
-import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.CustomIconButton
 import com.example.tophair.app.utils.MarginSpace
-import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -60,14 +55,14 @@ import com.google.accompanist.pager.rememberPagerState
 
 @Composable
 fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostController) {
-    val empresasState = empresaViewModel.empresaTop5.observeAsState()!!
-    val empresaHomeState = empresaViewModel.empresaHome.observeAsState()!!
+    val empresasState = empresaViewModel.empresaTop5.observeAsState()
+    val empresaHomeState = empresaViewModel.empresaHome.observeAsState()
     val empresasTop5 = empresasState.value ?: emptyList()
     val empresaHome = empresaHomeState.value ?: emptyList()
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
     val scrollState = rememberScrollState()
 
-    if (empresaLoader) {
+    if (!empresaLoader) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -88,6 +83,64 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(alignment = Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(scrollState)
+                    ) {
+                        CustomIconButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .width(160.dp),
+                            text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
+                            painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
+                            contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
+                            onClick = {
+                                empresaViewModel.clearEmpresaFiltro()
+                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString())
+                                navController.navigate(NavMenuEnum.SEARCH.name)
+                            },
+                            color = Color(0xFF2F9C7F)
+                        )
+
+                        CustomIconButton(
+                            modifier = Modifier.width(160.dp),
+                            text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
+                            painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
+                            contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
+                            onClick = {
+                                empresaViewModel.clearEmpresaFiltro()
+                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString())
+                                navController.navigate(NavMenuEnum.SEARCH.name)
+                            },
+                            color = Color(0xFF041720)
+                        )
+
+                        CustomIconButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .width(160.dp),
+                            text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
+                            painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
+                            contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
+                            onClick = {
+                                empresaViewModel.clearEmpresaFiltro()
+                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString())
+                                navController.navigate(NavMenuEnum.SEARCH.name)
+                            },
+                            color = Color(0xFF0F3D3A)
+                        )
+                    }
+                }
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -95,69 +148,11 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
             ) {
                 MarginSpace(height = 12.dp)
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(alignment = Alignment.CenterHorizontally),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .horizontalScroll(scrollState)
-                        ) {
-                            CustomIconButton(
-                                modifier = Modifier
-                                    .padding(horizontal = 20.dp)
-                                    .width(150.dp),
-                                text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
-                                painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
-                                contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
-                                onClick = {
-                                    empresaViewModel.clearEmpresaFiltro()
-                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString())
-                                    navController.navigate(NavMenuEnum.SEARCH.name)
-                                },
-                                color = Color(0xFF2F9C7F)
-                            )
-
-                            CustomIconButton(
-                                modifier = Modifier.width(150.dp),
-                                text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
-                                painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
-                                contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
-                                onClick = {
-                                    empresaViewModel.clearEmpresaFiltro()
-                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString())
-                                    navController.navigate(NavMenuEnum.SEARCH.name)
-                                },
-                                color = Color(0xFF041720)
-                            )
-
-                            CustomIconButton(
-                                modifier = Modifier
-                                    .padding(horizontal = 20.dp)
-                                    .width(150.dp),
-                                text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
-                                painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
-                                contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
-                                onClick = {
-                                    empresaViewModel.clearEmpresaFiltro()
-                                    empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString())
-                                    navController.navigate(NavMenuEnum.SEARCH.name)
-                                },
-                                color = Color(0xFF0F3D3A)
-                            )
-                        }
-                    }
-                }
-
                 MarginSpace(height = 16.dp)
 
                 TitleComposable(
                     typeTitle = TitleType.H2,
-                    textTitle = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados).toUpperCase(),
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_mais_avaliados).uppercase(),
                     fontWeight = FontWeight.Medium,
                     textColor = Color.Black,
                     modifier = Modifier
@@ -172,7 +167,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                 MarginSpace(height = 12.dp)
 
-                if (empresasTop5 != null && empresasTop5.isNotEmpty()) {
+                if (empresasTop5.isNotEmpty()) {
                     EmpresaPager(empresas = empresasTop5, navController)
                 }
 
@@ -180,7 +175,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                 TitleComposable(
                     typeTitle = TitleType.H2,
-                    textTitle = stringResource(id = R.string.txt_estabelecimentos_recomendados).toUpperCase(),
+                    textTitle = stringResource(id = R.string.txt_estabelecimentos_recomendados).uppercase(),
                     fontWeight = FontWeight.Medium,
                     textColor = Color.Black,
                     modifier = Modifier
@@ -195,7 +190,7 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
 
                 MarginSpace(height = 4.dp)
 
-                if (empresaHome != null && empresaHome.isNotEmpty()) {
+                if (empresaHome.isNotEmpty()) {
                     empresaHome.forEach { empresa ->
                         Box(
                             modifier = Modifier
@@ -209,10 +204,10 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                         ) {
                             if (!empresa.arquivoDtos.isNullOrEmpty()) {
                                 AsyncImage(
-                                    model = "http://34.237.189.174/api/arquivos/exibir/${
-                                        empresa.arquivoDtos?.get(
+                                    model = "https://tophair.zapto.org/api/arquivos/exibir/${
+                                        empresa.arquivoDtos.get(
                                             0
-                                        )?.id
+                                        ).id
                                     }",
                                     contentDescription = empresa.razaoSocial,
                                     contentScale = ContentScale.Crop,
@@ -318,7 +313,7 @@ fun EmpresaItem(empresa: Empresa, navController: NavHostController) {
     ) {
         if (!empresa.arquivoDtos.isNullOrEmpty()) {
             AsyncImage(
-                model = "http://34.237.189.174/api/arquivos/exibir/${empresa.arquivoDtos?.get(0)?.id}",
+                model = "https://tophair.zapto.org/api/arquivos/exibir/${empresa.arquivoDtos.get(0).id}",
                 contentDescription = empresa.razaoSocial,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
