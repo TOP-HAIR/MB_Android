@@ -90,54 +90,64 @@ fun HomeComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCont
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    Row(
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 14.dp)
                             .horizontalScroll(scrollState)
                     ) {
-                        CustomIconButton(
-                            modifier = Modifier
-                                .padding(start = 20.dp)
-                                .width(190.dp),
-                            text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
-                            painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
-                            contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
-                            onClick = {
-                                empresaViewModel.clearEmpresaFiltro()
-                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString())
-                                navController.navigate(NavMenuEnum.SEARCH.name)
-                            },
-                            color = Color(0xFF2F9C7F)
-                        )
+                        Box(
+                            modifier = Modifier.align(Alignment.Center)
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CustomIconButton(
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .width(170.dp),
+                                    text = stringResource(FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro),
+                                    painter = FilterServicoEnum.CABELO_MASCULINO_CURTO.imagemFiltro,
+                                    contentDescription = FilterServicoEnum.CABELO_MASCULINO_CURTO.descricaoFiltro,
+                                    onClick = {
+                                        empresaViewModel.clearEmpresaFiltro()
+                                        empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.CABELO_MASCULINO_CURTO.textoFiltro.toString())
+                                        navController.navigate(NavMenuEnum.SEARCH.name)
+                                    },
+                                    color = Color(0xFF2F9C7F)
+                                )
 
-                        CustomIconButton(
-                            modifier = Modifier.width(170.dp).padding(horizontal = 10.dp),
-                            text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
-                            painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
-                            contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
-                            onClick = {
-                                empresaViewModel.clearEmpresaFiltro()
-                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString())
-                                navController.navigate(NavMenuEnum.SEARCH.name)
-                            },
-                            color = Color(0xFF041720)
-                        )
+                                CustomIconButton(
+                                    modifier = Modifier
+                                        .width(170.dp)
+                                        .padding(horizontal = 10.dp),
+                                    text = stringResource(FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro),
+                                    painter = FilterServicoEnum.HOMEM_COM_BARBA.imagemFiltro,
+                                    contentDescription = FilterServicoEnum.HOMEM_COM_BARBA.descricaoFiltro,
+                                    onClick = {
+                                        empresaViewModel.clearEmpresaFiltro()
+                                        empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.HOMEM_COM_BARBA.textoFiltro.toString())
+                                        navController.navigate(NavMenuEnum.SEARCH.name)
+                                    },
+                                    color = Color(0xFF041720)
+                                )
 
-                        CustomIconButton(
-                            modifier = Modifier
-                                .padding(end = 20.dp)
-                                .width(170.dp),
-                            text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
-                            painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
-                            contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
-                            onClick = {
-                                empresaViewModel.clearEmpresaFiltro()
-                                empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString())
-                                navController.navigate(NavMenuEnum.SEARCH.name)
-                            },
-                            color = Color(0xFF0F3D3A)
-                        )
+                                CustomIconButton(
+                                    modifier = Modifier
+                                        .padding(end = 20.dp)
+                                        .width(170.dp),
+                                    text = stringResource(id = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro),
+                                    painter = FilterServicoEnum.TINTURA_PARA_CABELO.imagemFiltro,
+                                    contentDescription = FilterServicoEnum.TINTURA_PARA_CABELO.descricaoFiltro,
+                                    onClick = {
+                                        empresaViewModel.clearEmpresaFiltro()
+                                        empresaViewModel.getFiltroEmpresas(servico = FilterServicoEnum.TINTURA_PARA_CABELO.textoFiltro.toString())
+                                        navController.navigate(NavMenuEnum.SEARCH.name)
+                                    },
+                                    color = Color(0xFF0F3D3A)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -284,7 +294,11 @@ fun EmpresaPager(empresas: List<Empresa>, navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(state = pagerState, count = empresas.size, modifier = Modifier.shadow(1.dp, RoundedCornerShape(12.dp))) { page ->
+        HorizontalPager(
+            state = pagerState,
+            count = empresas.size,
+            modifier = Modifier.shadow(1.dp, RoundedCornerShape(12.dp))
+        ) { page ->
             EmpresaItem(empresa = empresas[page], navController)
         }
 
