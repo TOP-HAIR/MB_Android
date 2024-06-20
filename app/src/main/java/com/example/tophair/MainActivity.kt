@@ -46,11 +46,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//        WindowCompat.setDecorFitsSystemWindows(
-//            window,
-//            false
-//        )
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         MainScope().launch {
             SessionManager.initialize(applicationContext)

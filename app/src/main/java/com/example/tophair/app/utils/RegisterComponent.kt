@@ -58,11 +58,10 @@ fun RegisterComponent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(28.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(modifier = Modifier) {
+                Column(modifier = Modifier.padding(start = 28.dp, top = 28.dp, end = 28.dp)) {
                     Image(
                         painter = painterResource(
                             id = R.mipmap.logo_inicial
@@ -74,11 +73,12 @@ fun RegisterComponent(
                     )
                 }
 
-                MarginSpace(12.dp)
+                Spacer(modifier = Modifier.weight(1f))
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     content = componentContent
@@ -86,7 +86,7 @@ fun RegisterComponent(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Box(modifier = Modifier.fillMaxWidth()) {
+                Box(modifier = Modifier.fillMaxWidth().padding(start = 20.dp,end = 20.dp, bottom = 20.dp)) {
                     TextComposable(
                         typeText = TextType.EXTRA_SMALL,
                         textBody = stringResource(R.string.txt_politicas_e_termos),
