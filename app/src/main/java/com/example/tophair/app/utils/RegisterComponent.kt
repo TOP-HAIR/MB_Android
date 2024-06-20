@@ -70,7 +70,7 @@ fun RegisterComponent(
                         contentDescription = "TopHair Logo",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
+                            .height(240.dp)
                     )
                 }
 

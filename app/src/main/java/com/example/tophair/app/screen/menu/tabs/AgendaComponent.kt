@@ -1,15 +1,8 @@
 package com.example.tophair.app.screen.menu.tabs
 
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import android.app.TimePickerDialog
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -33,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,12 +42,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tophair.R
 import com.example.tophair.app.data.entities.AgendaPost
-import com.example.tophair.app.data.entities.UserLogin
 import com.example.tophair.app.data.entities.enum.NavMenuEnum
 import com.example.tophair.app.data.entities.enum.StatusAgendamento
 import com.example.tophair.app.data.entities.enum.TextType
-import com.example.tophair.app.data.entities.enum.TitleType
-import com.example.tophair.app.data.entities.enum.TitleType.*
+import com.example.tophair.app.data.entities.enum.TitleType.H1
 import com.example.tophair.app.data.viewmodel.AgendaViewModel
 import com.example.tophair.app.data.viewmodel.ServicoViewModel
 import com.example.tophair.app.data.viewmodel.UserViewModel
@@ -66,13 +55,17 @@ import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
 import com.example.tophair.ui.theme.TopHairTheme
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import java.time.Duration
-import java.time.ZonedDateTime
 
 
 private var hour: Int = 0
@@ -210,7 +203,6 @@ fun AgendaComponent(
                 readOnly = true,
                 singleLine = true
             )
-
             MarginSpace(8.dp)
 
             OutlinedTextField(
@@ -227,6 +219,7 @@ fun AgendaComponent(
                     .fillMaxWidth()
                     .onFocusEvent {
                         if (it.isFocused) {
+                            focusManager.clearFocus(force = true)
                             popTimePicker(context) { selectedHour, selectedMinute ->
                                 hour = selectedHour
                                 minute = selectedMinute
@@ -255,6 +248,7 @@ fun AgendaComponent(
                         durationToAdd = servicoState?.value?.qtdTempoServico
                     )
 
+
                     val obj = AgendaPost(
                         startTime = datetimeFormatado.toString(),
                         endTime = dateTimeFinal.toString(),
@@ -262,15 +256,11 @@ fun AgendaComponent(
                         title = "${(servicoState?.value?.nomeServico).toString()} - ${(user?.value?.nomeCompleto).toString()}"
                     )
 
-                    agendaViewModel.postAgenda(obj,idServico,idEmpresa)
+                    agendaViewModel.postAgenda(obj, idServico, idEmpresa)
+
+                    navController.navigate(NavMenuEnum.CALENDAR.name)
                 }
             })
-        }
-
-        LaunchedEffect(agendaState.value) {
-            if (agendaState != null) {
-                navController.navigate(NavMenuEnum.CALENDAR.name)
-            }
         }
     }
 }

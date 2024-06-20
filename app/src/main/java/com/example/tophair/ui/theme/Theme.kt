@@ -313,20 +313,17 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
 fun TopHairTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false, // Define sempre o tema claro
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            dynamicLightColorScheme(context)
         }
-
-        darkTheme -> darkScheme
         else -> lightScheme
     }
-
 
     MaterialTheme(
         colorScheme = colorScheme,

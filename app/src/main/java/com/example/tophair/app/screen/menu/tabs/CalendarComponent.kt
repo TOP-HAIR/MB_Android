@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +45,9 @@ import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
-import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: EmpresaViewModel) {
@@ -80,7 +84,8 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
             if (agenda != null && agenda.isNotEmpty()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -102,51 +107,36 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
 
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                     ) {
                         agenda.forEach { agenda ->
                             Box(
                                 modifier = Modifier
-                                    .shadow(4.dp, RoundedCornerShape(12.dp))
-                                    .padding(horizontal = 20.dp, vertical = 14.dp)
+                                    .padding(horizontal = 20.dp, vertical = 18.dp)
                             ) {
-                                Column {
+                                Column() {
                                     Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
+                                        modifier = Modifier.fillMaxWidth(),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = agenda?.start ?: "Data inválida",
+                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.start) ?: "Data inválida",
                                             color = Color.Black,
-                                            fontSize = 18.sp
+                                            fontSize = 16.sp,
+                                            modifier = Modifier
                                         )
 
-                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Spacer(modifier = Modifier.width(8.dp))
 
                                         Text(
-                                            text = agenda?.start ?: "Data inválida",
+                                            text = formatarDataHoraParaPadraoBrasileiro(agenda?.end) ?: "Data inválida",
                                             color = Color.Black,
-                                            fontSize = 18.sp
-                                        )
-
-                                        Spacer(modifier = Modifier.width(4.dp))
-
-                                        Text(
-                                            text = agenda?.end.toString(),
-                                            color = Color.Black,
-                                            fontSize = 14.sp
+                                            fontSize = 12.sp,
+                                            modifier = Modifier.weight(1f)
                                         )
                                     }
 
-                                    Image(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(140.dp),
-                                        painter = painterResource(id = R.mipmap.no_image),
-                                        contentDescription = agenda.empresaDto?.razaoSocial,
-                                        contentScale = ContentScale.Crop
-                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
 
                                     Row(
                                         modifier = Modifier
@@ -155,14 +145,13 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Column(
-                                        ) {
+                                        Column(modifier = Modifier.width(140.dp)) {
                                             Text(
                                                 modifier = Modifier
                                                     .padding(vertical = 4.dp),
                                                 text = agenda?.empresaDto?.razaoSocial.toString(),
                                                 color = Color.Black,
-                                                fontSize = 18.sp
+                                                fontSize = 16.sp
                                             )
 
                                             Text(
@@ -174,11 +163,11 @@ fun CalendarComponent(agendaViewModel: AgendaViewModel, empresaViewModel: Empres
 
                                         CustomButton(
                                             stringResource(R.string.btn_txt_cancelar),
-                                            modifier = Modifier.width(150.dp),
+                                            modifier = Modifier,
                                             color = Color(0xFFFF0000),
                                             onClick = {
-                                                if(agendaCan != null){
-                                                    agendaViewModel.putCancelarAgenda(agenda?.idAgenda)
+                                                agenda?.idAgenda?.let {
+                                                    agendaViewModel.putCancelarAgenda(it)
                                                 }
                                             },
                                             typeText = TextType.SMALL,
@@ -245,4 +234,14 @@ fun CalendarComponentPreview() {
         agendaViewModel = fakeAgendaViewModel,
         empresaViewModel = fakeEmpresaViewModel
     )
+}
+
+fun formatarDataHoraParaPadraoBrasileiro(dataHora: String? = ""): String {
+    val formatoEntrada = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
+    val dataHoraOriginal: Date = formatoEntrada.parse(dataHora)
+
+    val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("pt", "BR"))
+
+    return formatoBrasileiro.format(dataHoraOriginal)
 }

@@ -11,9 +11,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -44,12 +41,8 @@ import com.example.tophair.ui.theme.TopHairTheme
 class LoginView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         SessionManager.initialize(this)
         setContent {
@@ -76,7 +69,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     var showModal by remember { mutableStateOf(false) }
     var modalTitle by remember { mutableStateOf("") }
     var modalMessage by remember { mutableStateOf("") }
-    var iconResId by remember { mutableStateOf(R.mipmap.icon_server_error) }
+    var iconResId by remember { mutableStateOf(R.mipmap.icon_credential_error) }
     val view = LocalView.current
     val serverErrorMessage = stringResource(id = R.string.txt_modal_message_server_error)
     val credentialErrorMessage = stringResource(id = R.string.txt_modal_message_credential_error)
@@ -84,15 +77,10 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
     val credentialErrorTitle = stringResource(id = R.string.txt_modal_title_credential_error)
 
     LaunchedEffect(erroApi) {
-        if (erroApi != null && erroApi != "") {
+        if (!erroApi.isNullOrEmpty()) {
             showModal = true
             when (erroApi) {
-                "Erro de servidor", "500" -> {
-                    modalTitle = serverErrorTitle
-                    modalMessage = serverErrorMessage
-                    iconResId = R.mipmap.icon_server_error
-                }
-                "Credenciais inválidas", "400" -> {
+                "Credenciais invÃ¡lidas", "400" -> {
                     modalTitle = credentialErrorTitle
                     modalMessage = credentialErrorMessage
                     iconResId = R.mipmap.icon_credential_error
@@ -135,10 +123,8 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
                     .fillMaxWidth()
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
-
                             val window = (view.context as Activity).window
-                            val insetsController =
-                                WindowCompat.getInsetsController(window, view)
+                            val insetsController = WindowCompat.getInsetsController(window, view)
                             insetsController?.apply {
                                 hide(WindowInsetsCompat.Type.statusBars())
                                 systemBarsBehavior =
@@ -168,7 +154,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
             MarginSpace(16.dp)
 
             CustomButton(stringResource(R.string.btn_txt_login), onClick = {
-                if (!email.isNullOrEmpty() && !senha.isNullOrEmpty()) {
+                if (email.isNotEmpty() && senha.isNotEmpty()) {
                     val obj = UserLogin(email, senha)
                     userViewModel.postUserLogin(obj)
                 }
@@ -187,18 +173,7 @@ fun LoginScreen(userViewModel: UserViewModel = UserViewModel()) {
 
             MarginSpace(16.dp)
 
-            TextButton(
-                onClick = {
-                },
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.txt_senha_reset),
-                    fontSize = 14.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+
         }
     )
 }

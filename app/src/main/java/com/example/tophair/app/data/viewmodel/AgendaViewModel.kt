@@ -47,6 +47,7 @@ class AgendaViewModel : ViewModel() {
                         agendaResponse?.let {
                             agendaRes.postValue(it)
                         }
+                        Log.e("postAgenda", "postAgenda ${response}")
                     } else {
                         Log.e("EnderecoViewModel", "erro no postAgenda ${response}")
                         erroApi.postValue("Dados inválidos.")

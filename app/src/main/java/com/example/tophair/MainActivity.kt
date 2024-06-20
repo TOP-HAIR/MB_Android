@@ -6,13 +6,19 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -37,11 +43,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        WindowCompat.setDecorFitsSystemWindows(
+//            window,
+//            false
+//        )
         setContent {
             TopHairTheme {
                 Surface(
@@ -72,36 +78,47 @@ fun TelaInicial() {
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            CustomButton(stringResource(R.string.btn_txt_login), onClick = {
-                val loginView = Intent(route, LoginView::class.java)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CustomButton(stringResource(R.string.btn_txt_login), onClick = {
+                        val loginView = Intent(route, LoginView::class.java)
+                        route.startActivity(loginView)
+                        (route as? Activity)?.overridePendingTransition(
+                            R.anim.animate_slide_left_enter,
+                            R.anim.animate_slide_left_exit
+                        )
+                    })
 
-                route.startActivity(loginView)
-                (route as? Activity)?.overridePendingTransition(
-                    R.anim.animate_slide_left_enter,
-                    R.anim.animate_slide_left_exit
-                )
-            })
+                    MarginSpace(24.dp)
 
-            MarginSpace(24.dp)
+                    CustomRowWithDividers()
 
-            CustomRowWithDividers()
+                    MarginSpace(24.dp)
 
-            MarginSpace(24.dp)
-
-            CustomButton(
-                stringResource(R.string.btn_txt_cadastro), onClick = {
-                    val registerEmailView = Intent(route, RegisterEmailView::class.java)
-
-                    route.startActivity(registerEmailView)
-                    (route as? Activity)?.overridePendingTransition(
-                        R.anim.animate_slide_left_enter,
-                        R.anim.animate_slide_left_exit
+                    CustomButton(
+                        stringResource(R.string.btn_txt_cadastro), onClick = {
+                            val registerEmailView = Intent(route, RegisterEmailView::class.java)
+                            route.startActivity(registerEmailView)
+                            (route as? Activity)?.overridePendingTransition(
+                                R.anim.animate_slide_left_enter,
+                                R.anim.animate_slide_left_exit
+                            )
+                        },
+                        color = Color(47, 156, 127)
                     )
-                },
-                color = Color(47, 156, 127)
-            )
 
-            MarginSpace(32.dp)
+                    MarginSpace(32.dp)
+                }
+            }
         }
     )
 }

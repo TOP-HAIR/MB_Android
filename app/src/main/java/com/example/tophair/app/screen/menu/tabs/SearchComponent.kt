@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -55,7 +55,6 @@ import com.example.tophair.app.data.entities.enum.TextType
 import com.example.tophair.app.data.entities.enum.TitleType
 import com.example.tophair.app.data.viewmodel.EmpresaViewModel
 import com.example.tophair.app.utils.CircleLoader
-import com.example.tophair.app.utils.CustomButton
 import com.example.tophair.app.utils.MarginSpace
 import com.example.tophair.app.utils.fonts.TextComposable
 import com.example.tophair.app.utils.fonts.TitleComposable
@@ -65,8 +64,7 @@ import com.example.tophair.ui.theme.TopHairTheme
 @Composable
 fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val empresaFiltroState = empresaViewModel.empresaFiltro.observeAsState()!!
-    val empresaFiltro = empresaFiltroState.value ?: emptyList()
+    val empresaFiltro by empresaViewModel.empresaFiltro.collectAsState()
     val empresaLoader by empresaViewModel.empresaLoader.observeAsState(true)
 
     var estado by remember { mutableStateOf("") }
@@ -195,7 +193,7 @@ fun SearchComponent(empresaViewModel: EmpresaViewModel, navController: NavHostCo
                         ) {
                             if (!empresa.arquivoDtos.isNullOrEmpty()) {
                                 AsyncImage(
-                                    model = "http://34.235.119.206/api/arquivos/exibir/${
+                                    model = "https://tophair.zapto.org/api/arquivos/exibir/${
                                         empresa.arquivoDtos?.get(
                                             0
                                         )?.id

@@ -64,7 +64,7 @@ fun CustomButton(
 @Composable
 fun CustomIconButton(
     text: String = "",
-    typeText: TextType = TextType.SMALL,
+    typeText: TextType = TextType.EXTRA_SMALL,
     onClick: () -> Unit = {},
     color: Color = Color(0xFF26A69A),
     modifier: Modifier = Modifier
@@ -73,24 +73,32 @@ fun CustomIconButton(
     painter: Int,
     contentDescription: String? = null
 ) {
-    Button(
-        onClick = { onClick() },
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White,
-            containerColor = color
-        ),
-        modifier = modifier,
-        shape = MaterialTheme.shapes.small
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = painter),
-            contentDescription = contentDescription,
-            modifier = Modifier.size(24.dp)
-        )
+        Button(
+            onClick = { onClick() },
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = color
+            ),
+            modifier = modifier,
+            shape = MaterialTheme.shapes.small
+        ) {
+            Image(
+                painter = painterResource(id = painter),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(20.dp)
+            )
 
-        Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
-        Text(text, fontSize = typeText.fontSize)
+            Text(
+                text, fontSize = typeText.fontSize,
+                color = Color.White
+            )
+        }
     }
 }
 
